@@ -1,5 +1,21 @@
 # Tamkin Application
 
+## ملاحظة مهمة للـ Git
+
+تأكد من commit الملفات التالية:
+
+- `.env.prod` و `.env.test` (تحتوي على إعدادات غير حساسة)
+- جميع ملفات `docker-compose.*.yml`
+- جميع ملفات `nginx/*.conf`
+- ملفات الكود في `tamkin-frontend/` و `tamkin-backend/`
+
+الملفات المستثناة من Git:
+
+- `node_modules/`
+- `.next/` و `dist/`
+- `.env` المحلية
+- `postgres-data*/`
+
 ## ملفات الإعداد
 
 - `.env.prod` - إعدادات بيئة الإنتاج
