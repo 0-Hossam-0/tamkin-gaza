@@ -27,7 +27,7 @@ export class AuthService {
 
     async loginWithGoogle(req: Request, res: Response, body: LoginDto) {
 
-        const { email, name, picture } = await this.googleAuth.verifyGmailAccount(body.id_token);
+        const { email, name, picture } = await this.googleAuth.verifyGmailAccount(body.id_token, req);
 
         let user = await this.userModel.findOne({
             where: { email }
