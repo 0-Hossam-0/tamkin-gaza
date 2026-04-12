@@ -2,14 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import jwt, { sign } from "jsonwebtoken";
 import { Repository } from "typeorm";
-import { E_TokenType } from "src/Common/Enums/token.enum";
-import { I_Decoded, I_SignToken } from "src/Common/Types/token.types";
-import { JwtModel } from "src/DataBase/Models/jwt.model";
-import { UserModel } from "src/DataBase/Models/user.model";
-import { E_UserRole } from "src/Common/Enums/user.enums";
 import { I_Session } from "./client-info.service";
 import { compareHash, generateHash } from "./hash";
 import { ErrorResponse } from "../Response/error.response";
+import { JwtModel } from "../../../DataBase/Models/jwt.model";
+import { UserModel } from "../../../DataBase/Models/user.model";
+import { E_TokenType } from "../../Enums/token.enum";
+import { E_UserRole } from "../../Enums/user.enums";
+import { I_SignToken, I_Decoded } from "../../Types/token.types";
 
 
 
@@ -151,7 +151,7 @@ export class TokenService {
    async decodeToken(
     token: string,
     type: E_TokenType,
-    
+
   ) {
 
     const signature = token.split(" ")[1] ;
@@ -170,7 +170,7 @@ export class TokenService {
 
     try {
       decoded = await this.verifyToken(token, SECRET_KEY);
-    } catch (error) {
+    } catch (error: any) {
       throw this.errorResponse.unauthorized({
         message: 'Token validation failed',
         info: error.message,
@@ -186,7 +186,7 @@ export class TokenService {
           uuid: decoded.userId,
         }
       })
-    } 
+    }
 
     const jwt = await this.jwtRepository.findOne({
       where: {

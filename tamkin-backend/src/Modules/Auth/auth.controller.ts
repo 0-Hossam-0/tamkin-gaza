@@ -2,8 +2,8 @@ import { Body, Controller, Post, Req, Res, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './Dto/register.dto';
 import { ValidationPipe } from '@nestjs/common';
-import { SuccessResponse } from 'src/Common/Utils/Response/success.response';
 import type { Request, Response } from 'express';
+import { SuccessResponse } from '../../Common/Utils/Response/success.response';
 
 @UsePipes(new ValidationPipe({
   forbidNonWhitelisted: true,

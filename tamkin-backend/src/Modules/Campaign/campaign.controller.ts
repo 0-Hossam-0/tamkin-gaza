@@ -5,6 +5,6 @@ import { CreateCampaignDto } from './Dtos/create-campaign.dto';
 export class CampaignController {
   @Post()
   async createCampaign(@Body() createCampaignDto: CreateCampaignDto) {
-    const campaign = await
+    const campaign = await 
   }
 }

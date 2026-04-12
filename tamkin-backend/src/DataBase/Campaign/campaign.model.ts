@@ -13,7 +13,7 @@ export class Campaign {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'jsonb' })
+  @Column({ type: 'jsonb', unique: true })
   title!: Record<CampaignLanguages, string>;
 
   @Column({ type: 'jsonb' })

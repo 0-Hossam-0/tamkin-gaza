@@ -5,16 +5,13 @@ import { Request } from 'express';
 
 @Injectable()
 export class GoogleAuth {
-  constructor(
-    private readonly ErrorResponse: ErrorResponse
-  ) { }
+  constructor(private readonly ErrorResponse: ErrorResponse) {}
 
   verifyGmailAccount = async (
     id_token: string,
     req: Request,
   ): Promise<TokenPayload> => {
     try {
-
       const client = new OAuth2Client();
 
       let ticket = await client.verifyIdToken({
@@ -32,30 +29,22 @@ export class GoogleAuth {
       }
 
       return payload;
-
-
     } catch (error) {
-
-      if (error.message.startsWith("Invalid argument: id_token")) {
+      if (error.message.startsWith('Invalid argument: id_token')) {
         throw this.ErrorResponse.badRequest({
           message: req.t('auth:errors.failToVerifyThisToken'),
           info: 'Invalid argument: id_token',
         });
-      }
-
-      else if (error.message.startsWith("Token used too late")) {
+      } else if (error.message.startsWith('Token used too late')) {
         throw this.ErrorResponse.badRequest({
           message: req.t('auth:errors.failToVerifyThisToken'),
           info: req.t('auth:errors.tokenUsedTooLate'),
         });
-      }
-
-      else {
+      } else {
         throw this.ErrorResponse.badRequest({
           message: req.t('auth:errors.failToVerifyThisToken'),
         });
       }
     }
   };
-
 }
