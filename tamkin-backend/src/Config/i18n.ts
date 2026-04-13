@@ -14,7 +14,7 @@ export const i18nInit = async () => {
       supportedLngs: languages,
       preload: languages,
 
-      ns: ['auth', 'token'],
+      ns: ['auth', 'token', 'main'],
       defaultNS: 'common',
       backend: {
         loadPath: join(__dirname, '../Locales/{{lng}}/{{ns}}.json'),

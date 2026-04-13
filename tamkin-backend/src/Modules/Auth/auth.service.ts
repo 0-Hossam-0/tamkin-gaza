@@ -121,7 +121,7 @@ export class AuthService {
             lastName: body.fullName.split(' ')[1],
             nationality: countries.getName(body.nationality, "en"),
             provider: E_UserProvider.SYSTEM,
-            test:"sss"
+            test: "sss"
         });
 
         if (!newUser) {
@@ -178,7 +178,6 @@ export class AuthService {
                 info: req.t('auth:errors.invalidCredentialsInfo')
             });
         }
-
 
         if (!await compareHash({
             plainText: body.password,

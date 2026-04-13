@@ -1,0 +1,128 @@
+{
+  "organization": {
+    "name": "Tamkin",
+    "type": "Humanitarian Community Initiative",
+    "isGovernmental": false,
+    "isInternationalNGO": false,
+    "country": "Palestine"
+  },
+  "project": {
+    "status": "active",
+    "startedAt": "2026",
+    "description": "A community-driven initiative focused on delivering urgent humanitarian support to injured individuals and amputees in Gaza through transparent and organized efforts.",
+    "goals": [
+      "Provide urgent medical support to injured individuals",
+      "Support amputees with rehabilitation needs",
+      "Deliver humanitarian aid efficiently and transparently",
+      "Bridge donors with real cases in need"
+    ]
+  },
+  "about": {
+    "title": "About Us",
+    "story": "Tamkin is a community-driven humanitarian initiative founded by young people from Gaza and Egypt. It was created to support the people of Gaza in general, with a primary focus on injured individuals and amputees who are facing the most critical humanitarian conditions.",
+    "mission": "To deliver fast, transparent, and effective humanitarian support to injured individuals and amputees in Gaza, while also contributing to broader humanitarian relief efforts.",
+    "vision": "To become a reliable humanitarian bridge that connects urgent support with those most in need in Gaza.",
+    "focus": {
+      "primary": [
+        "injured individuals",
+        "amputees"
+      ],
+      "secondary": [
+        "general humanitarian support for Gaza"
+      ]
+    }
+  },
+  "whyThisProject": {
+    "title": "Why This Project?",
+    "content": "Due to the urgent need for a structured and transparent platform that ensures aid reaches rightful beneficiaries directly without administrative delays or resource loss."
+  },
+  "targetAudience": {
+    "primary": [
+      "injured individuals",
+      "amputees"
+    ],
+    "secondary": [
+      "families in Gaza",
+      "general humanitarian cases"
+    ],
+    "regions": [
+      "Gaza Strip"
+    ]
+  },
+  "operations": {
+    "model": "community-based coordination",
+    "workflow": [
+      "Case identification",
+      "Verification",
+      "Resource allocation",
+      "Delivery of support",
+      "Follow-up when possible"
+    ],
+    "transparencyLevel": "high",
+    "verificationRequired": true
+  },
+  "supportTypes": {
+    "medical": [
+      "Emergency treatment",
+      "Surgeries support",
+      "Medication supply"
+    ],
+    "rehabilitation": [
+      "Prosthetics support",
+      "Physical therapy assistance"
+    ],
+    "humanitarian": [
+      "Food aid",
+      "Basic living support"
+    ]
+  },
+  "people": {
+    "founders": [
+      {
+        "displayName": "Founder (Gaza)",
+        "role": "Founder",
+        "location": "Gaza",
+        "isPublic": true
+      }
+    ],
+    "team": [
+      {
+        "displayName": "Operations Team Member",
+        "role": "Operations",
+        "location": "Egypt",
+        "isPublic": true
+      }
+    ],
+    "developers": [
+      {
+        "displayName": "Backend Developer",
+        "role": "Backend Engineer",
+        "stack": [
+          "NestJS",
+          "TypeORM"
+        ],
+        "isPublic": false
+      }
+    ]
+  },
+  "values": [
+    "Transparency",
+    "Rapid Response",
+    "Humanitarian Integrity",
+    "Direct Impact",
+    "Non-profit Community Work"
+  ],
+  "transparency": {
+    "policy": "We are committed to maintaining transparency in operations and publishing updates when available.",
+    "reportUrl": "/reports/latest",
+    "verification": "All operations are subject to internal verification and review."
+  },
+  "contact": {
+    "email": "info@domain.com",
+    "phone": "+20xxxxxxxxxx",
+    "social": {
+      "facebook": "",
+      "instagram": ""
+    }
+  }
+}

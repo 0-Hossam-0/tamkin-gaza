@@ -1,0 +1,128 @@
+{
+  "organization": {
+    "name": "Tamkin",
+    "type": "İnsani Toplum Girişimi",
+    "isGovernmental": false,
+    "isInternationalNGO": false,
+    "country": "Filistin"
+  },
+  "project": {
+    "status": "active",
+    "startedAt": "2026",
+    "description": "Gazze'deki yaralı ve ampute bireylere şeffaf ve düzenli çalışmalar aracılığıyla acil insani destek sağlamaya odaklanan toplum odaklı bir girişim.",
+    "goals": [
+      "Yaralılara acil tıbbi destek sağlamak",
+      "Ampute bireylerin rehabilitasyon ihtiyaçlarını desteklemek",
+      "İnsani yardımları verimli ve şeffaf bir şekilde ulaştırmak",
+      "Bağışçıları gerçek ihtiyaç sahipleriyle buluşturmak"
+    ]
+  },
+  "about": {
+    "title": "Hakkımızda",
+    "story": "Tamkin, Gazze ve Mısır'dan gençler tarafından kurulan toplum odaklı bir insani girişimdir. Genel olarak Gazze halkını, özellikle de en kritik insani koşullarla karşı karşıya kalan yaralı ve ampute bireyleri desteklemek için oluşturulmuştur.",
+    "mission": "Gazze'deki yaralı ve ampute bireylere hızlı, şeffaf ve etkili insani destek sağlamak; aynı zamanda daha geniş çaplı insani yardım çabalarına katkıda bulunmak.",
+    "vision": "Acil destekleri Gazze'deki en muhtaç kişilere bağlayan güvenilir bir insani köprü olmak.",
+    "focus": {
+      "primary": [
+        "Yaralı bireyler",
+        "Ampute bireyler"
+      ],
+      "secondary": [
+        "Gazze için genel insani destek"
+      ]
+    }
+  },
+  "whyThisProject": {
+    "title": "Neden Bu Proje?",
+    "content": "Yardımların idari gecikmeler veya kaynak israfı yaşanmadan doğrudan hak sahiplerine ulaşmasını sağlayan, düzenli ve şeffaf bir platforma duyulan acil ihtiyaçtan dolayı."
+  },
+  "targetAudience": {
+    "primary": [
+      "Yaralı bireyler",
+      "Ampute bireyler"
+    ],
+    "secondary": [
+      "Gazze'deki aileler",
+      "Genel insani vakalar"
+    ],
+    "regions": [
+      "Gazze Şeridi"
+    ]
+  },
+  "operations": {
+    "model": "Toplum temelli koordinasyon",
+    "workflow": [
+      "Vaka tespiti",
+      "Doğrulama",
+      "Kaynak tahsisi",
+      "Desteğin ulaştırılması",
+      "Mümkünse takip"
+    ],
+    "transparencyLevel": "high",
+    "verificationRequired": true
+  },
+  "supportTypes": {
+    "medical": [
+      "Acil tedavi",
+      "Ameliyat desteği",
+      "İlaç tedariki"
+    ],
+    "rehabilitation": [
+      "Protez desteği",
+      "Fizik tedavi yardımı"
+    ],
+    "humanitarian": [
+      "Gıda yardımı",
+      "Temel yaşam desteği"
+    ]
+  },
+  "people": {
+    "founders": [
+      {
+        "displayName": "Kurucu (Gazze)",
+        "role": "Kurucu",
+        "location": "Gazze",
+        "isPublic": true
+      }
+    ],
+    "team": [
+      {
+        "displayName": "Operasyon Ekibi Üyesi",
+        "role": "Operasyonlar",
+        "location": "Mısır",
+        "isPublic": true
+      }
+    ],
+    "developers": [
+      {
+        "displayName": "Backend Geliştiricisi",
+        "role": "Backend Mühendisi",
+        "stack": [
+          "NestJS",
+          "TypeORM"
+        ],
+        "isPublic": false
+      }
+    ]
+  },
+  "values": [
+    "Şeffaflık",
+    "Hızlı Müdahale",
+    "İnsani Dürüstlük",
+    "Doğrudan Etki",
+    "Kar Amacı Gütmeyen Toplum Çalışması"
+  ],
+  "transparency": {
+    "policy": "Operasyonlarda şeffaflığı korumayı ve mevcut oldukça güncellemeleri yayınlamayı taahhüt ediyoruz.",
+    "reportUrl": "/reports/latest",
+    "verification": "Tüm operasyonlar kurum içi doğrulama ve incelemeye tabidir."
+  },
+  "contact": {
+    "email": "info@domain.com",
+    "phone": "+20xxxxxxxxxx",
+    "social": {
+      "facebook": "",
+      "instagram": ""
+    }
+  }
+}
