@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable, Scope } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import jwt, { sign } from "jsonwebtoken";
 import { Repository } from "typeorm";
@@ -10,10 +10,12 @@ import { UserModel } from "../../../DataBase/Models/user.model";
 import { E_TokenType } from "../../Enums/token.enum";
 import { E_UserRole } from "../../Enums/user.enums";
 import { I_SignToken, I_Decoded } from "../../Types/token.types";
+import { E_SignatureLevel } from "../../Enums/signature.level.enum";
+import type { Request } from "express";
 
 
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class TokenService {
   constructor(
     private readonly errorResponse:ErrorResponse ,
@@ -21,28 +23,51 @@ export class TokenService {
     private readonly jwtRepository: Repository<JwtModel>,
     @InjectRepository(UserModel)
     private readonly userRepository: Repository<UserModel>,
-
+    @Inject("REQUEST")
+    private readonly request: Request,
   ) { }
-
-
 
   private getSecretKey(
     tokenType: E_TokenType,
-    role: E_UserRole | string,
+    signature: E_SignatureLevel,
   ): string {
+
 
     let key: string | undefined;
 
-    const rolePrefix = role === E_UserRole.USER ? 'USER_' : 'ADMIN_';
-
-    const typeSuffix = tokenType === E_TokenType.ACCESS ? 'ACCESS_TOKEN_SIGNATURE' : 'REFRESH_TOKEN_SIGNATURE';
-
-    const keyName = `${rolePrefix}${typeSuffix}`;
-
-    key = process.env[keyName];
+    switch(tokenType){
+      case E_TokenType.ACCESS:
+        switch(signature){
+          case E_SignatureLevel.SUPER_ADMIN:
+            key = process.env.SUPER_ADMIN_ACCESS_TOKEN_SECRET;
+            break;
+          case E_SignatureLevel.ADMIN:
+            key = process.env.ADMIN_ACCESS_TOKEN_SECRET;
+            break;
+          case E_SignatureLevel.USER:
+            key = process.env.USER_ACCESS_TOKEN_SECRET;
+            break;
+        }
+        break;
+      case E_TokenType.REFRESH:
+        switch(signature){
+          case E_SignatureLevel.SUPER_ADMIN:
+            key = process.env.SUPER_ADMIN_REFRESH_TOKEN_SECRET;
+            break;
+          case E_SignatureLevel.ADMIN:
+            key = process.env.ADMIN_REFRESH_TOKEN_SECRET;
+            break;
+          case E_SignatureLevel.USER:
+            key = process.env.USER_REFRESH_TOKEN_SECRET;
+            break;
+        }
+        break;
+    }
 
     if (!key) {
-      throw new Error(`Secret key ${keyName} is missing in .env`);
+      throw this.errorResponse.serverError({
+        message: this.request.t('token:errors.secret_key_missing') ,
+      })
     }
 
     return key;
@@ -50,7 +75,8 @@ export class TokenService {
 
   private async signToken(data: I_SignToken) {
 
-    let SECRET_KEY: string = this.getSecretKey(data.tokenType, data.payload.role);
+
+    let SECRET_KEY: string = this.getSecretKey(data.tokenType, data.payload.signature);
 
     const ACCESS_TOKEN_EXPIRES = process.env.NODE_ENV === "Development" ? process.env.ACCESS_TOKEN_EXPIRES_DEV_MOOD ?? "24h" : process.env.ACCESS_TOKEN_EXPIRES ?? "1h";
 
@@ -74,13 +100,32 @@ export class TokenService {
 
   async createLoginCredentials(
     userId: string,
-    role: E_UserRole | string,
+    role: E_UserRole ,
   ) {
+
+    let signature: E_SignatureLevel = E_SignatureLevel.USER;
+
+
+    switch (role) {
+      case E_UserRole.SUPER_ADMIN:
+        signature = E_SignatureLevel.SUPER_ADMIN;
+        break;
+
+        case E_UserRole.ADMIN:
+          signature = E_SignatureLevel.ADMIN;
+          break;
+
+      default:
+        signature = E_SignatureLevel.USER;
+        break;
+    }
+
 
     const access_token = await this.signToken({
       payload: {
         userId,
         role,
+        signature
       },
       tokenType: E_TokenType.ACCESS,
     });
@@ -89,18 +134,19 @@ export class TokenService {
       payload: {
         userId,
         role,
+        signature
       },
       tokenType: E_TokenType.REFRESH,
     });
 
     return {
       access_token: {
-        token: access_token.token,
+        token: `${signature} ${access_token.token}`,
         jti: access_token.jti,
       },
 
       refresh_token: {
-        token: refresh_token.token,
+        token: `${signature} ${refresh_token.token}`,
         jti: refresh_token.jti,
       },
     };
@@ -136,7 +182,15 @@ export class TokenService {
     token: string,
     secretKey: string,
   ): Promise<I_Decoded> => {
-    return jwt.verify(token, secretKey) as I_Decoded;
+
+    try {
+      return jwt.verify(token, secretKey) as I_Decoded;
+    } catch (error) {
+      throw this.errorResponse.unauthorized({
+        message: this.request.t('auth:errors.token_validation_failed') ,
+        info: error.message,
+      });
+    }
   };
 
   private async revokeAllTokensForUser(filter: { userId: string }) {
@@ -154,27 +208,36 @@ export class TokenService {
 
   ) {
 
-    const signature = token.split(" ")[1] ;
-    let role: E_UserRole | string;
-    if(signature === "System"){
-      role = E_UserRole.ADMIN
-    }else if(signature === "Admin"){
-      role = E_UserRole.ADMIN
-    }else{
-      role = E_UserRole.USER
-    }
 
-
-    const SECRET_KEY = this.getSecretKey(type, role);
+    const SECRET_KEY = this.getSecretKey(type, token.split(" ")[0] as E_SignatureLevel);
     let decoded: I_Decoded;
 
     try {
-      decoded = await this.verifyToken(token, SECRET_KEY);
-    } catch (error: any) {
+      decoded = await this.verifyToken(token.split(" ")[1], SECRET_KEY);
+    } catch (error) {
+
+      const message = this.request.t('token:errors.token_validation_failed') ;
+
+      if (error.name === 'TokenExpiredError') {
+        throw this.errorResponse.unauthorized({
+          message: message ,
+          info: this.request.t('token:errors.token_expired'),
+        });
+      }
+
+      if (error.name === 'JsonWebTokenError') {
+        throw this.errorResponse.unauthorized({
+          message: message ,
+          info: this.request.t('auth:errors.token_validation_failed'),
+        });
+      }
+
       throw this.errorResponse.unauthorized({
-        message: 'Token validation failed',
+        message: message,
         info: error.message,
       });
+
+
     }
 
     let user: any = null;
@@ -196,49 +259,51 @@ export class TokenService {
 
     if (!user) {
       throw this.errorResponse.unauthorized({
-        message: 'User or Gate account not found',
-        info: 'The associated account could not be located',
+        message: this.request.t('token:errors.user_account_not_found') ,
+        info: this.request.t('token:errors.the_associated_account_could_not_be_located'),
       });
     }
 
     if (adminSetting?.changeCredentialsTime && adminSetting.changeCredentialsTime > new Date(decoded.iat * 1000)) {
       throw this.errorResponse.unauthorized({
-        message: 'Token invalidated by recent credential change',
-        info: 'Your password or account settings have been updated; please log in again',
+        message: this.request.t('token:errors.token_invalidated_by_recent_credential_change') ,
+        info: this.request.t('token:errors.your_password_or_account_settings_have_been_updated_please_log_in_again'),
       });
     }
 
     if (!jwt) {
       throw this.errorResponse.unauthorized({
-        message: 'Invalid or revoked session',
-        info: 'Your session credentials are no longer valid. Please log in again',
+        message: this.request.t('token:errors.invalid_or_revoked_session') ,
+        info: this.request.t('token:errors.your_session_credentials_are_no_longer_valid_please_log_in_again'),
       });
     }
 
     if (jwt.type !== type) {
       throw this.errorResponse.unauthorized({
-        message: 'Invalid token type',
-        info: 'The provided token does not match the required token type',
+        message: this.request.t('token:errors.invalid_token_type') ,
+        info: this.request.t('token:errors.the_provided_token_does_not_match_the_required_token_type'),
       });
     }
 
     if (jwt.revoked) {
       throw this.errorResponse.unauthorized({
-        message: 'Session expired, please log in again',
+        message: this.request.t('token:errors.session_expired_please_log_in_again') ,
+        info: this.request.t('token:errors.your_session_credentials_are_no_longer_valid_please_log_in_again'),
       });
     }
 
     if (jwt.expiresAt < new Date()) {
+
       if (jwt.type === E_TokenType.REFRESH) {
         throw this.errorResponse.unauthorized({
-          message: 'Refresh token has expired',
-          info: 'Your session has timed out. Please log in again',
+          message: this.request.t('token:errors.refresh_token_has_expired') ,
+          info: this.request.t('token:errors.your_session_has_timed_out_please_log_in_again'),
         });
       }
 
       throw this.errorResponse.unauthorized({
-        message: 'Access token has expired',
-        info: 'Your access token has timed out. Please refresh your session',
+        message: this.request.t('token:errors.access_token_has_expired') ,
+        info: this.request.t('token:errors.your_access_token_has_timed_out_please_refresh_your_session'),
       });
     }
 
@@ -257,7 +322,8 @@ export class TokenService {
       })
  */
       throw this.errorResponse.unauthorized({
-        message: 'Session expired, please log in again',
+        message: this.request.t('token:errors.session_expired_please_log_in_again') ,
+        info: this.request.t('token:errors.your_session_credentials_are_no_longer_valid_please_log_in_again'),
       });
     }
 

@@ -8,7 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ErrorResponse } from './Common/Utils/Response/error.response';
 import middleware from 'i18next-http-middleware';
 import i18next from 'i18next';
-import { i18nInit } from './Common/Config/i18n';
+import { i18nInit } from './Config/i18n';
 
 
 async function bootstrap() {

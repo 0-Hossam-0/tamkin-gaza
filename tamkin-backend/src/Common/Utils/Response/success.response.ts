@@ -1,4 +1,4 @@
-import { I_Response } from "../../Interfaces/response.interface";
+import { I_Response } from "../../Interfaces/Response/response.interface";
 
 export const SuccessResponse = <T = any>({
     message = 'done',

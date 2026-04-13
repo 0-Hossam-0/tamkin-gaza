@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModel } from "src/DataBase/Models/user.model";
 import { JwtModel } from "src/DataBase/Models/jwt.model";
 import { ClientInfoService } from "../Utils/Security/client-info.service";
+import { TokenService } from "../Utils/Security/token.service";
 
 @Module({
     imports: [
@@ -11,7 +12,8 @@ import { ClientInfoService } from "../Utils/Security/client-info.service";
     ],
     providers: [
         ErrorResponse,
-        ClientInfoService],
+        ClientInfoService,
+        TokenService],
     exports: [
         TypeOrmModule.forFeature([UserModel, JwtModel]),
         TypeOrmModule.forRoot({
@@ -19,6 +21,7 @@ import { ClientInfoService } from "../Utils/Security/client-info.service";
         }),
         ErrorResponse,
         ClientInfoService,
+        TokenService
     ],
 })
 export class CommonModule { }
