@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
+import { TranslationService } from 'src/Common/Services/Translation/translation.service';
 import { GoogleAuthService } from './Google-Auth/google.auth';
 import { UserModel } from 'src/DataBase/Models/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request, Response } from 'express';
+import { ILanguageRequest } from 'src/Common/Interfaces/Language/language-request.interface';
 import { TokenTypeEnum } from 'src/Common/Enums/token.enum';
 import { CookiesService } from 'src/Common/Services/Cookies/cookies.service';
 import { UserProviderEnum } from 'src/Common/Enums/User/user.enum';
@@ -18,6 +20,7 @@ import { HashingService } from 'src/Common/Services/Security/Hash/hash.service';
 export class AuthService {
   constructor(
     private readonly responseService: ResponseService,
+    private readonly translationService: TranslationService,
     private readonly googleAuth: GoogleAuthService,
     @InjectRepository(UserModel)
     private readonly userModel: Repository<UserModel>,
@@ -49,9 +52,16 @@ export class AuthService {
       });
 
       if (!newUser) {
+        const userLang = (req as ILanguageRequest).userLanguage;
         throw this.responseService.serverError({
-          message: req.t('auth:errors.failToCreateUser'),
-          info: req.t('auth:errors.somethingWentWrongPleaseTryAgain'),
+          message: this.translationService.translate(
+            'auth:errors.failToCreateUser',
+            userLang,
+          ),
+          info: this.translationService.translate(
+            'auth:errors.somethingWentWrongPleaseTryAgain',
+            userLang,
+          ),
         });
       }
 
@@ -106,15 +116,26 @@ export class AuthService {
     });
 
     if (user) {
+      const userLang = (req as ILanguageRequest).userLanguage;
       throw this.responseService.badRequest({
-        message: req.t('auth:errors.emailAlreadyExists'),
-        info: req.t('auth:errors.thisAccountIsAlreadyRegisteredPleaseLogin'),
+        message: this.translationService.translate(
+          'auth:errors.emailAlreadyExists',
+          userLang,
+        ),
+        info: this.translationService.translate(
+          'auth:errors.thisAccountIsAlreadyRegisteredPleaseLogin',
+          userLang,
+        ),
       });
     }
 
     if (body.password !== body.confirmPassword) {
+      const userLang = (req as ILanguageRequest).userLanguage;
       throw this.responseService.badRequest({
-        message: req.t('auth:errors.passwordsNotMatch'),
+        message: this.translationService.translate(
+          'auth:validation.passwordsNotMatch',
+          userLang,
+        ),
       });
     }
 
@@ -129,9 +150,16 @@ export class AuthService {
     });
 
     if (!newUser) {
+      const userLang = (req as ILanguageRequest).userLanguage;
       throw this.responseService.serverError({
-        message: req.t('auth:errors.failToCreateUser'),
-        info: req.t('auth:errors.somethingWentWrongPleaseTryAgain'),
+        message: this.translationService.translate(
+          'auth:errors.failToCreateUser',
+          userLang,
+        ),
+        info: this.translationService.translate(
+          'auth:errors.somethingWentWrongPleaseTryAgain',
+          userLang,
+        ),
       });
     }
 
@@ -182,16 +210,30 @@ export class AuthService {
     });
 
     if (!user || !user.password) {
+      const userLang = (req as ILanguageRequest).userLanguage;
       throw this.responseService.badRequest({
-        message: req.t('auth:errors.invalidCredentials'),
-        info: req.t('auth:errors.invalidCredentialsInfo'),
+        message: this.translationService.translate(
+          'auth:errors.invalidCredentials',
+          userLang,
+        ),
+        info: this.translationService.translate(
+          'auth:errors.invalidCredentialsInfo',
+          userLang,
+        ),
       });
     }
 
     if (!(await this.hashingService.compare(body.password, user.password))) {
+      const userLang = (req as ILanguageRequest).userLanguage;
       throw this.responseService.badRequest({
-        message: req.t('auth:errors.invalidCredentials'),
-        info: req.t('auth:errors.invalidCredentialsInfo'),
+        message: this.translationService.translate(
+          'auth:errors.invalidCredentials',
+          userLang,
+        ),
+        info: this.translationService.translate(
+          'auth:errors.invalidCredentialsInfo',
+          userLang,
+        ),
       });
     }
 

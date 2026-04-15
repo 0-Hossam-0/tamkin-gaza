@@ -1,65 +1,30 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ITranslationService } from '../../Interfaces/Language/translation.interface';
 import * as fs from 'fs';
-import * as fsPromise from 'fs/promises';
 import * as path from 'path';
-import { LanguageCode } from 'src/Common/Interfaces/Language/languages-config.interface';
 import languagesConfig from '../../../Config/Language/language.json';
 
 @Injectable()
-export class JsonFileService implements ITranslationService, OnModuleInit {
+export class JsonFileService implements OnModuleInit {
   private readonly cache: Record<string, any> = {};
   private readonly baseDir = path.join(
     __dirname,
     '../../../../assets/translations',
   );
 
-  getDefaultLanguageCode(): LanguageCode {
-    const data = this.getRawLanguageData();
-    return this.validateAndExtractDefault(data);
-  }
-
-  private getRawLanguageData(): typeof languagesConfig {
+  getRawLanguageData(): typeof languagesConfig {
     const filePath = path.join(
       process.cwd(),
       'src/Config/Language/language.json',
     );
 
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath))
       throw new Error(`Configuration file not found at: ${filePath}`);
-    }
 
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(fileContent) as typeof languagesConfig;
   }
-  private validateAndExtractDefault(
-    data: typeof languagesConfig,
-  ): LanguageCode {
-    const defaultEntries = data.filter((item) => {
-      const code = Object.keys(item)[0];
-      const config = (item as any)[code];
-      return config?.isDefault === true;
-    });
-
-    if (defaultEntries.length === 0) {
-      throw new Error(
-        'Invalid language.json: No language is marked as "isDefault": true.',
-      );
-    }
-
-    if (defaultEntries.length > 1) {
-      const foundCodes = defaultEntries.map((entry) => Object.keys(entry)[0]);
-      throw new Error(
-        `Invalid language.json: Multiple default languages found (${foundCodes.join(', ')}). Only one is allowed.`,
-      );
-    }
-
-    return Object.keys(defaultEntries[0])[0] as LanguageCode;
-  }
 
   onModuleInit() {
-    console.log('--- Loading All Translations Into Memory ---');
-
     const languages = fs.readdirSync(this.baseDir);
 
     for (const lang of languages) {
@@ -91,11 +56,9 @@ export class JsonFileService implements ITranslationService, OnModuleInit {
         }
       }
     }
-
-    console.log('✓ All translations loaded successfully');
   }
 
-  public get(lang: string, pathKey: string): string {
+  public get(lang: string, pathKey: string, context?: { prop?: any }): string {
     try {
       if (!pathKey.includes(':')) return pathKey;
 
@@ -112,13 +75,23 @@ export class JsonFileService implements ITranslationService, OnModuleInit {
 
       if (!translation) return pathKey;
 
-      const result = parts.reduce(
+      let result = parts.reduce(
         (obj: any, key: string) =>
           obj && obj[key] !== undefined ? obj[key] : undefined,
         translation,
       );
 
-      return typeof result === 'string' ? result : pathKey;
+      if (typeof result !== 'string') return pathKey;
+
+      if (context?.prop) {
+        const propValue = Array.isArray(context.prop)
+          ? context.prop.join(', ')
+          : context.prop;
+
+        result = result.replace(/{prop}/g, propValue);
+      }
+
+      return result;
     } catch {
       return pathKey;
     }

@@ -1,0 +1,4 @@
+{
+  "passwordsNotMatch": "Password and confirm password do not match",
+  "invalidCountryCode": "Invalid country code"
+}

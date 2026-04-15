@@ -1,0 +1,13 @@
+{
+  "failToVerifyThisAccount": "Failed to verify this account",
+  "failToVerifyThisToken": "Failed to verify this token",
+  "tokenUsedTooLate": "Token used too late",
+  "emailAlreadyExists": "Email already exists",
+  "thisAccountIsAlreadyRegisteredPleaseLogin": "This account is already registered, please login",
+  "failToCreateUser": "Failed to create user",
+  "somethingWentWrongPleaseTryAgain": "Something went wrong, please try again",
+  "invalidCredentials": "Login failed",
+  "invalidCredentialsInfo": "Invalid email or password provided. Please check your credentials and try again.",
+  "unAuthorized": "You are not authorized to access this resource",
+  "unAuthorizedInfo": "You do not have permission to access this resource. Please contact the admin for assistance."
+}

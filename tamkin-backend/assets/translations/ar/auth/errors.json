@@ -1,0 +1,13 @@
+{
+  "failToVerifyThisAccount": "فشل التحقق من هذا الحساب",
+  "failToVerifyThisToken": "فشل التحقق من هذا التوكن",
+  "tokenUsedTooLate": "تم استخدام التوكن بعد فوات الأوان",
+  "emailAlreadyExists": "البريد الإلكتروني موجود بالفعل",
+  "thisAccountIsAlreadyRegisteredPleaseLogin": "هذا الحساب مسجل بالفعل، يرجى تسجيل الدخول",
+  "failToCreateUser": "فشل إنشاء المستخدم",
+  "somethingWentWrongPleaseTryAgain": "حدث خطأ ما، يرجى المحاولة مرة أخرى",
+  "invalidCredentials": "فشل تسجيل الدخول",
+  "invalidCredentialsInfo": "البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى التحقق من بيانات الاعتماد والمحاولة مرة أخرى.",
+  "unAuthorized": "غير مصرح لك بالوصول إلى هذا المورد",
+  "unAuthorizedInfo": "ليس لديك صلاحية الوصول إلى هذا المورد. يرجى الاتصال بالمسؤول للحصول على المساعدة."
+}

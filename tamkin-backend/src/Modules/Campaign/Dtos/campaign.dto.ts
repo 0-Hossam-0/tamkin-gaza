@@ -1,33 +1,51 @@
 import {
   IsEnum,
   IsNumber,
-  IsObject,
   IsOptional,
-  IsString,
   Min,
-  ValidateNested,
+  IsString,
+  IsNotEmpty,
+  IsDefined,
 } from 'class-validator';
 import { CampaignStatusEnum } from '../Enums/campaign-status.enum';
-import { SUPPORTED_LANGUAGES } from 'src/Config/languages.config';
+import {
+  SUPPORTED_LANGUAGES,
+  LanguageCode,
+} from 'src/Common/Interfaces/Language/languages-config.interface';
+import { IsLanguageRecord } from 'src/Common/Decorators/Language/isLanguageRecord.decorator';
 
 export class CampaignDto {
-  @IsObject({ message: 'campaign:validation.title_required' })
-  @ValidateNested()
-  title: Record<(typeof SUPPORTED_LANGUAGES)[number], string>;
+  @IsDefined({
+    message: `campaign:validation.title_required`,
+  })
+  @IsLanguageRecord({
+    message: `campaign:validation.title_invalid|${SUPPORTED_LANGUAGES}`,
+  })
+  title: Record<LanguageCode, string>;
 
-  @IsObject()
-  @ValidateNested()
-  description: Record<(typeof SUPPORTED_LANGUAGES)[number], string>;
+  @IsDefined({
+    message: `campaign:validation.description_required`,
+  })
+  @IsLanguageRecord({
+    message: `campaign:validation.description_invalid|${SUPPORTED_LANGUAGES}`,
+  })
+  description: Record<LanguageCode[number], string>;
 
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(1)
+  @IsDefined({
+    message: `campaign:validation.target_amount_required`,
+  })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: `campaign:validation.target_amount_invalid` },
+  )
+  @Min(1, { message: 'campaign:validation.target_amount_min' })
   target_amount: number;
 
-  @IsString()
+  @IsString({ message: 'campaign:validation.image_invalid' })
   @IsOptional()
   image: string;
 
-  @IsEnum(CampaignStatusEnum)
+  @IsEnum(CampaignStatusEnum, { message: 'campaign:validation.status_invalid' })
   @IsOptional()
   status: CampaignStatusEnum;
 }

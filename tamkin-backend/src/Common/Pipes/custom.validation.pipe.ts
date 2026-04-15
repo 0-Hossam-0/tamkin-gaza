@@ -26,19 +26,41 @@ export class CustomValidationPipe extends ValidationPipe {
     const formattedErrors = errors.map((error) => {
       const constraints = Object.values(error.constraints || {});
 
-      const translatedMessages = constraints.map((key) => {
-        if (key.includes(':') && key.includes('.')) {
-          return this.translationService.translate(key, userLanguage);
+      const translatedMessages: string[] = [];
+
+      constraints.forEach((key) => {
+        // check if the key is one of OUR keys (contains module:file.key)
+        const isCustomKey = key.includes(':') && key.includes('.');
+
+        if (isCustomKey) {
+          if (key.includes('|')) {
+            const [translationKey, ...rest] = key.split('|');
+            const propStr = rest.join('|');
+            const prop = propStr.split(',').map((item) => item.trim());
+
+            const message = this.translationService.translate(
+              translationKey,
+              userLanguage,
+              { prop },
+            );
+            translatedMessages.push(message);
+          } else {
+            const message = this.translationService.translate(
+              key,
+              userLanguage,
+            );
+            translatedMessages.push(message);
+          }
         }
-        return key;
+        // IMPORTANT: Do not add an 'else' block here.
+        // If it's not a custom key, we ignore it completely.
       });
 
       return {
         path: error.property,
-        info: translatedMessages.join(', '),
+        error: translatedMessages,
       };
     });
-
     return this.responseService.badRequest({
       message: 'Validation failed',
       issues: formattedErrors,

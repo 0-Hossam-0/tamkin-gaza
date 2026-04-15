@@ -1,0 +1,13 @@
+{
+  "failToVerifyThisAccount": "Bu hesap doğrulanamadı",
+  "failToVerifyThisToken": "Bu token doğrulanamadı",
+  "tokenUsedTooLate": "Token çok geç kullanıldı",
+  "emailAlreadyExists": "E-posta zaten mevcut",
+  "thisAccountIsAlreadyRegisteredPleaseLogin": "Bu hesap zaten kayıtlı, lütfen giriş yapın",
+  "failToCreateUser": "Kullanıcı oluşturulamadı",
+  "somethingWentWrongPleaseTryAgain": "Bir şeyler yanlış gitti, lütfen tekrar deneyin",
+  "invalidCredentials": "Giriş başarısız",
+  "invalidCredentialsInfo": "Geçersiz e-posta veya şifre girildi. Lütfen kimlik bilgilerinizi kontrol edip tekrar deneyin.",
+  "unAuthorized": "Bu kaynağa erişim yetkiniz yok",
+  "unAuthorizedInfo": "Bu kaynağa erişim izniniz yok. Lütfen yardım için yöneticiyle iletişime geçin."
+}

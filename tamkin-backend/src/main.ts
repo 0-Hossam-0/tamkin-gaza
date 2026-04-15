@@ -3,13 +3,9 @@ import { AppModule } from './app.module';
 import { ResponseStatusInterceptor } from './Common/Interceptors/response-status.interceptor';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
 import { ClassSerializerInterceptor } from '@nestjs/common';
-import { ResponseService } from './Common/Services/Response/response.service';
-import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {
-  // await i18nInit();
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());

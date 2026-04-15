@@ -1,0 +1,13 @@
+{
+  "failToVerifyThisAccount": "اس اکاؤنٹ کی تصدیق کرنے میں ناکامی",
+  "failToVerifyThisToken": "اس ٹوکن کی تصدیق کرنے میں ناکامی",
+  "tokenUsedTooLate": "ٹوکن بہت دیر سے استعمال ہوا",
+  "emailAlreadyExists": "ای میل پہلے سے موجود ہے",
+  "thisAccountIsAlreadyRegisteredPleaseLogin": "یہ اکاؤنٹ پہلے سے رجسٹرڈ ہے، براہ کرم لاگ ان کریں",
+  "failToCreateUser": "یوزر بنانے میں ناکامی",
+  "somethingWentWrongPleaseTryAgain": "کچھ غلط ہو گیا، براہ کرم دوبارہ کوشش کریں",
+  "invalidCredentials": "لاگ ان ناکام رہا",
+  "invalidCredentialsInfo": "غلط ای میل یا پاس ورڈ فراہم کیا گیا ہے۔ براہ کرم اپنی اسناد کی جانچ کریں اور دوبارہ کوشش کریں۔",
+  "unAuthorized": "آپ کو اس ریسورس تک رسائی حاصل کرنے کی اجازت نہیں ہے",
+  "unAuthorizedInfo": "آپ کو اس ریسورس تک رسائی حاصل کرنے کی اجازت نہیں ہے۔ براہ کرم مدد کے لیے منتظم سے رابطہ کریں۔"
+}

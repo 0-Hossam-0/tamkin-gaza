@@ -2,18 +2,21 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TokenTypeEnum } from 'src/Common/Enums/token.enum';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
+import { TranslationService } from 'src/Common/Services/Translation/translation.service';
 import { TokenService } from 'src/Common/Services/Security/token.service';
-import { I_Request } from 'src/Common/Types/request.types';
+import { IRequest } from 'src/Common/Types/request.types';
+import { ILanguageRequest } from 'src/Common/Interfaces/Language/language-request.interface';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(
     private readonly tokenService: TokenService,
     private readonly responseService: ResponseService,
+    private readonly translationService: TranslationService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    let req: any | I_Request = context.switchToHttp().getRequest();
+    let req: any | IRequest = context.switchToHttp().getRequest();
 
     let authorization: string = '';
 
@@ -29,11 +32,16 @@ export class AuthenticationGuard implements CanActivate {
     authorization = req.cookies['access_token'];
 
     if (!authorization || authorization === '') {
+      const userLang = (req as ILanguageRequest).userLanguage;
       throw this.responseService.forbidden({
-        message: req.t(
+        message: this.translationService.translate(
           'token:errors.you_are_not_authorized_to_access_this_resource',
+          userLang,
         ),
-        info: req.t('token:errors.authorization_header_missing'),
+        info: this.translationService.translate(
+          'token:errors.authorization_header_missing',
+          userLang,
+        ),
       });
     }
 
