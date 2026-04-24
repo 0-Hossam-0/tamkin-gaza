@@ -19,6 +19,8 @@ import { JsonFileService } from './Common/Services/Json/json-file.service';
 import { APP_PIPE } from '@nestjs/core';
 import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
 import { TranslationService } from './Common/Services/Translation/translation.service';
+import { MinioModule } from './Modules/Reels/Minio/minio.module';
+import { ReelsModule } from './Modules/Reels/reels.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { TranslationService } from './Common/Services/Translation/translation.se
     CommonModule,
     AuthModule,
     CampaignModule,
+    MinioModule,
+    ReelsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -50,7 +54,7 @@ export class AppModule implements OnApplicationBootstrap {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LanguageMiddleware).forRoutes('*');
   }
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) { }
 
   async onApplicationBootstrap() {
     if (this.dataSource.isInitialized) {

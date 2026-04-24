@@ -1,0 +1,8 @@
+{
+    "not_found": "Reel not found",
+    "update_failed": "Failed to update reel",
+    "invalid_file_type": "Invalid file type. Only video files are allowed.",
+    "invalid_id": "Invalid Reel ID format"
+,
+    "forbidden": "You do not have permission to perform this action"
+}

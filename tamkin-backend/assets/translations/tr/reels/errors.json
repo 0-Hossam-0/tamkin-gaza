@@ -1,0 +1,7 @@
+{
+    "not_found": "Reel bulunamadı",
+    "update_failed": "Reel güncellenemedi",
+    "invalid_file_type": "Geçersiz dosya türü. Sadece video dosyalarına izin verilir.",
+    "invalid_id": "Geçersiz Reel kimliği formatı",
+    "forbidden": "Bu işlemi gerçekleştirmeye izniniz yok"
+}

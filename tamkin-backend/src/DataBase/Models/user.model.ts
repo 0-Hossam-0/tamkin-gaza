@@ -6,18 +6,22 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  Generated,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Expose } from 'class-transformer';
 import { IUser } from 'src/Common/Interfaces/User/user.interface';
+import { ReelModel } from './reel.model';
 
 @Entity()
 export class UserModel implements IUser {
   @PrimaryGeneratedColumn()
   _id: number;
 
-  @PrimaryGeneratedColumn('uuid')
+  @Column({ unique: true })
+  @Generated('uuid')
   uuid: string;
 
   @Column({ nullable: false })
@@ -57,4 +61,7 @@ export class UserModel implements IUser {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => ReelModel, (reel) => reel.user)
+  reels: ReelModel[];
 }
