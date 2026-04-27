@@ -5,10 +5,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { CampaignDto } from 'src/Modules/Campaign/Dtos/campaign.dto';
 
-@Entity('Campaigns')
+@Entity('campaign')
 export class Campaign {
   @PrimaryGeneratedColumn()
   id: number;
@@ -25,8 +26,8 @@ export class Campaign {
   @Column({ unique: true })
   slug: string;
 
-  @Column({ nullable: true })
-  image: string;
+  @Column({ type: 'jsonb', nullable: true })
+  image: string[];
 
   @Column({
     type: 'enum',
@@ -40,4 +41,7 @@ export class Campaign {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 }

@@ -3,13 +3,11 @@ import { CampaignController } from './campaign.controller';
 import { CampaignService } from './campaign.service';
 import { Campaign } from 'src/DataBase/Campaign/campaign.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
-import { TranslationService } from 'src/Common/Services/Translation/translation.service';
-import { JsonFileService } from 'src/Common/Services/Json/json-file.service';
+import { CommonModule } from 'src/Common/common.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Campaign])],
+  imports: [TypeOrmModule.forFeature([Campaign]), CommonModule],
   controllers: [CampaignController],
-  providers: [CampaignService, ResponseService, TranslationService, JsonFileService],
+  providers: [CampaignService],
 })
 export class CampaignModule {}

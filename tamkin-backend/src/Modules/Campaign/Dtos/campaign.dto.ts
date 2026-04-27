@@ -6,6 +6,7 @@ import {
   IsString,
   IsNotEmpty,
   IsDefined,
+  IsArray,
 } from 'class-validator';
 import { CampaignStatusEnum } from '../Enums/campaign-status.enum';
 import {
@@ -34,16 +35,14 @@ export class CampaignDto {
   @IsDefined({
     message: `validation:campaign.target_amount_required`,
   })
-  @IsNumber(
-    { maxDecimalPlaces: 2 },
-    { message: `validation:campaign.target_amount_invalid` },
-  )
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: `validation:campaign.target_amount_invalid` })
   @Min(1, { message: 'validation:campaign.target_amount_min' })
   target_amount: number;
 
-  @IsString({ message: 'validation:campaign.image_invalid' })
+  @IsArray({ message: 'validation:campaign.image_invalid' })
+  @IsString({ each: true, message: 'validation:campaign.image_invalid' })
   @IsOptional()
-  image: string;
+  image: string[];
 
   @IsEnum(CampaignStatusEnum, { message: 'validation:campaign.status_invalid' })
   @IsOptional()

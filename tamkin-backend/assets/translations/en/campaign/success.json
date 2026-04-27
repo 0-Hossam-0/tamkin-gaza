@@ -1,3 +1,6 @@
 {
-  "campaign_created_successfully": "Campaign created successfully"
+  "campaign_created_successfully": "Campaign created successfully",
+  "campaign_updated_successfully": "Campaign updated successfully",
+  "campaign_deleted_successfully": "Campaign deleted successfully",
+  "campaign_restored_successfully": "Campaign restored successfully"
 }
