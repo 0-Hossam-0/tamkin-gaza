@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ReelModel } from 'src/DataBase/Models/reel.model';
 import { UserModel } from 'src/DataBase/Models/user.model';
-import { MinioService } from './Minio/minio.service';
+import { MinioService } from 'src/Common/Minio/minio.service';
 import { IUser } from 'src/Common/Interfaces/User/user.interface';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
 import { ResponseService } from 'src/Common/Services/Response/response.service';

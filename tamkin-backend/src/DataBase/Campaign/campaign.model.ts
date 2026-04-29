@@ -3,6 +3,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  Generated,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
@@ -13,6 +14,10 @@ import { CampaignDto } from 'src/Modules/Campaign/Dtos/campaign.dto';
 export class Campaign {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ unique: true })
+  @Generated('uuid')
+  uuid: string;
 
   @Column({ type: 'jsonb', unique: true })
   title: CampaignDto['title'];

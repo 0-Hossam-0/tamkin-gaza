@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { MinioService } from 'src/Common/Minio/minio.service';
 import { CreateCampaignDto } from './Dtos/create-campaign.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Campaign } from '../../DataBase/Campaign/campaign.model';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { CampaignDto } from './Dtos/campaign.dto';
-import { TranslationService } from 'src/Common/Services/Translation/translation.service';
 import type { IRequest } from 'src/Common/Types/request.types';
 import { REQUEST } from '@nestjs/core';
 import { UpdateCampaignDto } from './Dtos/update-campaign.dto';
@@ -17,8 +17,9 @@ export class CampaignService {
     @InjectRepository(Campaign)
     private readonly campaignRepository: Repository<Campaign>,
     private readonly responseService: ResponseService,
+    private readonly minioService: MinioService,
     @Inject(REQUEST) private readonly request: IRequest,
-  ) {}
+  ) { }
 
   private async findByTitle(campaignTitle: CampaignDto['title']) {
     const campaign = await this.campaignRepository.findOne({
@@ -26,14 +27,22 @@ export class CampaignService {
     });
     return campaign;
   }
+  async findByUuid(campaignUuid: string) {
+    const campaign = await this.campaignRepository.findOne({
+      where: { uuid: campaignUuid },
+    });
+    return campaign;
+  }
+
   async findBySlug(campaignSlug: string) {
     const campaign = await this.campaignRepository.findOne({
       where: { slug: campaignSlug },
     });
     return campaign;
   }
-  async getCampaignInLanguage(campaignSlug: string) {
-    const campaign = await this.findBySlug(campaignSlug);
+
+  async getCampaignInLanguage(campaignUuid: string) {
+    const campaign = await this.findByUuid(campaignUuid);
     const userLanguage = this.request.userLanguage;
     if (!campaign)
       throw this.responseService.notFound({ message: 'campaign:errors.campaign_not_found' });
@@ -56,7 +65,9 @@ export class CampaignService {
     }));
   }
 
-  async create(createCampaignDto: CreateCampaignDto) {
+  async create(createCampaignDto: CreateCampaignDto, files?: Express.Multer.File[]) {
+
+
     const isCampaignExist = await this.findByTitle(createCampaignDto.title);
 
     if (isCampaignExist)
@@ -64,19 +75,31 @@ export class CampaignService {
         message: 'campaign:errors.campaign_already_exist',
       });
 
+    const imageUrls: string[] = [];
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const { fileUrl } = await this.minioService.uploadFile(file);
+        imageUrls.push(fileUrl);
+      }
+    }
+
+
     const campaign = this.campaignRepository.create({
       ...createCampaignDto,
+      image: imageUrls,
       slug: createSlug(createCampaignDto.title.en),
     });
+
     return await this.campaignRepository.save(campaign);
   }
 
-  async update(updateCampaignDto: UpdateCampaignDto, campaignSlug: string) {
-    const campaign = await this.findBySlug(campaignSlug);
+  async update(updateCampaignDto: UpdateCampaignDto, campaignUuid: string, files?: Express.Multer.File[]) {
+    const campaign = await this.findByUuid(campaignUuid);
 
     if (!campaign)
       throw this.responseService.notFound({
-        message: 'campaign:errors.campaign_already_exist',
+        message: 'campaign:errors.campaign_not_found',
       });
 
     const updateData: Partial<Campaign> = { ...updateCampaignDto };
@@ -84,15 +107,22 @@ export class CampaignService {
       updateData.slug = createSlug(updateCampaignDto.title.en);
     }
 
+    if (files && files.length > 0) {
+      const imageUrls: string[] = campaign.image ? [...campaign.image] : [];
+      for (const file of files) {
+        const { fileUrl } = await this.minioService.uploadFile(file);
+        imageUrls.push(fileUrl);
+      }
+      updateData.image = imageUrls;
+    }
+
     await this.campaignRepository.update({ id: campaign.id }, updateData);
 
-    // Fetch the updated campaign
-    const updatedSlug = updateData.slug || campaign.slug;
-    return await this.findBySlug(updatedSlug);
+    return await this.findByUuid(campaign.uuid);
   }
 
-  async delete(campaignSlug: string) {
-    const campaign = await this.findBySlug(campaignSlug);
+  async delete(campaignUuid: string) {
+    const campaign = await this.findByUuid(campaignUuid);
 
     if (!campaign)
       throw this.responseService.notFound({
@@ -102,9 +132,9 @@ export class CampaignService {
     await this.campaignRepository.softDelete({ id: campaign.id });
   }
 
-  async restore(campaignSlug: string) {
+  async restore(campaignUuid: string) {
     const campaign = await this.campaignRepository.findOne({
-      where: { slug: campaignSlug },
+      where: { uuid: campaignUuid },
       withDeleted: true,
     });
 
@@ -120,6 +150,6 @@ export class CampaignService {
 
     await this.campaignRepository.restore({ id: campaign.id });
 
-    return await this.findBySlug(campaignSlug);
+    return await this.findByUuid(campaignUuid);
   }
 }

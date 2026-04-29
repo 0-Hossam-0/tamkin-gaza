@@ -6,7 +6,7 @@ import type { Request, Response } from 'express';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
 import { ConfirmEmailDto } from './Dto/confirm.email.dto';
-import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
+import { AuthenticationGuard } from 'src/Common/Guards/authentication/authentication.guard';
 
 @UsePipes(
   new ValidationPipe({
@@ -29,7 +29,6 @@ export class AuthController {
     @Body() body: GoogleLoginDto,
   ) {
     const { user, status } = await this.authService.loginWithGoogle(req, res, body);
-    const userLang = req.userLanguage;
 
     return this.responseService.success({
       message:
@@ -52,7 +51,6 @@ export class AuthController {
   ) {
     const { user } = await this.authService.register(req, res, body);
 
-    const userLang = req.userLanguage;
     return this.responseService.success({
       message: 'auth:success.registered_successfully',
       info: 'auth:success.credentials_saved_in_cookies_successfully',
@@ -70,7 +68,6 @@ export class AuthController {
   ) {
     const { user } = await this.authService.login(req, res, body);
 
-    const userLang = req.userLanguage;
     return this.responseService.success({
       message: 'auth:success.logged_successfully',
       info: 'auth:success.credentials_saved_in_cookies_successfully',
@@ -84,7 +81,6 @@ export class AuthController {
   async logout(@Req() req: IRequest, @Res({ passthrough: true }) res: Response) {
     await this.authService.logout(req as unknown as Request, res);
 
-    const userLang = req.userLanguage;
     return this.responseService.success({
       message: 'auth:success.logged_out_successfully',
     });

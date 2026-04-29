@@ -4,7 +4,7 @@ import { TokenTypeEnum } from '../../Enums/token.enum';
 import { SetTokenType } from './token.decorator';
 import { AuthorizationGuard } from '../../Guards/Authorization/authorization.guard';
 import { SetAccessRoles } from './roles.decorator';
-import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
+import { AuthenticationGuard } from 'src/Common/Guards/authentication/authentication.guard';
 
 export function Auth(
   accessRoles: UserRoleEnum[] = [],

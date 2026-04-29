@@ -19,7 +19,7 @@ import { JsonFileService } from './Common/Services/Json/json-file.service';
 import { APP_PIPE } from '@nestjs/core';
 import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
 import { TranslationService } from './Common/Services/Translation/translation.service';
-import { MinioModule } from './Modules/Reels/Minio/minio.module';
+import { MinioModule } from './Common/Minio/minio.module';
 import { ReelsModule } from './Modules/Reels/reels.module';
 
 @Module({

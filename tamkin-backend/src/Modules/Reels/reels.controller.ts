@@ -60,7 +60,6 @@ export class ReelsController {
     });
   }
 
-
   @Get('search')
   async searchReels(@Query() query: SearchReelsDto) {
     const data = await this.reelsService.searchReels(query);
