@@ -1,0 +1,12 @@
+{
+  "title_required": "ur",
+  "title_invalid": "عنوان کی فیلڈ غلط ہے۔ یہ لینگویج کیز والا آبجیکٹ ہونا چاہیے: {prop}",
+  "description_required": "تفصیل کی فیلڈ ضروری ہے۔ یہ لینگویج کیز والا آبجیکٹ ہونا چاہیے: {prop}",
+  "description_invalid": "تفصیل کی فیلڈ غلط ہے۔ یہ لینگویج کیز والا آبجیکٹ ہونا چاہیے: {prop}",
+  "target_amount_required": "ہدف کی رقم کی فیلڈ ضروری ہے",
+  "target_amount_invalid": "ہدف کی رقم کی فیلڈ غلط ہے",
+  "target_amount_min": "ہدف کی رقم کم از کم 1 ہونی چاہیے",
+  "status_required": "حالت کی فیلڈ ضروری ہے",
+  "image_invalid": "تصویر کی فیلڈ غلط ہے",
+  "status_invalid": "حالت کی فیلڈ غلط ہے"
+}

@@ -1,0 +1,7 @@
+{
+  "campaign_already_exist": "إسم هذه الحملة موجود بالفعل",
+  "campaign_not_found": "الحملة غير موجودة",
+  "validation": {
+    "title_format_error": "يجب أن يحتوي العنوان على ترجمات للغات التالية: {langs}"
+  }
+}

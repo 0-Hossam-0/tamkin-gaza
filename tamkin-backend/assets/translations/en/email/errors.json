@@ -1,0 +1,8 @@
+{
+  "email_config_missing": "Email configuration is missing",
+  "email_config_missing_info": "Email configuration is missing. Please contact support.",
+  "fail_to_send_email": "Failed to send email",
+  "fail_to_send_email_info": "Failed to send email. Please try again later.",
+  "otp_invalid": "Invalid OTP",
+  "otp_invalid_info": "Invalid OTP. Please try again later."
+}

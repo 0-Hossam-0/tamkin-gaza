@@ -1,0 +1,6 @@
+{
+  "is_not_empty": "This field is required",
+  "is_string": "This field must be a string",
+  "is_email": "Invalid email format",
+  "is_strong_password": "Password is too weak"
+}

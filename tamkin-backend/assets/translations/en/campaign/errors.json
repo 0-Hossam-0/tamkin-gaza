@@ -1,0 +1,7 @@
+{
+  "campaign_already_exist": "This campaign name already exists",
+  "campaign_not_found": "Campaign not found",
+  "validation": {
+    "title_format_error": "The title must contain translations for all supported languages: {langs}"
+  }
+}

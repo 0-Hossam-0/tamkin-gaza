@@ -1,0 +1,11 @@
+{
+  "registered_successfully": "تم التسجيل بنجاح",
+  "logged_successfully": "تم تسجيل الدخول بنجاح",
+  "credentials_saved_in_cookies_successfully": "تم حفظ بيانات الاعتماد في الكوكيز بنجاح",
+  "logged_out_successfully": "تم تسجيل الخروج بنجاح",
+  "credentials_deleted_from_cookies_successfully": "تم حذف بيانات الاعتماد من الكوكيز بنجاح",
+  "request_confirm_email": "طلب تأكيد البريد الإلكتروني",
+  "otp_sent_to_your_email_please_check_your_email_and_confirm_your_email": "تم إرسال رمز التحقق إلى بريدك الإلكتروني، يرجى مراجعته وتأكيد بريدك الإلكتروني",
+  "email_verified_successfully": "تم التحقق من البريد الإلكتروني بنجاح",
+  "email_verified_successfully_info": "تم التحقق من بريدك الإلكتروني. يمكنك الآن الوصول إلى جميع المميزات."
+}

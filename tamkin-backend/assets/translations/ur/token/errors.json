@@ -1,0 +1,20 @@
+{
+  "secret_key_missing": "کنفیگریشن فائل میں خفیہ کلید موجود نہیں ہے",
+  "token_validation_failed": "ٹوکن کی تصدیق نہیں ہو سکی",
+  "token_expired": "ٹوکن کی مدت ختم ہو گئی ہے، براہِ کرم دوبارہ کوشش کریں",
+  "user_account_not_found": "صارف کا اکاؤنٹ نہیں ملا",
+  "the_associated_account_could_not_be_located": "متعلقہ اکاؤنٹ نہیں مل سکا",
+  "token_invalidated_by_recent_credential_change": "اکاؤنٹ کی معلومات میں حالیہ تبدیلی کی وجہ سے ٹوکن غیر مؤثر ہو گیا ہے",
+  "your_password_or_account_settings_have_been_updated_please_log_in_again": "آپ کا پاس ورڈ یا اکاؤنٹ سیٹنگز اپڈیٹ ہو گئی ہیں، براہِ کرم دوبارہ لاگ اِن کریں",
+  "invalid_or_revoked_session": "سیشن غیر معتبر ہے یا ختم کر دیا گیا ہے",
+  "your_session_credentials_are_no_longer_valid_please_log_in_again": "آپ کے سیشن کی معلومات اب درست نہیں رہیں، براہِ کرم دوبارہ لاگ اِن کریں",
+  "invalid_token_type": "ٹوکن کی قسم درست نہیں ہے",
+  "the_provided_token_does_not_match_the_required_token_type": "فراہم کردہ ٹوکن مطلوبہ قسم سے مطابقت نہیں رکھتا",
+  "session_expired_please_log_in_again": "سیشن کی مدت ختم ہو گئی ہے، براہِ کرم دوبارہ لاگ اِن کریں",
+  "refresh_token_has_expired": "ریفریش ٹوکن کی مدت ختم ہو گئی ہے، براہِ کرم دوبارہ لاگ اِن کریں",
+  "your_session_has_timed_out_please_log_in_again": "آپ کا سیشن ختم ہو گیا ہے، براہِ کرم دوبارہ لاگ اِن کریں",
+  "access_token_has_expired": "ایکسس ٹوکن کی مدت ختم ہو گئی ہے",
+  "your_access_token_has_timed_out_please_refresh_your_session": "ایکسس ٹوکن کی مدت ختم ہو گئی ہے، براہِ کرم اپنا سیشن ریفریش کریں",
+  "authorization_header_missing": "Authorization کی معلومات بھیجی نہیں گئی",
+  "you_are_not_authorized_to_access_this_resource": "آپ کو اس ریسورس تک رسائی کی اجازت نہیں ہے"
+}

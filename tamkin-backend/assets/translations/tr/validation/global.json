@@ -1,0 +1,6 @@
+{
+  "is_not_empty": "Bu alan zorunludur",
+  "is_string": "Bu alan bir metin olmalıdır",
+  "is_email": "Geçersiz e-posta formatı",
+  "is_strong_password": "Şifre çok zayıf"
+}

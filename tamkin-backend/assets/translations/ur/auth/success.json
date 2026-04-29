@@ -1,0 +1,11 @@
+{
+  "registered_successfully": "رجسٹریشن کامیاب",
+  "logged_successfully": "لاگ ان کامیاب",
+  "credentials_saved_in_cookies_successfully": "اسناد کامیابی سے کوکیز میں محفوظ ہو گئیں",
+  "logged_out_successfully": "کامیابی سے لاگ آؤٹ ہو گیا",
+  "credentials_deleted_from_cookies_successfully": "اسناد کامیابی سے کوکیز سے حذف ہو گئیں",
+  "request_confirm_email": "ای میل تصدیق کی درخواست",
+  "otp_sent_to_your_email_please_check_your_email_and_confirm_your_email": "تصدیقی کوڈ آپ کی ای میل پر بھیج دیا گیا ہے، براہ کرم اپنی ای میل چیک کریں اور تصدیق کریں",
+  "email_verified_successfully": "ای میل کامیابی سے تصدیق شدہ ہو گئی",
+  "email_verified_successfully_info": "آپ کی ای میل تصدیق ہو گئی ہے۔ اب آپ تمام خصوصیات تک رسائی حاصل کر سکتے ہیں۔"
+}

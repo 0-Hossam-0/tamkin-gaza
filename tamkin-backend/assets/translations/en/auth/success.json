@@ -1,0 +1,11 @@
+{
+  "registered_successfully": "Registered successfully",
+  "logged_successfully": "Logged in successfully",
+  "credentials_saved_in_cookies_successfully": "Credentials saved in cookies successfully",
+  "logged_out_successfully": "Logged out successfully",
+  "credentials_deleted_from_cookies_successfully": "Credentials deleted from cookies successfully",
+  "request_confirm_email": "Request confirm email",
+  "otp_sent_to_your_email_please_check_your_email_and_confirm_your_email": "Otp sent to your email please check your email and confirm your email",
+  "email_verified_successfully": "Email verified successfully",
+  "email_verified_successfully_info": "Your email has been verified. You can now access all features."
+}

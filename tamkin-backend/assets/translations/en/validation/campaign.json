@@ -1,0 +1,12 @@
+{
+  "title_required": "انجليزي",
+  "title_invalid": "Title field is invalid. Must be an object with language keys: {prop}",
+  "description_required": "Description field is required. Must be an object with language keys: {prop}",
+  "description_invalid": "Description field is invalid. Must be an object with language keys: {prop}",
+  "target_amount_required": "Target amount is required",
+  "target_amount_invalid": "Target amount field is invalid",
+  "target_amount_min": "Target amount must be at least 1",
+  "status_required": "Status is required",
+  "image_invalid": "Image field is invalid",
+  "status_invalid": "Status field is invalid"
+}

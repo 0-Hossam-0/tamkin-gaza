@@ -1,0 +1,5 @@
+{
+  "invalid_full_name": "Geçersiz tam ad formatı",
+  "invalid_country_code": "Geçersiz ülke kodu",
+  "passwords_not_match": "Şifre ve şifre onayı eşleşmiyor"
+}

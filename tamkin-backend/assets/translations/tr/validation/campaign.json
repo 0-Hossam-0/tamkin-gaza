@@ -1,0 +1,12 @@
+{
+  "title_required": "tr",
+  "title_invalid": "Başlık alanı geçersiz. Dil anahtarları içeren bir nesne olmalıdır: {prop}",
+  "description_required": "Açıklama alanı gereklidir. Dil anahtarları içeren bir nesne olmalıdır: {prop}",
+  "description_invalid": "Açıklama alanı geçersiz. Dil anahtarları içeren bir nesne olmalıdır: {prop}",
+  "target_amount_required": "Hedef miktar gereklidir",
+  "target_amount_invalid": "Hedef miktar alanı geçersiz",
+  "target_amount_min": "Hedef miktar en az 1 olmalı",
+  "status_required": "Durum gereklidir",
+  "image_invalid": "Resim alanı geçersiz",
+  "status_invalid": "Durum alanı geçersiz"
+}

@@ -1,0 +1,20 @@
+{
+  "secret_key_missing": "Yapılandırma dosyasında gizli anahtar bulunamadı",
+  "token_validation_failed": "Token doğrulanamadı",
+  "token_expired": "Token süresi doldu, lütfen tekrar deneyin",
+  "user_account_not_found": "Kullanıcı hesabı bulunamadı",
+  "the_associated_account_could_not_be_located": "İlişkili hesap bulunamadı",
+  "token_invalidated_by_recent_credential_change": "Hesap bilgileri güncellendiği için token geçersiz hale getirildi",
+  "your_password_or_account_settings_have_been_updated_please_log_in_again": "Şifreniz veya hesap ayarlarınız güncellendi, lütfen tekrar giriş yapın",
+  "invalid_or_revoked_session": "Oturum geçersiz veya sonlandırılmış",
+  "your_session_credentials_are_no_longer_valid_please_log_in_again": "Oturum bilgileriniz artık geçerli değil, lütfen tekrar giriş yapın",
+  "invalid_token_type": "Geçersiz token türü",
+  "the_provided_token_does_not_match_the_required_token_type": "Sağlanan token gerekli türle eşleşmiyor",
+  "session_expired_please_log_in_again": "Oturum süresi doldu, lütfen tekrar giriş yapın",
+  "refresh_token_has_expired": "Yenileme token’ının süresi doldu, lütfen tekrar giriş yapın",
+  "your_session_has_timed_out_please_log_in_again": "Oturum zaman aşımına uğradı, lütfen tekrar giriş yapın",
+  "access_token_has_expired": "Erişim token’ının süresi doldu",
+  "your_access_token_has_timed_out_please_refresh_your_session": "Erişim token’ının süresi doldu, lütfen oturumunuzu yenileyin",
+  "authorization_header_missing": "Authorization bilgisi gönderilmedi",
+  "you_are_not_authorized_to_access_this_resource": "Bu kaynağa erişim yetkiniz yok"
+}

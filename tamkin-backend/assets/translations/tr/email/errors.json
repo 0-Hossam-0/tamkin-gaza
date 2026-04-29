@@ -1,0 +1,8 @@
+{
+  "email_config_missing": "E-posta yapılandırması eksik",
+  "email_config_missing_info": "E-posta yapılandırması eksik. Lütfen destek ile iletişime geçin.",
+  "fail_to_send_email": "E-posta gönderilemedi",
+  "fail_to_send_email_info": "E-posta gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+  "otp_invalid": "Geçersiz OTP",
+  "otp_invalid_info": "Geçersiz OTP. Lütfen daha sonra tekrar deneyin."
+}

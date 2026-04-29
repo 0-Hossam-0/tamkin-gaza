@@ -1,0 +1,11 @@
+{
+  "registered_successfully": "Başarıyla kayıt olundu",
+  "logged_successfully": "Başarıyla giriş yapıldı",
+  "credentials_saved_in_cookies_successfully": "Kimlik bilgileri çerezlere başarıyla kaydedildi",
+  "logged_out_successfully": "Başarıyla çıkış yapıldı",
+  "credentials_deleted_from_cookies_successfully": "Kimlik bilgileri çerezlerden başarıyla silindi",
+  "request_confirm_email": "E-posta onay isteği",
+  "otp_sent_to_your_email_please_check_your_email_and_confirm_your_email": "E-postanıza doğrulama kodu gönderildi, lütfen e-postanızı kontrol edip onaylayın",
+  "email_verified_successfully": "E-posta başarıyla doğrulandı",
+  "email_verified_successfully_info": "E-postanız doğrulandı. Artık tüm özelliklere erişebilirsiniz."
+}

@@ -1,0 +1,7 @@
+{
+  "campaign_already_exist": "Bu kampanya adı zaten mevcut",
+  "campaign_not_found": "Kampanya bulunamadı",
+  "validation": {
+    "title_format_error": "Başlık şu dillerde çeviri içermelidir: {langs}"
+  }
+}

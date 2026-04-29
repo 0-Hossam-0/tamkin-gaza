@@ -1,0 +1,12 @@
+{
+  "title_required": "عربي",
+  "description_required": "حقل الوصف مطلوب",
+  "title_invalid": "{prop} : حقل العنوان غير صحيح. يجب أن يكون كائنًا بمفاتيح اللغات",
+  "description_invalid": "{prop} : حقل الوصف غير صحيح. يجب أن يكون كائنًا بمفاتيح اللغات",
+  "target_amount_required": "حقل مبلغ الهدف مطلوب",
+  "target_amount_invalid": "حقل مبلغ الهدف غير صحيح",
+  "target_amount_min": "مبلغ الهدف يجب أن يكون على الأقل 1",
+  "status_required": "حقل الحالة مطلوب",
+  "image_invalid": "حقل الصورة غير صحيح",
+  "status_invalid": "حقل الحالة غير صحيح"
+}

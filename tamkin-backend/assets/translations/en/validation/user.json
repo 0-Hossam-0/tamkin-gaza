@@ -1,0 +1,5 @@
+{
+  "invalid_full_name": "Invalid full name format",
+  "invalid_country_code": "Invalid country code",
+  "passwords_not_match": "Password and confirm password do not match"
+}

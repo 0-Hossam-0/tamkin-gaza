@@ -1,0 +1,20 @@
+{
+  "secret_key_missing": "Secret key is missing in .env",
+  "token_validation_failed": "Token validation failed",
+  "token_expired": "Token is expired",
+  "user_account_not_found": "User account not found",
+  "the_associated_account_could_not_be_located": "The associated account could not be located",
+  "token_invalidated_by_recent_credential_change": "Token invalidated by recent credential change",
+  "your_password_or_account_settings_have_been_updated_please_log_in_again": "Your password or account settings have been updated; please log in again",
+  "invalid_or_revoked_session": "Invalid or revoked session",
+  "your_session_credentials_are_no_longer_valid_please_log_in_again": "Your session credentials are no longer valid. Please log in again",
+  "invalid_token_type": "Invalid token type",
+  "the_provided_token_does_not_match_the_required_token_type": "The provided token does not match the required token type",
+  "session_expired_please_log_in_again": "Session expired, please log in again",
+  "refresh_token_has_expired": "Refresh token has expired",
+  "your_session_has_timed_out_please_log_in_again": "Your session has timed out. Please log in again",
+  "access_token_has_expired": "Access token has expired",
+  "your_access_token_has_timed_out_please_refresh_your_session": "Your access token has timed out. Please refresh your session",
+  "authorization_header_missing": "Authorization header is missing",
+  "you_are_not_authorized_to_access_this_resource": "You are not authorized to access this resource"
+}

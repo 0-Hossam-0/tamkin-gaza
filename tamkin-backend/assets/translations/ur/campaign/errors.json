@@ -1,0 +1,7 @@
+{
+  "campaign_already_exist": "اس مہم کا نام پہلے سے موجود ہے",
+  "campaign_not_found": "مہم نہیں ملی",
+  "validation": {
+    "title_format_error": "عنوان میں درج ذیل زبانوں کے ترجمے ہونے چاہئیں: {langs}"
+  }
+}
