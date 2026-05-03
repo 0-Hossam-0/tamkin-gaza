@@ -2,5 +2,6 @@
   "campaign_created_successfully": "تم إنشاء الحملة بنجاح",
   "campaign_updated_successfully": "تم تحديث الحملة بنجاح",
   "campaign_deleted_successfully": "تم حذف الحملة بنجاح",
-  "campaign_restored_successfully": "تم استعادة الحملة بنجاح"
+  "campaign_restored_successfully": "تم استعادة الحملة بنجاح",
+  "campaign_approved_successfully": "تم الموافقة على الحملة بنجاح"
 }

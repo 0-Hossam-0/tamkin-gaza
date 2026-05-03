@@ -2,6 +2,7 @@
   "campaign_already_exist": "إسم هذه الحملة موجود بالفعل",
   "campaign_not_found": "الحملة غير موجودة",
   "campaign_not_deleted": "الحملة غير محذوفة",
+  "campaign_not_in_draft_status": "الحملة ليست في حالة المسودة",
   "validation": {
     "title_format_error": "يجب أن يحتوي العنوان على ترجمات للغات التالية: {langs}"
   }

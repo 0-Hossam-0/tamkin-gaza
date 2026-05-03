@@ -10,6 +10,7 @@ import type { IRequest } from 'src/Common/Types/request.types';
 import { REQUEST } from '@nestjs/core';
 import { UpdateCampaignDto } from './Dtos/update-campaign.dto';
 import { createSlug } from 'src/Common/Utils/Slug/slug';
+import { CampaignStatusEnum } from './Enums/campaign-status.enum';
 
 @Injectable()
 export class CampaignService {
@@ -19,7 +20,7 @@ export class CampaignService {
     private readonly responseService: ResponseService,
     private readonly minioService: MinioService,
     @Inject(REQUEST) private readonly request: IRequest,
-  ) { }
+  ) {}
 
   private async findByTitle(campaignTitle: CampaignDto['title']) {
     const campaign = await this.campaignRepository.findOne({
@@ -44,7 +45,7 @@ export class CampaignService {
   async getCampaignInLanguage(campaignUuid: string) {
     const campaign = await this.findByUuid(campaignUuid);
     const userLanguage = this.request.userLanguage;
-    if (!campaign)
+    if (!campaign || campaign.status === CampaignStatusEnum.DRAFT)
       throw this.responseService.notFound({ message: 'campaign:errors.campaign_not_found' });
 
     return {
@@ -55,7 +56,9 @@ export class CampaignService {
   }
 
   async getAllCampaigns() {
-    const campaigns = await this.campaignRepository.find();
+    const campaigns = await this.campaignRepository.find({
+      where: { status: CampaignStatusEnum.ACTIVE },
+    });
     const userLanguage = this.request.userLanguage;
 
     return campaigns.map((campaign) => ({
@@ -66,8 +69,6 @@ export class CampaignService {
   }
 
   async create(createCampaignDto: CreateCampaignDto, files?: Express.Multer.File[]) {
-
-
     const isCampaignExist = await this.findByTitle(createCampaignDto.title);
 
     if (isCampaignExist)
@@ -84,17 +85,21 @@ export class CampaignService {
       }
     }
 
-
     const campaign = this.campaignRepository.create({
       ...createCampaignDto,
       image: imageUrls,
       slug: createSlug(createCampaignDto.title.en),
+      current_amount: createCampaignDto.current_amount ?? 0,
     });
 
     return await this.campaignRepository.save(campaign);
   }
 
-  async update(updateCampaignDto: UpdateCampaignDto, campaignUuid: string, files?: Express.Multer.File[]) {
+  async update(
+    updateCampaignDto: UpdateCampaignDto,
+    campaignUuid: string,
+    files?: Express.Multer.File[],
+  ) {
     const campaign = await this.findByUuid(campaignUuid);
 
     if (!campaign)
@@ -116,7 +121,7 @@ export class CampaignService {
       updateData.image = imageUrls;
     }
 
-    await this.campaignRepository.update({ id: campaign.id }, updateData);
+    await this.campaignRepository.update({ uuid: campaign.uuid }, updateData);
 
     return await this.findByUuid(campaign.uuid);
   }
@@ -129,7 +134,7 @@ export class CampaignService {
         message: 'campaign:errors.campaign_not_found',
       });
 
-    await this.campaignRepository.softDelete({ id: campaign.id });
+    await this.campaignRepository.softDelete({ uuid: campaign.uuid });
   }
 
   async restore(campaignUuid: string) {
@@ -148,7 +153,28 @@ export class CampaignService {
         message: 'campaign:errors.campaign_not_deleted',
       });
 
-    await this.campaignRepository.restore({ id: campaign.id });
+    await this.campaignRepository.restore({ uuid: campaign.uuid });
+
+    return await this.findByUuid(campaignUuid);
+  }
+
+  async approve(campaignUuid: string) {
+    const campaign = await this.findByUuid(campaignUuid);
+
+    if (!campaign)
+      throw this.responseService.notFound({
+        message: 'campaign:errors.campaign_not_found',
+      });
+
+    if (campaign.status !== CampaignStatusEnum.DRAFT)
+      throw this.responseService.conflict({
+        message: 'campaign:errors.campaign_not_in_draft_status',
+      });
+
+    await this.campaignRepository.update(
+      { uuid: campaign.uuid },
+      { status: CampaignStatusEnum.ACTIVE },
+    );
 
     return await this.findByUuid(campaignUuid);
   }

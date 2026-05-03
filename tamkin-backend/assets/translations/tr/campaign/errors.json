@@ -2,6 +2,7 @@
   "campaign_already_exist": "Bu kampanya adı zaten mevcut",
   "campaign_not_found": "Kampanya bulunamadı",
   "campaign_not_deleted": "Kampanya silinmemiş",
+  "campaign_not_in_draft_status": "Kampanya taslak durumunda değil",
   "validation": {
     "title_format_error": "Başlık şu dillerde çeviri içermelidir: {langs}"
   }

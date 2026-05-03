@@ -12,11 +12,7 @@ import { CampaignDto } from 'src/Modules/Campaign/Dtos/campaign.dto';
 
 @Entity('campaign')
 export class Campaign {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ unique: true })
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
   @Column({ type: 'jsonb', unique: true })
@@ -27,6 +23,9 @@ export class Campaign {
 
   @Column({ type: 'decimal', precision: 12, scale: 2 })
   target_amount: number;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  current_amount: number;
 
   @Column({ unique: true })
   slug: string;

@@ -6,6 +6,8 @@
   "target_amount_required": "Target amount is required",
   "target_amount_invalid": "Target amount field is invalid",
   "target_amount_min": "Target amount must be at least 1",
+  "current_amount_invalid": "Current amount field is invalid",
+  "current_amount_min": "Current amount must be at least 0",
   "status_required": "Status is required",
   "image_invalid": "Image field is invalid",
   "status_invalid": "Status field is invalid"

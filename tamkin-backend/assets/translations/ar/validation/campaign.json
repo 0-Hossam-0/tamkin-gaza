@@ -6,6 +6,8 @@
   "target_amount_required": "حقل مبلغ الهدف مطلوب",
   "target_amount_invalid": "حقل مبلغ الهدف غير صحيح",
   "target_amount_min": "مبلغ الهدف يجب أن يكون على الأقل 1",
+  "current_amount_invalid": "حقل المبلغ الحالي غير صحيح",
+  "current_amount_min": "يجب أن يكون المبلغ الحالي على الأقل 0",
   "status_required": "حقل الحالة مطلوب",
   "image_invalid": "حقل الصورة غير صحيح",
   "status_invalid": "حقل الحالة غير صحيح"

@@ -6,6 +6,8 @@
   "target_amount_required": "ہدف کی رقم کی فیلڈ ضروری ہے",
   "target_amount_invalid": "ہدف کی رقم کی فیلڈ غلط ہے",
   "target_amount_min": "ہدف کی رقم کم از کم 1 ہونی چاہیے",
+  "current_amount_invalid": "موجودہ رقم کی فیلڈ غلط ہے",
+  "current_amount_min": "موجودہ رقم کم از کم 0 ہونی چاہیے",
   "status_required": "حالت کی فیلڈ ضروری ہے",
   "image_invalid": "تصویر کی فیلڈ غلط ہے",
   "status_invalid": "حالت کی فیلڈ غلط ہے"

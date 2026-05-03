@@ -39,6 +39,11 @@ export class CampaignDto {
   @Min(1, { message: 'validation:campaign.target_amount_min' })
   target_amount: number;
 
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: `validation:campaign.current_amount_invalid` })
+  @Min(0, { message: 'validation:campaign.current_amount_min' })
+  current_amount: number;
+
   @IsArray({ message: 'validation:campaign.image_invalid' })
   @IsString({ each: true, message: 'validation:campaign.image_invalid' })
   @IsOptional()

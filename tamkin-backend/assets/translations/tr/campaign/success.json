@@ -2,5 +2,6 @@
   "campaign_created_successfully": "Kampanya başarıyla oluşturuldu",
   "campaign_updated_successfully": "Kampanya başarıyla güncellendi",
   "campaign_deleted_successfully": "Kampanya başarıyla silindi",
-  "campaign_restored_successfully": "Kampanya başarıyla geri yüklendi"
+  "campaign_restored_successfully": "Kampanya başarıyla geri yüklendi",
+  "campaign_approved_successfully": "Kampanya başarıyla onaylandı"
 }

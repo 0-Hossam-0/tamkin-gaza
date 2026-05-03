@@ -6,7 +6,7 @@ import type { Request, Response } from 'express';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
 import { ConfirmEmailDto } from './Dto/confirm.email.dto';
-import { AuthenticationGuard } from 'src/Common/Guards/authentication/authentication.guard';
+import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 
 @UsePipes(
   new ValidationPipe({

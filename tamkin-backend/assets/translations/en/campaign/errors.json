@@ -2,6 +2,7 @@
   "campaign_already_exist": "This campaign name already exists",
   "campaign_not_found": "Campaign not found",
   "campaign_not_deleted": "Campaign is not deleted",
+  "campaign_not_in_draft_status": "Campaign is not in draft status",
   "validation": {
     "title_format_error": "The title must contain translations for all supported languages: {langs}"
   }

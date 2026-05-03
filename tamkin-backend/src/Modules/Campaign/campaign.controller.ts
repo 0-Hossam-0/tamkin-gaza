@@ -20,6 +20,7 @@ import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { UpdateCampaignDto } from './Dtos/update-campaign.dto';
 import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
+import { Multer } from 'multer';
 
 @Controller('campaign')
 export class CampaignController {
@@ -91,6 +92,17 @@ export class CampaignController {
     return this.responseService.success({
       statusCode: HttpStatus.OK,
       message: 'campaign:success.campaign_restored_successfully',
+      data: campaign,
+    });
+  }
+
+  @Patch('approve/:id')
+  @Auth([UserRoleEnum.SUPER_ADMIN])
+  async approveCampaign(@Param('id', ParseUUIDPipe) campaignUuid: string) {
+    const campaign = await this.campaignService.approve(campaignUuid);
+    return this.responseService.success({
+      statusCode: HttpStatus.OK,
+      message: 'campaign:success.campaign_approved_successfully',
       data: campaign,
     });
   }

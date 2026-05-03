@@ -6,6 +6,8 @@
   "target_amount_required": "Hedef miktar gereklidir",
   "target_amount_invalid": "Hedef miktar alanı geçersiz",
   "target_amount_min": "Hedef miktar en az 1 olmalı",
+  "current_amount_invalid": "Geçerli tutar alanı geçersiz",
+  "current_amount_min": "Geçerli tutar en az 0 olmalı",
   "status_required": "Durum gereklidir",
   "image_invalid": "Resim alanı geçersiz",
   "status_invalid": "Durum alanı geçersiz"
