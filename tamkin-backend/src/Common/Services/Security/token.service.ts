@@ -29,7 +29,6 @@ export class TokenService {
 
   private getSecretKey(tokenType: TokenTypeEnum, signature: SignatureLevelEnum): string {
     let key: string | undefined;
-    console.log(signature);
     switch (tokenType) {
       case TokenTypeEnum.ACCESS:
         switch (signature) {

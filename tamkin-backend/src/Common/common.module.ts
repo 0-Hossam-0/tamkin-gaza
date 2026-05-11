@@ -11,9 +11,10 @@ import { JsonFileService } from './Services/Json/json-file.service';
 import { EmailService } from './Services/Email/email.service';
 import { OTPService } from './Services/Otp/otp.service';
 import { OtpModel } from 'src/DataBase/Models/otp.model';
+import { MailModel } from 'src/DataBase/Models/mail.model';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserModel, JwtModel, OtpModel])],
+  imports: [TypeOrmModule.forFeature([UserModel, JwtModel, OtpModel, MailModel])],
   providers: [
     ResponseService,
     ClientInfoService,

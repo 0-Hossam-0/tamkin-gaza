@@ -12,48 +12,64 @@ import {
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
 import { TranslationService } from '../Translation/translation.service';
-
+import { MailModel } from 'src/DataBase/Models/mail.model';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MailType, IOtpContext } from 'src/Common/Interfaces/Mail/mail.interface';
 
 @Injectable()
 export class EmailService {
-
-  constructor(private readonly error: ResponseService ,
+  constructor(
+    private readonly error: ResponseService,
     private readonly translationService: TranslationService,
-  ) { }
+    @InjectRepository(MailModel)
+    private readonly emailRepository: Repository<MailModel>,
+  ) {}
 
   private async sendEmail({
     to,
     subject,
     html,
+    type,
+    OTP,
   }: {
     to: string;
     subject: string;
     html: string;
+    type: MailType;
+    OTP: string;
   }) {
-    
     let transporter: ReturnType<typeof getTransporter>;
 
     try {
       transporter = getTransporter();
     } catch {
-        throw this.error.serverError({
-          message: this.translationService.translate('email:errors.email_config_missing'),
-          info: this.translationService.translate('email:errors.email_config_missing_info'),
-        });
+      throw this.error.serverError({
+        message: this.translationService.translate('email:errors.email_config_missing'),
+        info: this.translationService.translate('email:errors.email_config_missing_info'),
+      });
     }
 
     try {
-      return await transporter.sendMail({
+      await transporter.sendMail({
         from: `"${process.env.APP_NAME}" <${process.env.APP_EMAIL}>`,
         to,
         subject,
         html,
       });
+      const context: IOtpContext = { OTP };
+      const newEmail = this.emailRepository.create({
+        context,
+        subject: subject,
+        recipientEmail: to,
+        emailType: type,
+      });
+      return await this.emailRepository.save(newEmail);
     } catch (sendError: any) {
-        throw this.error.serverError({
-          message: this.translationService.translate('email:errors.fail_to_send_email'),
-          info: this.translationService.translate('email:errors.fail_to_send_email_info'),
-        });
+      throw this.error.serverError({
+        message: this.translationService.translate('email:errors.fail_to_send_email'),
+        info: this.translationService.translate('email:errors.fail_to_send_email_info'),
+      });
     }
   }
 
@@ -62,7 +78,6 @@ export class EmailService {
     userName,
     OTP,
     type,
-
   }: {
     email: string;
     userName: string;
@@ -97,7 +112,7 @@ export class EmailService {
     };
 
     const { subject, html } = templates[type];
-    await this.sendEmail({ to: email, subject, html });
+    await this.sendEmail({ to: email, subject, html, type, OTP });
 
     return true;
   }
