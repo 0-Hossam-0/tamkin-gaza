@@ -47,6 +47,13 @@ export class PaymentService {
     
     try {
       const sessionResult = await provider.createCheckoutSession(savedPayment);
+      
+      // Save provider-specific merchant reference if provided
+      if (sessionResult.merchantRefNumber) {
+        savedPayment.merchantRefNumber = sessionResult.merchantRefNumber;
+        await this.paymentRepository.save(savedPayment);
+      }
+      
       return sessionResult;
     } catch (error: any) {
       this.logger.error(`Failed to create checkout session: ${error.message}`);
@@ -56,25 +63,20 @@ export class PaymentService {
     }
   }
 
-  async handleWebhook(providerName: string, signature: string, payload: Buffer | string) {
+  async handleWebhook(providerName: string, headers: Record<string, string | string[] | undefined>, payload: Buffer | string) {
     const provider = this.paymentFactory.getProvider(providerName);
-    const verification = await provider.verifyWebhook(signature, payload);
+    const verification = await provider.verifyWebhook(headers, payload);
 
     if (!verification.isValid) {
       this.logger.error(`Invalid webhook signature for provider: ${providerName}`);
       throw this.responseService.badRequest({ message: 'payment.errors.invalid_signature' });
     }
 
-    if (!verification.providerPaymentId) {
+    if (!verification.providerPaymentId && !verification.paymentUuid) {
       return { received: true, ignored: true };
     }
 
-    let paymentUuid: string | undefined;
-
-    if (providerName.toUpperCase() === 'STRIPE') {
-      const event = verification.eventPayload as any;
-      paymentUuid = event?.data?.object?.metadata?.paymentUuid || event?.data?.object?.client_reference_id;
-    }
+    const paymentUuid = verification.paymentUuid;
 
     if (!paymentUuid) {
       this.logger.error(`Could not find paymentUuid in webhook payload for provider ${providerName}`);

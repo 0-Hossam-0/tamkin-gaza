@@ -54,6 +54,9 @@ export class Payment {
   @Column({ name: 'provider_payment_id', nullable: true })
   providerPaymentId?: string;
 
+  @Column({ name: 'merchant_ref_number', nullable: true })
+  merchantRefNumber?: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

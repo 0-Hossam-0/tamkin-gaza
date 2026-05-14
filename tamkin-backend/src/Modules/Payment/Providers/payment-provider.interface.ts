@@ -3,12 +3,14 @@ import { Payment } from '../../../DataBase/Payment/payment.model';
 export interface CheckoutSessionResult {
   sessionId: string;
   checkoutUrl: string;
+  merchantRefNumber?: string;
 }
 
 export interface WebhookVerificationResult {
   isValid: boolean;
   eventPayload?: any;
   providerPaymentId?: string;
+  paymentUuid?: string;
   status?: 'SUCCEEDED' | 'FAILED';
 }
 
@@ -22,8 +24,8 @@ export interface IPaymentProvider {
    * Verifies the webhook signature and extracts event data
    */
   verifyWebhook(
-    signature: string,
-    payload: Buffer | string,
+    headers: Record<string, string | string[] | undefined>,
+    payload: any,
   ): Promise<WebhookVerificationResult>;
 
   /**

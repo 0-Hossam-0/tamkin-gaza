@@ -82,9 +82,10 @@ export class StripeProvider implements IPaymentProvider {
   }
 
   async verifyWebhook(
-    signature: string,
+    headers: Record<string, string | string[] | undefined>,
     payload: Buffer | string,
   ): Promise<WebhookVerificationResult> {
+    const signature = headers['stripe-signature'] as string;
     if (this.isMockMode) {
       // For mock mode, parse the payload directly assuming it's JSON
       try {
@@ -93,6 +94,7 @@ export class StripeProvider implements IPaymentProvider {
           isValid: true,
           eventPayload: data,
           providerPaymentId: data.id || `mock_pi_${Date.now()}`,
+          paymentUuid: data.metadata?.paymentUuid || data.client_reference_id,
           status: data.type === 'checkout.session.completed' ? 'SUCCEEDED' : 'FAILED',
         };
       } catch (err) {
@@ -115,16 +117,19 @@ export class StripeProvider implements IPaymentProvider {
 
       let status: 'SUCCEEDED' | 'FAILED' | undefined;
       let providerPaymentId: string | undefined;
+      let paymentUuid: string | undefined;
 
       switch (event.type) {
         case 'checkout.session.completed':
           status = 'SUCCEEDED';
           providerPaymentId = event.data.object.payment_intent;
+          paymentUuid = event.data.object.metadata?.paymentUuid || event.data.object.client_reference_id;
           break;
         case 'checkout.session.expired':
         case 'checkout.session.async_payment_failed':
           status = 'FAILED';
           providerPaymentId = event.data.object.payment_intent;
+          paymentUuid = event.data.object.metadata?.paymentUuid || event.data.object.client_reference_id;
           break;
         default:
           // We only care about specific events
@@ -135,6 +140,7 @@ export class StripeProvider implements IPaymentProvider {
         isValid: true,
         eventPayload: event,
         providerPaymentId,
+        paymentUuid,
         status,
       };
     } catch (err: any) {

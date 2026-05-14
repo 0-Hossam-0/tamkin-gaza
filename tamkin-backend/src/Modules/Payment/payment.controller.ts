@@ -29,17 +29,13 @@ export class PaymentController {
   @Post('webhook/:provider')
   async handleWebhook(
     @Param('provider') provider: string,
-    @Headers('stripe-signature') signature: string, // Stripe specific header, other providers might use different headers
     @Req() req: RawBodyRequest<IRequest>,
     @Body() body: any,
   ) {
     // Some providers like Stripe require the raw body to verify the signature
     const payload = req.rawBody || body; 
     
-    // For local mock mode, we might not have a signature
-    const sig = signature || 'mock_signature';
-
-    return await this.paymentService.handleWebhook(provider, sig, payload);
+    return await this.paymentService.handleWebhook(provider, req.headers as any, payload);
   }
 
   // Helper endpoint for local development/testing of mock mode
@@ -48,7 +44,7 @@ export class PaymentController {
     @Param('provider') provider: string,
     @Body() body: any,
   ) {
-    return await this.paymentService.handleWebhook(provider, 'mock_signature', body);
+    return await this.paymentService.handleWebhook(provider, {}, body);
   }
 
   @Get(':id')
