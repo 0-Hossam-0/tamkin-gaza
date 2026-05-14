@@ -20,7 +20,7 @@ export class UserModel implements IUser {
   @PrimaryGeneratedColumn()
   _id: number;
 
-  @Column({ unique: true })
+  @Column({ type: 'uuid', unique: true })
   @Generated('uuid')
   uuid: string;
 

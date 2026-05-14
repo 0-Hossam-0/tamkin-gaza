@@ -9,5 +9,6 @@ import { CommonModule } from 'src/Common/common.module';
   imports: [TypeOrmModule.forFeature([Campaign]), CommonModule],
   controllers: [CampaignController],
   providers: [CampaignService],
+  exports: [CampaignService],
 })
 export class CampaignModule {}

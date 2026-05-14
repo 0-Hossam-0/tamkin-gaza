@@ -19,6 +19,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
 import { MinioModule } from './Common/Minio/minio.module';
 import { ReelsModule } from './Modules/Reels/reels.module';
+import { PaymentModule } from './Modules/Payment/payment.module';
 import { I18nModule, I18nJsonLoader } from 'nestjs-i18n';
 
 @Module({
@@ -47,6 +48,7 @@ import { I18nModule, I18nJsonLoader } from 'nestjs-i18n';
     CampaignModule,
     MinioModule,
     ReelsModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [
