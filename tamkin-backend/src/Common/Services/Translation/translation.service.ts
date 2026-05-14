@@ -6,7 +6,7 @@ import languagesConfig from '../../../Config/Language/language.json';
 import { REQUEST } from '@nestjs/core';
 import type { IRequest } from 'src/Common/Types/request.types';
 
-const KNOWN_MODULES = ['auth', 'campaign', 'common', 'email', 'main', 'reels', 'token', 'validation'];
+const KNOWN_MODULES = ['auth', 'campaign', 'common', 'email', 'main', 'payment', 'reels', 'token', 'validation'];
 
 @Injectable()
 export class TranslationService {

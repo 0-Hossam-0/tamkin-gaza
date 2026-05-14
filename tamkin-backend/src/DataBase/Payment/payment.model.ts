@@ -57,6 +57,22 @@ export class Payment {
   @Column({ name: 'merchant_ref_number', nullable: true })
   merchantRefNumber?: string;
 
+  /**
+   * Provider-specific order identifier.
+   * For Paymob: the Paymob order ID returned after Step 2.
+   * Nullable for providers that do not use this concept (Stripe, Fawry).
+   */
+  @Column({ name: 'order_id', nullable: true })
+  orderId?: string;
+
+  /**
+   * Provider-specific single-use payment token.
+   * For Paymob: the payment key returned after Step 3 (used to build the iframe URL).
+   * Nullable for providers that do not use a separate payment key.
+   */
+  @Column({ name: 'payment_key', nullable: true, length: 512 })
+  paymentKey?: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

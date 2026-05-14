@@ -1,0 +1,7 @@
+{
+  "payment_initiated": "Ödeme başarıyla başlatıldı. Lütfen ödemenizi tamamlayın.",
+  "payment_fetched": "Ödeme ayrıntıları başarıyla alındı.",
+  "webhook_received": "Webhook olayı başarıyla alındı.",
+  "payment_succeeded": "Ödeme başarıyla tamamlandı.",
+  "payment_failed": "Ödeme tamamlanamadı."
+}

@@ -1,0 +1,7 @@
+{
+  "payment_initiated": "Payment initiated successfully. Please complete your payment.",
+  "payment_fetched": "Payment details retrieved successfully.",
+  "webhook_received": "Webhook event received successfully.",
+  "payment_succeeded": "Payment completed successfully.",
+  "payment_failed": "Payment was not completed."
+}

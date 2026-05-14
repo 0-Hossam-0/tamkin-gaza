@@ -15,7 +15,7 @@ import {
 } from '../../Interfaces/Response/response.interface';
 import { TranslationService } from '../Translation/translation.service';
 
-const KNOWN_MODULES = ['auth', 'campaign', 'common', 'email', 'main', 'reels', 'token', 'validation'];
+const KNOWN_MODULES = ['auth', 'campaign', 'common', 'email', 'main', 'payment', 'reels', 'token', 'validation'];
 
 @Injectable({ scope: Scope.REQUEST })
 export class ResponseService {

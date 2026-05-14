@@ -1,0 +1,9 @@
+{
+  "campaign_not_found": "الحملة غير موجودة",
+  "session_creation_failed": "تعذّر إنشاء جلسة الدفع. يرجى المحاولة مرة أخرى.",
+  "invalid_signature": "توقيع الطلب غير صالح. تم رفض الطلب.",
+  "payment_uuid_missing": "مرجع الدفع مفقود من بيانات الطلب.",
+  "payment_not_found": "سجل الدفع غير موجود.",
+  "provider_not_found": "مزود الدفع '{{provider}}' غير مدعوم.",
+  "invalid_provider": "تم تحديد مزود دفع غير صالح."
+}

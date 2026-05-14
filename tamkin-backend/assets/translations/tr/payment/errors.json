@@ -1,0 +1,9 @@
+{
+  "campaign_not_found": "Kampanya bulunamadı",
+  "session_creation_failed": "Ödeme oturumu oluşturulamadı. Lütfen tekrar deneyin.",
+  "invalid_signature": "Geçersiz webhook imzası. İstek reddedildi.",
+  "payment_uuid_missing": "Webhook verilerinde ödeme referansı eksik.",
+  "payment_not_found": "Ödeme kaydı bulunamadı.",
+  "provider_not_found": "Ödeme sağlayıcısı '{{provider}}' desteklenmiyor.",
+  "invalid_provider": "Geçersiz bir ödeme sağlayıcısı belirtildi."
+}

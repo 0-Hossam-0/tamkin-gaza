@@ -1,0 +1,9 @@
+{
+  "campaign_not_found": "Campaign not found",
+  "session_creation_failed": "Payment session could not be created. Please try again.",
+  "invalid_signature": "Invalid webhook signature. Request rejected.",
+  "payment_uuid_missing": "Payment reference is missing from the webhook payload.",
+  "payment_not_found": "Payment record not found.",
+  "provider_not_found": "Payment provider '{{provider}}' is not supported.",
+  "invalid_provider": "An invalid payment provider was specified."
+}
