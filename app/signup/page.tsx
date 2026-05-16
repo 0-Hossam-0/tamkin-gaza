@@ -1,16 +1,32 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import logo from '../assets/logo.png';
+import { langHeaders } from '../lib/lang';
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      router.push('/');
+    }
+  }, [session, router]);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [nationality, setNationality] = useState('');
   const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [generalError, setGeneralError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const inputStyle = {
     backgroundColor: '#f5f5f3',
@@ -24,6 +40,79 @@ export default function SignupPage() {
   };
   const blurGray = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.style.borderColor = '#e0e0e0';
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFieldErrors({});
+    setGeneralError('');
+    setSuccess('');
+
+    const errors: Record<string, string> = {};
+
+    if (!fullName) errors.fullName = 'هذا الحقل مطلوب';
+    if (!email) errors.email = 'هذا الحقل مطلوب';
+    if (!password) errors.password = 'هذا الحقل مطلوب';
+    if (!confirm) errors.confirmPassword = 'هذا الحقل مطلوب';
+    if (!nationality) errors.nationality = 'هذا الحقل مطلوب';
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    if (password !== confirm) {
+      setFieldErrors({ confirmPassword: 'كلمة المرور غير متطابقة' });
+      return;
+    }
+
+    if (!agreed) {
+      setGeneralError('يرجى الموافقة على سياسة الخصوصية');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:3000/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...langHeaders() },
+        body: JSON.stringify({
+          email,
+          password,
+          confirmPassword: confirm,
+          fullName,
+          nationality,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.issues && Array.isArray(data.issues)) {
+          const fieldErrorsMap: Record<string, string> = {};
+          data.issues.forEach((issue: { path: string; error: string[] }) => {
+            fieldErrorsMap[issue.path] = issue.error.join('، ');
+          });
+          setFieldErrors(fieldErrorsMap);
+        } else {
+          setGeneralError(data.message || 'حدث خطأ أثناء التسجيل');
+        }
+        return;
+      }
+
+      setSuccess('تم إنشاء الحساب بنجاح');
+      setFullName('');
+      setEmail('');
+      setPassword('');
+      setConfirm('');
+      setNationality('');
+      setAgreed(false);
+    } catch {
+      setGeneralError('حدث خطأ في الاتصال بالخادم');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,19 +133,22 @@ export default function SignupPage() {
             <p className="text-sm mt-1" style={{ color: '#777' }}>انضم إلى فريق آفاق</p>
           </div>
 
-          <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium" style={{ color: '#444' }}>الاسم الكامل</label>
               <input
                 type="text"
                 placeholder="الاسم الكامل"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => { setFullName(e.target.value); setFieldErrors((prev) => { const next = { ...prev }; delete next.fullName; return next; }); }}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none"
                 style={inputStyle}
                 onFocus={focusGreen}
                 onBlur={blurGray}
               />
+              {fieldErrors.fullName && (
+                <p className="text-xs" style={{ color: '#dc2626' }}>{fieldErrors.fullName}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-1">
@@ -65,12 +157,15 @@ export default function SignupPage() {
                 type="email"
                 placeholder="example@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setFieldErrors((prev) => { const next = { ...prev }; delete next.email; return next; }); }}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none"
                 style={inputStyle}
                 onFocus={focusGreen}
                 onBlur={blurGray}
               />
+              {fieldErrors.email && (
+                <p className="text-xs" style={{ color: '#dc2626' }}>{fieldErrors.email}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-1">
@@ -79,12 +174,15 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setFieldErrors((prev) => { const next = { ...prev }; delete next.password; return next; }); }}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none"
                 style={inputStyle}
                 onFocus={focusGreen}
                 onBlur={blurGray}
               />
+              {fieldErrors.password && (
+                <p className="text-xs" style={{ color: '#dc2626' }}>{fieldErrors.password}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-1">
@@ -93,12 +191,32 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
+                onChange={(e) => { setConfirm(e.target.value); setFieldErrors((prev) => { const next = { ...prev }; delete next.confirmPassword; return next; }); }}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none"
                 style={inputStyle}
                 onFocus={focusGreen}
                 onBlur={blurGray}
               />
+              {fieldErrors.confirmPassword && (
+                <p className="text-xs" style={{ color: '#dc2626' }}>{fieldErrors.confirmPassword}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" style={{ color: '#444' }}>الجنسية</label>
+              <input
+                type="text"
+                placeholder="مثال: Egy"
+                value={nationality}
+                onChange={(e) => { setNationality(e.target.value); setFieldErrors((prev) => { const next = { ...prev }; delete next.nationality; return next; }); }}
+                className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                style={inputStyle}
+                onFocus={focusGreen}
+                onBlur={blurGray}
+              />
+              {fieldErrors.nationality && (
+                <p className="text-xs" style={{ color: '#dc2626' }}>{fieldErrors.nationality}</p>
+              )}
             </div>
 
             <label className="flex items-center gap-2 cursor-pointer text-sm" style={{ color: '#555' }}>
@@ -115,12 +233,20 @@ export default function SignupPage() {
               </span>
             </label>
 
+            {generalError && (
+              <p className="text-sm text-center" style={{ color: '#dc2626' }}>{generalError}</p>
+            )}
+            {success && (
+              <p className="text-sm text-center" style={{ color: '#2d6a2d' }}>{success}</p>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 rounded-xl font-bold text-white text-sm mt-1 transition-opacity hover:opacity-90 active:opacity-80"
+              disabled={loading}
+              className="w-full py-3 rounded-xl font-bold text-white text-sm mt-1 transition-opacity hover:opacity-90 active:opacity-80 disabled:opacity-50"
               style={{ backgroundColor: '#1a1a1a' }}
             >
-              إنشاء حساب
+              {loading ? 'جاري التحميل...' : 'إنشاء حساب'}
             </button>
           </form>
 

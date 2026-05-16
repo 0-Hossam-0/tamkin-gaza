@@ -2,13 +2,62 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn, useSession } from "next-auth/react";
 import logo from '../assets/logo.png';
+import { langHeaders } from '../lib/lang';
+import { hasAuthCookiesFromDocument } from '../lib/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'loading') return;
+
+    if (session || hasAuthCookiesFromDocument()) {
+      router.replace('/');
+      return;
+    }
+
+    setCheckingAuth(false);
+  }, [session, status, router]);
+
+  if (checkingAuth || status === 'loading' || session) {
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!email) { setError('البريد الإلكتروني أو كلمة المرور غير صحيحين'); return; }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        credentials: "include",
+        headers: { 'Content-Type': 'application/json', ...langHeaders() },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) { setError('البريد الإلكتروني أو كلمة المرور غير صحيحين'); return; }
+
+      router.push('/');
+    } catch {
+      setError('البريد الإلكتروني أو كلمة المرور غير صحيحين');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -28,7 +77,7 @@ export default function LoginPage() {
             <p className="text-sm mt-1" style={{ color: '#777' }}>مرحباً بك في فريق آفاق</p>
           </div>
 
-          <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium" style={{ color: '#444' }}>البريد الإلكتروني</label>
               <input
@@ -71,12 +120,17 @@ export default function LoginPage() {
               <span className="text-xs cursor-pointer" style={{ color: '#2d6a2d' }}>نسيت كلمة المرور؟</span>
             </div>
 
+            {error && (
+              <p className="text-sm text-center" style={{ color: '#dc2626' }}>{error}</p>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 rounded-xl font-bold text-white text-sm mt-2 transition-opacity hover:opacity-90 active:opacity-80"
+              disabled={loading}
+              className="w-full py-3 rounded-xl font-bold text-white text-sm mt-2 transition-opacity hover:opacity-90 active:opacity-80 disabled:opacity-50"
               style={{ backgroundColor: '#1a1a1a' }}
             >
-              تسجيل الدخول
+              {loading ? 'جاري التحميل...' : 'تسجيل الدخول'}
             </button>
           </form>
           <div className="flex items-center gap-3 my-4">
