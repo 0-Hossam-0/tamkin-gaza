@@ -115,6 +115,19 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --color-primary-10:#FBF8FF;
+  --color-primary-50:#F2EFFF;
+  --color-primary-100:#E1E0FF;
+  --color-primary-200:#C0C1FF;
+  --color-primary-300: #A0A3FF;
+  --color-primary-400: #8083FF;
+  --color-primary-500: #6366F1; /* Main */
+  --color-primary-600: #494BD6; /* Buttons */
+  --color-primary-700: #1000A9; /* Hover */
+  --color-primary-800:#07006C;
+  --color-primary-900: #000000;
+  --color-primary:#6366F1;
 }
 
 @layer base {

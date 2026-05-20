@@ -57,5 +57,16 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "rights": "All rights reserved"
+  },
+  "dashboard":{
+    "dashboard":"Dashboard",
+    "users":"users",
+    "reals":"Reals",
+    "overview": "Overview",
+    "menu": "Menu",
+    "campaigns": "Campaigns",
+    "team": "Team",
+    "analytics": "Analytics",
+    "payments": "Payments"
   }
 }

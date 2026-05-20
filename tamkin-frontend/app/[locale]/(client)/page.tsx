@@ -4,11 +4,14 @@ import { useTranslations } from "next-intl";
 import Slider from "@/components/ui/Slider";
 import CampaignCard from "@/components/campaigns/CampaignCard";
 import AppButton from "@/components/buttons/AppButton";
+import ReelsSection from "@/components/reels/ReelsSection";
 
 export default function Home() {
   const t = useTranslations("homePage");
   return (
     <div className="py-4">
+
+      <ReelsSection />
       <div className="mt-2 sm:mt-6 md:mt-10">
         <Slider
           images={[

@@ -60,5 +60,16 @@
     "privacy": "الخصوصية",
     "terms": "الشروط",
     "rights": "جميع الحقوق محفوظة"
+  },
+  "dashboard":{
+    "dashboard":"لوحة التحكم",
+    "reals":"الريلز",
+    "overview": "نظرة عامة",
+    "menu": "القائمة",
+    "campaigns": "الحملات",
+    "team": "الفريق",
+    "analytics": "التحليلات",
+    "payments": "المدفوعات"
+ 
   }
 }
