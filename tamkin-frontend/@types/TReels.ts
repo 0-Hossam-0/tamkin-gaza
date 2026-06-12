@@ -1,12 +1,15 @@
 export type TReels = {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  totalViews: number;
-  totalLikes: number;
-  totalShares: number;
-  totalComments: number;
-  totalSaves: number;
-  totalReposts: number;
+  uuid: string;
+  fileName: string;
+  fileUrl: string;
+  title?: string;
+  content?: string;
+  user?: {
+    uuid: string;
+    fullName: string;
+    email: string;
+    picture?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 };

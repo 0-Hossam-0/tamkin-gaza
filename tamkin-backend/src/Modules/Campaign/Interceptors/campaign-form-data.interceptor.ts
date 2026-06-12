@@ -10,49 +10,78 @@ export class CampaignFormDataInterceptor implements NestInterceptor {
     if (value && typeof value === 'object') {
       const transformed = { ...value };
 
-      // Group title fields
+      // Handle bracket notation like title[en] or description[ar]
+      for (const key of Object.keys(transformed)) {
+        const match = key.match(/^(title|description)\[([a-z]{2})\]$/);
+        if (match) {
+          const field = match[1];
+          const lang = match[2];
+          if (!transformed[field] || typeof transformed[field] !== 'object') {
+            transformed[field] = {};
+          }
+          transformed[field][lang] = transformed[key];
+          delete transformed[key];
+        }
+      }
+
+      // Group title fields (Legacy camelCase format)
       if (
         transformed.arTitle !== undefined ||
         transformed.enTitle !== undefined ||
         transformed.urTitle !== undefined ||
         transformed.trTitle !== undefined
       ) {
-        transformed.title = {
-          ...(transformed.arTitle !== undefined && { ar: transformed.arTitle }),
-          ...(transformed.enTitle !== undefined && { en: transformed.enTitle }),
-          ...(transformed.urTitle !== undefined && { ur: transformed.urTitle }),
-          ...(transformed.trTitle !== undefined && { tr: transformed.trTitle }),
-        };
+        if (!transformed.title || typeof transformed.title !== 'object') {
+          transformed.title = {};
+        }
+        if (transformed.arTitle !== undefined) transformed.title.ar = transformed.arTitle;
+        if (transformed.enTitle !== undefined) transformed.title.en = transformed.enTitle;
+        if (transformed.urTitle !== undefined) transformed.title.ur = transformed.urTitle;
+        if (transformed.trTitle !== undefined) transformed.title.tr = transformed.trTitle;
+
         delete transformed.arTitle;
         delete transformed.enTitle;
         delete transformed.urTitle;
         delete transformed.trTitle;
       }
 
-      // Group description fields
+      // Group description fields (Legacy camelCase format)
       if (
         transformed.arDescription !== undefined ||
         transformed.enDescription !== undefined ||
         transformed.urDescription !== undefined ||
         transformed.trDescription !== undefined
       ) {
-        transformed.description = {
-          ...(transformed.arDescription !== undefined && { ar: transformed.arDescription }),
-          ...(transformed.enDescription !== undefined && { en: transformed.enDescription }),
-          ...(transformed.urDescription !== undefined && { ur: transformed.urDescription }),
-          ...(transformed.trDescription !== undefined && { tr: transformed.trDescription }),
-        };
+        if (!transformed.description || typeof transformed.description !== 'object') {
+          transformed.description = {};
+        }
+        if (transformed.arDescription !== undefined)
+          transformed.description.ar = transformed.arDescription;
+        if (transformed.enDescription !== undefined)
+          transformed.description.en = transformed.enDescription;
+        if (transformed.urDescription !== undefined)
+          transformed.description.ur = transformed.urDescription;
+        if (transformed.trDescription !== undefined)
+          transformed.description.tr = transformed.trDescription;
+
         delete transformed.arDescription;
         delete transformed.enDescription;
         delete transformed.urDescription;
         delete transformed.trDescription;
       }
 
-      // Convert target_amount if it is a string
+      // Convert amounts if they are strings
       if (typeof transformed.target_amount === 'string') {
         const parsedAmount = parseFloat(transformed.target_amount);
         if (!isNaN(parsedAmount)) {
           transformed.target_amount = parsedAmount;
+        }
+      }
+
+      if (typeof transformed.current_amount === 'string') {
+        const parsedAmount = parseFloat(transformed.current_amount);
+        if (!isNaN(parsedAmount)) {
+          transformed.current_amount = parsedAmount;
         }
       }
 

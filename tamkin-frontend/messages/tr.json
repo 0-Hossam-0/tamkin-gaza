@@ -1,5 +1,75 @@
 {
-    "homePage":{
-        "title":"مرحبا"
+  "homePage": {
+    "title": "Merhaba"
+  },
+  "navbar": {
+    "campaigns": "Kampanyalar",
+    "blogs": "Bloglar",
+    "stories": "Hikayeler",
+    "contact": "İletişim",
+    "more": "Daha Fazla",
+    "privacy": "Gizlilik",
+    "terms": "Şartlar",
+    "about": "Hakkımızda",
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol"
+  },
+  "errors": {
+    "forbidden": {
+      "title": "Erişim Engellendi",
+      "description": "Bu sayfaya erişim izniniz yok.",
+      "home": "Ana Sayfa",
+      "contact": "Destek İletişim"
+    },
+    "notFound": {
+      "title": "Sayfa Bulunamadı",
+      "description": "Aradığınız sayfa mevcut değil.",
+      "home": "Ana Sayfa",
+      "back": "Geri Dön"
     }
+  },
+  "about": {
+    "title": "Hakkımızda",
+    "p1": "Modern web uygulamaları geliştiriyoruz.",
+    "p2": "Hedefimiz ölçeklenebilir sistemler sunmaktır.",
+    "p3": "Performans ve kullanıcı deneyimine odaklanıyoruz."
+  },
+  "privacy": {
+    "title": "Gizlilik Politikası",
+    "intro": "Gizliliğinize saygı duyuyoruz.",
+    "dataCollection": "Yalnızca gerekli verileri topluyoruz.",
+    "cookies": "Analitik için çerezler kullanıyoruz.",
+    "security": "Verileriniz korunmaktadır."
+  },
+  "terms": {
+    "title": "Kullanım Şartları",
+    "acceptance": "Sitemizi kullanarak şartları kabul etmiş olursunuz.",
+    "usage": "Platformu kötüye kullanmayın.",
+    "liability": "Zararlardan sorumlu değiliz.",
+    "changes": "Şartlar her zaman değiştirilebilir."
+  },
+  "footer": {
+    "description": "Next.js ile oluşturulmuş modern SaaS platformu",
+    "company": "Şirket",
+    "legal": "Yasal",
+    "about": "Hakkımızda",
+    "contact": "İletişim",
+    "privacy": "Gizlilik",
+    "terms": "Şartlar",
+    "rights": "Tüm hakları saklıdır"
+  },
+  "dashboard": {
+    "dashboard": "Kontrol Paneli",
+    "users": "Kullanıcılar",
+    "reals": "Reels",
+    "overview": "Genel Bakış",
+    "menu": "Menü",
+    "campaigns": "Kampanyalar",
+    "team": "Ekip",
+    "analytics": "Analitik",
+    "payments": "Ödemeler",
+    "logout": "Çıkış Yap",
+    "search": "Ara...",
+    "profile": "Profil"
+  }
 }

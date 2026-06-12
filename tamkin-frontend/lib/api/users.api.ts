@@ -1,36 +1,24 @@
-import asyncWrapper from "../wrappers/asyncWrapper";
 import axiosInstance from "./axiosInstance";
+import type { TUser } from "@/@types/IUser";
+import type { IResponse } from "@/@types/IResponse";
 
-const userBaseUrl = "/users";
-const getAllUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${userBaseUrl}/`);
-  return res.data;
-});
+export const usersApi = {
+  getAll: async () => {
+    const res = await axiosInstance.get<IResponse<TUser[]>>("/users");
+    return res.data.data!;
+  },
 
-const getByIdUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${userBaseUrl}/${data.id}`);
-  return res.data;
-});
+  getById: async (id: string) => {
+    const res = await axiosInstance.get<IResponse<TUser>>(`/users/${id}`);
+    return res.data.data!;
+  },
 
-const createUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.post(`${userBaseUrl}/`, data);
-  return res.data;
-});
+  update: async (id: string, data: Partial<TUser>) => {
+    const res = await axiosInstance.put<IResponse<TUser>>(`/users/${id}`, data);
+    return res.data.data!;
+  },
 
-const updateUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.put(`${userBaseUrl}/${data.id}`, data);
-  return res.data;
-});
-
-const deleteUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.delete(`${userBaseUrl}/${data.id}`, data);
-  return res.data;
-});
-
-export default {
-  getAllUsers,
-  getByIdUsers,
-  createUsers,
-  updateUsers,
-  deleteUsers,
+  delete: async (id: string) => {
+    await axiosInstance.delete(`/users/${id}`);
+  },
 };

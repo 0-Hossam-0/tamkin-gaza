@@ -1,36 +1,80 @@
-import asyncWrapper from "../wrappers/asyncWrapper";
 import axiosInstance from "./axiosInstance";
+import type { TReels } from "@/@types/TReels";
+import type { IResponse } from "@/@types/IResponse";
 
-const usersBaseUrl = "/users";
-const getAllUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${usersBaseUrl}/`);
-  return res.data;
-});
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
 
-const getByIdUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${usersBaseUrl}/${data.id}`);
-  return res.data;
-});
+interface SearchReelsParams extends PaginationParams {
+  title?: string;
+  content?: string;
+  uploadedBy?: string;
+}
 
-const createUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.post(`${usersBaseUrl}/`, data);
-  return res.data;
-});
+interface BackendPaginatedData<T> {
+  data: T[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    totalPages: number;
+    currentPage: number;
+  };
+}
 
-const updateUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.put(`${usersBaseUrl}/${data.id}`, data);
-  return res.data;
-});
+export interface PaginatedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
-const deleteUsers = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.delete(`${usersBaseUrl}/${data.id}`, data);
-  return res.data;
-});
+function mapPaginated<T>(raw: BackendPaginatedData<T>): PaginatedResult<T> {
+  return {
+    items: raw.data,
+    total: raw.meta.totalItems,
+    page: raw.meta.currentPage,
+    limit: raw.meta.itemCount,
+    totalPages: raw.meta.totalPages,
+  };
+}
 
-export default {
-  getAllUsers,
-  getByIdUsers,
-  createUsers,
-  updateUsers,
-  deleteUsers,
+export const reelsApi = {
+  getAll: async (params?: PaginationParams) => {
+    const res = await axiosInstance.get<IResponse<BackendPaginatedData<TReels>>>("/reels", { params });
+    return mapPaginated(res.data.data!);
+  },
+
+  search: async (params?: SearchReelsParams) => {
+    const res = await axiosInstance.get<IResponse<BackendPaginatedData<TReels>>>("/reels/search", { params });
+    return mapPaginated(res.data.data!);
+  },
+
+  getById: async (id: string) => {
+    const res = await axiosInstance.get<IResponse<TReels>>(`/reels/${id}`);
+    return res.data.data!;
+  },
+
+  getByUserId: async (userId: string, params?: PaginationParams) => {
+    const res = await axiosInstance.get<IResponse<BackendPaginatedData<TReels>>>(`/reels/user/${userId}`, { params });
+    return mapPaginated(res.data.data!);
+  },
+
+  upload: async (formData: FormData) => {
+    const res = await axiosInstance.post<IResponse<TReels>>("/reels/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.data!;
+  },
+
+  update: async (id: string, data: { title?: string; content?: string }) => {
+    const res = await axiosInstance.put<IResponse<TReels>>(`/reels/update/${id}`, data);
+    return res.data.data!;
+  },
+
+  delete: async (id: string) => {
+    await axiosInstance.delete(`/reels/${id}`);
+  },
 };

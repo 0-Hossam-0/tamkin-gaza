@@ -20,7 +20,7 @@ export class CampaignDto {
     message: `validation.campaign.title_required`,
   })
   @IsLanguageRecord({
-    message: `validation.campaign.title_invalid|${SUPPORTED_LANGUAGES}`,
+    message: `validation.campaign.title_invalid|{"prop": "${SUPPORTED_LANGUAGES.join(', ')}"}`,
   })
   title: Record<LanguageCode, string>;
 
@@ -28,7 +28,7 @@ export class CampaignDto {
     message: `validation.campaign.description_required`,
   })
   @IsLanguageRecord({
-    message: `validation.campaign.description_invalid|${SUPPORTED_LANGUAGES}`,
+    message: `validation.campaign.description_invalid|{"prop": "${SUPPORTED_LANGUAGES.join(', ')}"}`,
   })
   description: Record<LanguageCode[number], string>;
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -20,30 +20,9 @@ import {
   ArrowUpDown,
   Search,
 } from "lucide-react";
-import { TUser } from "@/@types/IUser";
 import PaginationCard from "../common/PaginationCard";
-
-// ── Types ─────────────────────────────────────
-
-// ── Mock Data ─────────────────────────────────
-
-const FIRST = ["Alex", "Nour", "Omar", "Layla", "Hassan", "Fatima"];
-const LAST = ["Ibrahim", "Mansour", "Ali", "Smith", "Lee", "Kim"];
-
-const USERS: TUser[] = Array.from({ length: 15 }, (_, i) => ({
-  id: `U-${i + 1}`,
-  name: `${FIRST[i % FIRST.length]} ${LAST[i % LAST.length]}`,
-  email: `user${i}@example.com`,
-  role: i % 5 === 0 ? "admin" : "user",
-  isActive: i % 3 !== 0,
-  country: "Egypt",
-  phone: "+20 10" + Math.floor(Math.random() * 100000000),
-  createdAt: new Date(Date.now() - i * 86400000 * 10),
-  lastLogin: new Date(Date.now() - i * 3600000 * 5),
-  colorIdx: i % 6,
-}));
-
-// ── Helpers ───────────────────────────────────
+import { useUsers } from "@/hooks/useUsers";
+import type { TUser } from "@/@types/IUser";
 
 const AVATAR_COLORS = [
   ["#eef0fd", "#4648D4"],
@@ -54,52 +33,45 @@ const AVATAR_COLORS = [
   ["#fff7ed", "#c2410c"],
 ];
 
-function relativeTime(date: Date) {
-  const diff = Date.now() - date.getTime();
+function relativeTime(date: string) {
+  const diff = Date.now() - new Date(date).getTime();
   const hrs = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
   if (hrs < 24) return `${hrs}h ago`;
   return `${days}d ago`;
 }
 
-type SortKey = keyof TUser;
-
-// ── Component ─────────────────────────────────
+type SortKey = "fullName" | "email" | "role" | "createdAt" | "uuid";
 
 export default function UsersTable() {
-  const [loading, setLoading] = useState(false);
+  const { data: users, isLoading } = useUsers();
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("createdAt");
   const [sortDir, setSortDir] = useState<1 | -1>(-1);
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
-  }, []);
+  const pageSize = 5;
 
   const filtered = useMemo(() => {
-    return USERS.filter(
-      (u) =>
-        !search ||
-        [u.name, u.email, u.id].some((v) =>
-          v.toLowerCase().includes(search.toLowerCase()),
-        ),
-    ).sort((a, b) => {
-      let av: any = a[sortKey];
-      let bv: any = b[sortKey];
-
-      if (av instanceof Date) {
-        av = av.getTime();
-        bv = bv.getTime();
-      } else if (typeof av === "string") {
+    const list = users || [];
+    return list
+      .filter(
+        (u) =>
+          !search ||
+          [u.fullName, u.email, u.uuid].some((v) =>
+            v.toLowerCase().includes(search.toLowerCase()),
+          ),
+      )
+      .sort((a, b) => {
+        const ak = sortKey === "fullName" ? "fullName" : sortKey;
+        let av = String(a[ak as keyof TUser] ?? "");
+        let bv = String(b[ak as keyof TUser] ?? "");
         av = av.toLowerCase();
         bv = bv.toLowerCase();
-      }
+        return av < bv ? -sortDir : av > bv ? sortDir : 0;
+      });
+  }, [users, search, sortKey, sortDir]);
 
-      return av < bv ? -sortDir : av > bv ? sortDir : 0;
-    });
-  }, [search, sortKey, sortDir]);
+  const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   function handleSort(k: SortKey) {
     if (sortKey === k) setSortDir((d) => (d === 1 ? -1 : 1));
@@ -121,10 +93,8 @@ export default function UsersTable() {
 
   return (
     <Card className="rounded-3xl overflow-hidden border-none shadow-none">
-      {/* Header */}
       <div className="flex justify-between px-5 py-3 border-b">
-        <h2 className="text-sm font-semibold">Users</h2>
-
+        <h2 className="text-sm font-semibold">Users ({users?.length || 0})</h2>
         <div className="relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400" />
           <input
@@ -136,18 +106,17 @@ export default function UsersTable() {
         </div>
       </div>
 
-      {/* Table */}
       <Table>
         <TableHeader>
           <TableRow>
-            {["id", "name", "email", "role", "isActive", "createdAt"].map(
+            {["uuid", "fullName", "email", "role", "createdAt"].map(
               (col) => (
                 <TableHead
                   key={col}
                   onClick={() => handleSort(col as SortKey)}
                   className="cursor-pointer text-xs"
                 >
-                  {col}
+                  {col === "fullName" ? "name" : col}
                   <SortIcon k={col as SortKey} />
                 </TableHead>
               ),
@@ -157,61 +126,50 @@ export default function UsersTable() {
         </TableHeader>
 
         <TableBody>
-          {loading
+          {isLoading
             ? Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={7}>
+                  <TableCell colSpan={6}>
                     <Skeleton className="h-4 w-full" />
                   </TableCell>
                 </TableRow>
               ))
-            : filtered.map((user) => {
-                const [bg, fg] = AVATAR_COLORS[user.colorIdx];
+            : paginated.map((user, idx) => {
+                const [bg, fg] = AVATAR_COLORS[idx % AVATAR_COLORS.length];
 
                 return (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.id}</TableCell>
-
+                  <TableRow key={user.uuid}>
+                    <TableCell className="text-xs font-mono">
+                      {user.uuid.slice(0, 8)}...
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <div
                           className="w-7 h-7 rounded-full flex items-center justify-center text-xs"
                           style={{ background: bg, color: fg }}
                         >
-                          {user.name.slice(0, 2).toUpperCase()}
+                          {user.fullName.slice(0, 2).toUpperCase()}
                         </div>
-                        {user.name}
+                        {user.fullName}
                       </div>
                     </TableCell>
-
-                    <TableCell>{user.email}</TableCell>
-
+                    <TableCell className="text-xs">{user.email}</TableCell>
                     <TableCell>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full ${
-                          user.role === "admin"
+                          user.role === "admin" || user.role === "super_admin"
                             ? "bg-purple-50 text-purple-700"
-                            : "bg-gray-100 text-gray-600"
+                            : user.role === "user"
+                              ? "bg-gray-100 text-gray-600"
+                              : "bg-gray-100 text-gray-600"
                         }`}
                       >
                         {user.role}
                       </span>
                     </TableCell>
-
-                    <TableCell>
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded-full ${
-                          user.isActive
-                            ? "bg-green-50 text-green-700"
-                            : "bg-red-50 text-red-600"
-                        }`}
-                      >
-                        {user.isActive ? "Active" : "Suspended"}
-                      </span>
+                    <TableCell className="text-xs">
+                      {relativeTime(user.createdAt)}
                     </TableCell>
-
-                    <TableCell>{relativeTime(user.createdAt)}</TableCell>
-
                     <TableCell>
                       <div className="flex gap-1">
                         <button className="p-1 hover:bg-gray-100 rounded">
@@ -235,8 +193,8 @@ export default function UsersTable() {
         page={page}
         setPage={setPage}
         totalItems={filtered.length}
-        pageSize={5}
-        totalPages={Math.ceil(filtered.length / 5)}
+        pageSize={pageSize}
+        totalPages={Math.ceil(filtered.length / pageSize)}
       />
     </Card>
   );

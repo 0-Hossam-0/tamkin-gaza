@@ -1,40 +1,45 @@
-import asyncWrapper from "../wrappers/asyncWrapper";
 import axiosInstance from "./axiosInstance";
+import type { TCampaign } from "@/@types/TCampaign";
+import type { IResponse } from "@/@types/IResponse";
 
-const campaignsBaseUrl = "/campaigns";
+const baseUrl = "/campaign";
 
-const getAllCampaigns = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${campaignsBaseUrl}/`);
-  return res.data;
-});
+export const campaignApi = {
+  getAll: async () => {
+    const res = await axiosInstance.get<IResponse<TCampaign[]>>(baseUrl);
+    return res.data.data!;
+  },
 
-const getByIdCampaigns = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${campaignsBaseUrl}/${data.id}`);
-  return res.data;
-});
+  getById: async (id: string) => {
+    const res = await axiosInstance.get<IResponse<TCampaign>>(`${baseUrl}/${id}`);
+    return res.data.data!;
+  },
 
-const createCampaigns = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.post(`${campaignsBaseUrl}/`, data);
-  return res.data;
-});
+  create: async (formData: FormData) => {
+    const res = await axiosInstance.post<IResponse<TCampaign>>(baseUrl, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.data!;
+  },
 
-const updateCampaigns = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.put(`${campaignsBaseUrl}/${data.id}`, data);
-  return res.data;
-});
+  update: async (id: string, formData: FormData) => {
+    const res = await axiosInstance.put<IResponse<TCampaign>>(`${baseUrl}/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.data!;
+  },
 
-const deleteCampaigns = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.delete(
-    `${campaignsBaseUrl}/${data.id}`,
-    data,
-  );
-  return res.data;
-});
+  delete: async (id: string) => {
+    await axiosInstance.delete(`${baseUrl}/${id}`);
+  },
 
-export default {
-  getAllCampaigns,
-  getByIdCampaigns,
-  createCampaigns,
-  updateCampaigns,
-  deleteCampaigns,
+  restore: async (id: string) => {
+    const res = await axiosInstance.patch<IResponse<TCampaign>>(`${baseUrl}/restore/${id}`);
+    return res.data.data!;
+  },
+
+  approve: async (id: string) => {
+    const res = await axiosInstance.patch<IResponse<TCampaign>>(`${baseUrl}/approve/${id}`);
+    return res.data.data!;
+  },
 };

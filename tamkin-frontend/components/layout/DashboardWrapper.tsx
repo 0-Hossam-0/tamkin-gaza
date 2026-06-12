@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState, useMemo, useCallback } from "react";
+import { ReactNode, useState, useMemo, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -47,6 +47,8 @@ import {
 } from "../ui/dropdown-menu";
 import { useParams } from "next/navigation";
 import { locales } from "@/i18n/routing";
+import { useAuth } from "@/components/AuthProvider";
+import { useLogout } from "@/hooks/useAuth";
 
 interface SidebarItem {
   label: string;
@@ -65,8 +67,8 @@ interface DashboardWrapperProps {
 export default function DashboardWrapper({
   children,
   title,
-  userName = "John Doe",
-  userEmail = "john@example.com",
+  userName,
+  userEmail,
 }: DashboardWrapperProps) {
   const t = useTranslations("dashboard");
   const { isArabic, locale } = useLanguage();
@@ -79,6 +81,30 @@ export default function DashboardWrapper({
     [key: string]: boolean;
   }>({});
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // Use real auth data from AuthProvider
+  const { user, isLoading: authLoading } = useAuth();
+  const logoutMutation = useLogout();
+
+  // Redirect non-admin users to login
+  const isAdmin = user?.role === "admin" || user?.role === "super_admin";
+  useEffect(() => {
+    if (!authLoading && (!user || !isAdmin)) {
+      router.push("/login");
+    }
+  }, [user, authLoading, isAdmin, router]);
+
+  const displayName = userName ?? user?.fullName ?? "User";
+  const displayEmail = userEmail ?? user?.email ?? "";
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      router.push("/login");
+    } catch {
+      router.push("/login");
+    }
+  }, [logoutMutation, router]);
 
   const changeLocale = useCallback(
     (newLocale: (typeof locales)[number]) => {
@@ -144,14 +170,22 @@ export default function DashboardWrapper({
 
   const initials = useMemo(
     () =>
-      userName
+      displayName
         .split(" ")
         .map((n) => n[0])
         .join("")
         .slice(0, 2)
         .toUpperCase(),
-    [userName],
+    [displayName],
   );
+
+  if (authLoading || !user || !isAdmin) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-indigo-600 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -346,7 +380,7 @@ export default function DashboardWrapper({
             >
               {isCollapsed ? (
                 <div className="flex justify-center">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
                     {initials}
                   </div>
                 </div>
@@ -361,14 +395,14 @@ export default function DashboardWrapper({
                 className={`flex-1 min-w-0 ${isArabic ? "text-right" : "text-left"}`}
               >
                 <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-100 truncate leading-tight">
-                  {userName}
+                  {displayName}
                 </p>
                 <p className="text-xs text-neutral-400 dark:text-neutral-500 truncate leading-tight mt-0.5">
-                  {userEmail}
+                  {displayEmail}
                 </p>
               </div>
               <button
-                onClick={() => alert("Logout")}
+                      onClick={handleLogout}
                 title={t("logout")}
                 className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-150 shrink-0"
               >
@@ -471,12 +505,12 @@ export default function DashboardWrapper({
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center gap-2.5 h-9 pl-2 pr-3 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 transition-all duration-150"
               >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-linear-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
                   {initials}
                 </div>
-                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200 hidden sm:block">
-                  {userName.split(" ")[0]}
-                </span>
+                      <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200 hidden sm:block">
+                        {displayName.split(" ")[0]}
+                      </span>
                 <ChevronDown
                   className={`w-3 h-3 text-neutral-400 transition-transform duration-200 ${
                     userMenuOpen ? "rotate-180" : ""
@@ -502,10 +536,10 @@ export default function DashboardWrapper({
                   >
                     <div className="px-3 py-2.5 border-b border-neutral-100 dark:border-neutral-800 mb-1">
                       <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-100 truncate">
-                        {userName}
+                        {displayName}
                       </p>
                       <p className="text-xs text-neutral-400 truncate mt-0.5">
-                        {userEmail}
+                        {displayEmail}
                       </p>
                     </div>
                     <Link
@@ -518,7 +552,7 @@ export default function DashboardWrapper({
                     </Link>
                     <button
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-150"
-                      onClick={() => alert("Logout")}
+                            onClick={handleLogout}
                     >
                       <LogOut className="w-3.5 h-3.5" />
                       {t("logout")}

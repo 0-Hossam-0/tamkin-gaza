@@ -60,13 +60,16 @@
   },
   "dashboard":{
     "dashboard":"Dashboard",
-    "users":"users",
+    "users":"Users",
     "reals":"Reals",
     "overview": "Overview",
     "menu": "Menu",
     "campaigns": "Campaigns",
     "team": "Team",
     "analytics": "Analytics",
-    "payments": "Payments"
+    "payments": "Payments",
+    "logout": "Logout",
+    "search": "Search...",
+    "profile": "Profile"
   }
 }

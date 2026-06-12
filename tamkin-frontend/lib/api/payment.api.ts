@@ -1,37 +1,30 @@
-import asyncWrapper from "../wrappers/asyncWrapper";
 import axiosInstance from "./axiosInstance";
+import type { TPayments, TPaymentProvider } from "@/@types/TPayments";
+import type { IResponse } from "@/@types/IResponse";
 
-const paymentBaseUrl = "/payments";
+interface CreatePaymentDto {
+  campaignUuid: string;
+  amount: number;
+  currency?: string;
+  provider: TPaymentProvider;
+}
 
-const getAllPayments = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${paymentBaseUrl}/`);
-  return res.data;
-});
+interface PaymentSession {
+  sessionId?: string;
+  checkoutUrl?: string;
+  merchantRefNumber?: string;
+  paymentKey?: string;
+  orderId?: string;
+}
 
-const getByIdPayments = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.get(`${paymentBaseUrl}/${data.id}`);
-  return res.data;
-});
+export const paymentApi = {
+  create: async (dto: CreatePaymentDto) => {
+    const res = await axiosInstance.post<IResponse<PaymentSession>>("/payments/create", dto);
+    return res.data.data!;
+  },
 
-const createPayments = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.post(`${paymentBaseUrl}/`, data);
-  return res.data;
-});
-
-const updatePayments = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.put(`${paymentBaseUrl}/${data.id}`, data);
-  return res.data;
-});
-
-const deletePayments = asyncWrapper.api(async (data?: any) => {
-  const res = await axiosInstance.delete(`${paymentBaseUrl}/${data.id}`, data);
-  return res.data;
-});
-
-export default {
-  getAllPayments,
-  getByIdPayments,
-  createPayments,
-  updatePayments,
-  deletePayments,
+  getById: async (id: string) => {
+    const res = await axiosInstance.get<IResponse<TPayments>>(`/payments/${id}`);
+    return res.data.data!;
+  },
 };

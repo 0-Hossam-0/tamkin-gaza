@@ -1,6 +1,6 @@
 "use client";
 import { ArrowDown, ArrowUp, ArrowUpDown, Eye, Trash } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   TableBody,
   TableCell,
@@ -9,111 +9,71 @@ import {
   Table,
   TableRow,
 } from "../ui/table";
-import { TPayments } from "@/@types/TPayments";
 import { Skeleton } from "../ui/skeleton";
-import { Pagination } from "swiper/modules";
 import PaginationCard from "../common/PaginationCard";
 import { Card } from "../ui/card";
-const cols: TPayments[] = [
-  {
-    id: "R-1",
-    amount: 10,
-    user: {
-      id: `idd`,
-      name: "name",
-      email: `user@example.com`,
-      role: "admin",
-      isActive: true,
-      country: "Egypt",
-      phone: "+20 10" + Math.floor(Math.random() * 100000000),
-      createdAt: new Date(Date.now() - 86400000 * 10),
-      lastLogin: new Date(Date.now() - 3600000 * 5),
-      colorIdx: 6,
-    },
-    provider: "stripe",
-    currency: "USD",
 
-    createdAt: new Date(Date.now() - 86400000 * 10),
+type PaymentRow = {
+  id: string;
+  name: string;
+  campaign: string;
+  email: string;
+  amount: number;
+  currency: string;
+  provider: string;
+  createdAt: Date;
+};
+
+const MOCK_PAYMENTS: PaymentRow[] = [
+  {
+    id: "P-1",
+    name: "Ahmed Ali",
+    campaign: "Medical Supplies for Gaza",
+    email: "ahmed@example.com",
+    amount: 500,
+    currency: "USD",
+    provider: "stripe",
+    createdAt: new Date("2024-01-15"),
   },
   {
-    id: "R-1",
-    amount: 10,
-    user: {
-      id: `idd`,
-      name: "name",
-      email: `user@example.com`,
-      role: "admin",
-      isActive: true,
-      country: "Egypt",
-      phone: "+20 10" + Math.floor(Math.random() * 100000000),
-      createdAt: new Date(Date.now() - 86400000 * 10),
-      lastLogin: new Date(Date.now() - 3600000 * 5),
-      colorIdx: 6,
-    },
+    id: "P-2",
+    name: "Sarah Hassan",
+    campaign: "Winter Relief Fund",
+    email: "sarah@example.com",
+    amount: 250,
     currency: "USD",
-
-    provider: "stripe",
-    createdAt: new Date(Date.now() - 86400000 * 10),
+    provider: "paymob",
+    createdAt: new Date("2024-02-20"),
   },
   {
-    id: "R-1",
-    amount: 10,
-    user: {
-      id: `idd`,
-      name: "name",
-      email: `user@example.com`,
-      role: "admin",
-      isActive: true,
-      country: "Egypt",
-      phone: "+20 10" + Math.floor(Math.random() * 100000000),
-      createdAt: new Date(Date.now() - 86400000 * 10),
-      lastLogin: new Date(Date.now() - 3600000 * 5),
-      colorIdx: 6,
-    },
+    id: "P-3",
+    name: "Omar Khaled",
+    campaign: "Education Support",
+    email: "omar@example.com",
+    amount: 1000,
     currency: "USD",
-
-    provider: "stripe",
-    createdAt: new Date(Date.now() - 86400000 * 10),
-  },
-  {
-    id: "R-1",
-    amount: 10,
-    user: {
-      id: `idd`,
-      name: "name",
-      email: `user@example.com`,
-      role: "admin",
-      isActive: true,
-      country: "Egypt",
-      phone: "+20 10" + Math.floor(Math.random() * 100000000),
-      createdAt: new Date(Date.now() - 86400000 * 10),
-      lastLogin: new Date(Date.now() - 3600000 * 5),
-      colorIdx: 6,
-    },
-    currency: "USD",
-    provider: "stripe",
-    createdAt: new Date(Date.now() - 86400000 * 10),
+    provider: "fawry",
+    createdAt: new Date("2024-03-10"),
   },
 ];
-type SortKey = keyof TPayments;
+
+type SortKey = keyof PaymentRow;
 
 const PaymentTables = () => {
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("createdAt");
   const [sortDir, setSortDir] = useState<1 | -1>(-1);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(t);
   }, []);
 
   const filtered = useMemo(() => {
-    return cols.sort((a, b) => {
+    return [...MOCK_PAYMENTS].sort((a, b) => {
       let av: any = a[sortKey];
       let bv: any = b[sortKey];
-
       if (av instanceof Date) {
         av = av.getTime();
         bv = bv.getTime();
@@ -121,10 +81,9 @@ const PaymentTables = () => {
         av = av.toLowerCase();
         bv = bv.toLowerCase();
       }
-
       return av < bv ? -sortDir : av > bv ? sortDir : 0;
     });
-  }, [search, sortKey, sortDir]);
+  }, [sortKey, sortDir]);
 
   function handleSort(k: SortKey) {
     if (sortKey === k) setSortDir((d) => (d === 1 ? -1 : 1));
@@ -143,13 +102,13 @@ const PaymentTables = () => {
       <ArrowDown className="w-3 h-3 inline" />
     );
   };
+
   return (
     <Card>
-      {/* Table */}
       <Table>
         <TableHeader>
           <TableRow>
-            {["id", "name", "campaing", "email", "amount", "createdAt"].map(
+            {["id", "name", "campaign", "email", "amount", "createdAt"].map(
               (col) => (
                 <TableHead
                   key={col}
@@ -174,51 +133,35 @@ const PaymentTables = () => {
                   </TableCell>
                 </TableRow>
               ))
-            : filtered.map((p) => {
-                return (
-                  <TableRow key={p.id}>
-                    <TableCell>{p.id}</TableCell>
-
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs">
-                          {p.user.name.slice(0, 2).toUpperCase()}
-                        </div>
-                        {p.user.name}
-                      </div>
-                    </TableCell>
-
-                    <TableCell>{"pay for gaza"}</TableCell>
-                    <TableCell>{p.user.email}</TableCell>
-
-                    <TableCell>
-                      {p.amount} {p.currency}
-                    </TableCell>
-
-                    <TableCell>
-                      {new Date(p.createdAt).toDateString()}
-                    </TableCell>
-
-                    <TableCell>
-                      <div className="flex gap-1">
-                        <button className="p-1 hover:bg-gray-100 rounded">
-                          <Eye className="w-3 h-3" />
-                        </button>
-                        <button className="p-1 hover:bg-gray-100 rounded text-red-500">
-                          <Trash className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+            : filtered.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell>{p.id}</TableCell>
+                  <TableCell>{p.name}</TableCell>
+                  <TableCell>{p.campaign}</TableCell>
+                  <TableCell>{p.email}</TableCell>
+                  <TableCell>
+                    {p.amount} {p.currency}
+                  </TableCell>
+                  <TableCell>{p.createdAt.toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <button className="p-1 hover:bg-gray-100 rounded">
+                        <Eye className="w-3 h-3" />
+                      </button>
+                      <button className="p-1 hover:bg-gray-100 rounded text-red-500">
+                        <Trash className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
 
       <PaginationCard
         page={page}
         setPage={setPage}
-        totalItems={cols.length}
+        totalItems={MOCK_PAYMENTS.length}
         pageSize={5}
         totalPages={1}
       />

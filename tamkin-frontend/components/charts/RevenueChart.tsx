@@ -13,23 +13,21 @@ import {
 } from "recharts";
 import useLanguage from "@/hooks/useLanguage";
 
-type Currency = "USD" | "EGP";
+type Currency = "USD" | "USD";
 
 interface RevenueData {
   month: string;
   revenue: Record<Currency, number>;
 }
 
-
 const allRevenueData: RevenueData[] = [
-  { month: "Jan", revenue: { USD: 1200, EGP: 60000 } },
-  { month: "Feb", revenue: { USD: 1500, EGP: 75000 } },
-  { month: "Mar", revenue: { USD: 1700, EGP: 85000 } },
-  { month: "Apr", revenue: { USD: 1400, EGP: 70000 } },
-  { month: "May", revenue: { USD: 1900, EGP: 95000 } },
-  { month: "Jun", revenue: { USD: 2200, EGP: 110000 } },
+  { month: "Jan", revenue: { USD: 1200} },
+  { month: "Feb", revenue: { USD: 1500} },
+  { month: "Mar", revenue: { USD: 1700} },
+  { month: "Apr", revenue: { USD: 1400} },
+  { month: "May", revenue: { USD: 1900} },
+  { month: "Jun", revenue: { USD: 2200} },
 ];
-
 
 const formatCurrency = (value: number, currency: Currency) => {
   return new Intl.NumberFormat("en-US", {
@@ -38,7 +36,6 @@ const formatCurrency = (value: number, currency: Currency) => {
     maximumFractionDigits: 0,
   }).format(value);
 };
-
 
 export default function RevenueChart() {
   const [currency, setCurrency] = useState<Currency>("USD");
@@ -73,7 +70,7 @@ export default function RevenueChart() {
 
         {/* Currency Switch */}
         <div className="flex gap-2">
-          {(["USD", "EGP"] as Currency[]).map((c) => (
+          {(["USD", "USD"] as Currency[]).map((c) => (
             <button
               key={c}
               onClick={() => setCurrency(c)}

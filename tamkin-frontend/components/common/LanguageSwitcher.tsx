@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { Languages } from "lucide-react";
 import {
@@ -21,17 +21,15 @@ const languageNames: Record<string, string> = {
 
 export const LanguageSwitcher = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const currentLocale = useLocale();
 
   const handleLocaleChange = (newLocale: string) => {
-    // Ensure we don't have a double locale prefix
     const segments = pathname.split("/");
     const firstSegment = segments[1];
     const isLocale = locales.includes(firstSegment as any);
     const cleanPathname = isLocale ? "/" + segments.slice(2).join("/") : pathname;
 
-    router.replace(cleanPathname, { locale: newLocale });
+    window.location.href = `/${newLocale}${cleanPathname}`;
   };
 
   return (
@@ -64,17 +62,15 @@ export const LanguageSwitcher = () => {
 
 export const LanguageButtons = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const currentLocale = useLocale();
 
   const handleLocaleChange = (newLocale: string) => {
-    // Ensure we don't have a double locale prefix
     const segments = pathname.split("/");
     const firstSegment = segments[1];
     const isLocale = locales.includes(firstSegment as any);
     const cleanPathname = isLocale ? "/" + segments.slice(2).join("/") : pathname;
 
-    router.replace(cleanPathname, { locale: newLocale });
+    window.location.href = `/${newLocale}${cleanPathname}`;
   };
 
   return (
