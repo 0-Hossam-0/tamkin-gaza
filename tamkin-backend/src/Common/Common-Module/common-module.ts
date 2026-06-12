@@ -7,7 +7,8 @@ import { OtpModel } from "src/DataBase/Models/otp.model";
 import { EmailService } from "../Utils/Email/email.service";
 import { ResponseService } from "../Services/Response/response.service";
 import { ClientInfoService } from "../Services/Security/client-info.service";
-import { TokenService } from "../Security/token.service";
+import { TokenService } from "../Services/Security/token.service";
+import { CookiesService } from "../Services/Cookies/cookies.service";
 
 @Module({
     imports: [
@@ -18,7 +19,8 @@ import { TokenService } from "../Security/token.service";
         ClientInfoService,
         TokenService,
         EmailService,
-        OTPService
+        OTPService,
+        CookiesService
     ],
     exports: [
         TypeOrmModule.forFeature([UserModel, JwtModel, OtpModel]),
@@ -26,7 +28,8 @@ import { TokenService } from "../Security/token.service";
         ClientInfoService,
         TokenService,
         EmailService,
-        OTPService
+        OTPService,
+        CookiesService
     ],
 })
 export class CommonModule { }
