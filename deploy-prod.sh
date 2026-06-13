@@ -34,8 +34,8 @@ fi
 
 # 1) Pull latest code
 echo -e "${YELLOW}📥 Pulling latest code from main branch...${NC}"
-git checkout main
-git pull origin main
+git checkout prod
+git pull origin prod
 
 # 2) Check for uncommitted changes
 if [[ -n $(git status -s) ]]; then
