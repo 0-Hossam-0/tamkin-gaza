@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { getTransporter } from './Config/email.config';
 import { E_EmailSubject } from './email.subjects';
-import { OTPTypeEnum } from 'src/Common/Enums/otp.enum';
+import { OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
 import {
   confirmEmailTemplate,
   disableTwoFATemplate,

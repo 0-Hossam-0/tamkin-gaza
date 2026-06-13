@@ -4,6 +4,7 @@ import { UserModel } from 'src/DataBase/Models/user.model';
 import { JwtModel } from 'src/DataBase/Models/jwt.model';
 import { ClientInfoService } from './Services/Security/client-info.service';
 import { ResponseService } from './Services/Response/response.service';
+import { CookiesService } from './Services/Cookies/cookies.service';
 import { TokenService } from './Services/Security/token.service';
 import { HashingService } from './Services/Security/Hash/hash.service';
 import { TranslationService } from './Services/Translation/translation.service';
@@ -22,6 +23,7 @@ import { MailModel } from 'src/DataBase/Models/mail.model';
     TranslationService,
     EmailService,
     OTPService,
+    CookiesService,
   ],
   exports: [
     TypeOrmModule.forFeature([UserModel, JwtModel, OtpModel]),
@@ -32,6 +34,7 @@ import { MailModel } from 'src/DataBase/Models/mail.model';
     TranslationService,
     EmailService,
     OTPService,
+    CookiesService,
   ],
 })
 export class CommonModule {}

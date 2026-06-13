@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OtpModel } from 'src/DataBase/Models/otp.model';
-import { E_OTPStatus, OTPTypeEnum } from 'src/Common/Enums/otp.enum';
+import { OTPStatusEnum, OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
 import { EmailService } from '../Email/email.service';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { HashingService } from 'src/Common/Services/Security/Hash/hash.service';
@@ -39,7 +39,7 @@ export class OTPService {
       where: {
         userId,
         type,
-        status: E_OTPStatus.ACTIVE,
+        status: OTPStatusEnum.ACTIVE,
       }
     }); return otp ? otp : false;
 
@@ -109,7 +109,7 @@ export class OTPService {
       code: await this.hashingService.generateHash({text: otpCode}),
       type,
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
-      status: E_OTPStatus.ACTIVE,
+      status: OTPStatusEnum.ACTIVE,
       resendCount: 0,
       blockedUntil: new Date(Date.now() + 1 * 60 * 1000),
       deleteIn: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -170,7 +170,7 @@ export class OTPService {
       });
     }
 
-    otp.status = E_OTPStatus.USED;
+    otp.status = OTPStatusEnum.USED;
     await this.otpRepository.save(otp);
 
     return true;

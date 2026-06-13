@@ -1,0 +1,760 @@
+{
+  "info": {
+    "_postman_id": "6ab577e1-fdfd-42d0-bb06-7bca88702179",
+    "name": "Tamkin",
+    "description": "This Postman collection is the central API reference for the Tamkin platform. It covers all endpoints for authentication, campaign management, donation payments, and media reels.\n\nThe collection is structured by feature module to reflect the backend architecture, making it easy for frontend developers to integrate.\n\nDesigned for:\n- Client application integration\n- API testing and payload validation\n- QA and automated test pipelines",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40056651"
+  },
+  "item": [
+    {
+      "name": "0.System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}",
+              "host": [
+                "{{BASE_URL}}"
+              ]
+            },
+            "description": "Checks that the server is running and reachable.\n\n**Expected User Data**\nNone"
+          },
+          "response": []
+        }
+      ],
+      "description": "System-level utility endpoints for verifying server health and connectivity."
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login & Session Management",
+          "item": [
+            {
+              "name": "Login with Google",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"id_token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6...\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/google",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "google"
+                  ]
+                },
+                "description": "Authenticates or registers a user via a Google ID token. Sets session cookies on success. Returns a `status` field indicating whether the user was logged in or newly registered.\n\n**Expected User Data**\n`id_token` (string) – Required, Google OAuth2 ID token obtained from the client"
+              },
+              "response": []
+            },
+            {
+              "name": "Register",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Ahmad Al-Masri\",\n    \"email\": \"ahmad@example.com\",\n    \"password\": \"StrongPass@123\",\n    \"confirmPassword\": \"StrongPass@123\",\n    \"nationality\": \"Palestinian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/register",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Creates a new user account. Sets session cookies on success.\n\n**Expected User Data**\n`fullName` (string) – Required, full name of the user\n`email` (string) – Required, valid email address\n`password` (string) – Required, strong password\n`confirmPassword` (string) – Required, must exactly match `password`\n`nationality` (string) – Required, user's nationality"
+              },
+              "response": []
+            },
+            {
+              "name": "Login",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"ahmad@example.com\",\n    \"password\": \"StrongPass@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Authenticates an existing user with email and password. Sets session cookies on success.\n\n**Expected User Data**\n`email` (string) – Required, registered email address\n`password` (string) – Required, account password"
+              },
+              "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/logout",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                },
+                "description": "Clears session cookies and terminates the active session.\n\n**Expected User Data**\nNone – Relies on the session cookie sent by the browser."
+              },
+              "response": []
+            }
+          ],
+          "description": "Handles user authentication, session creation, and session termination. Covers standard email/password login, Google OAuth, registration, and logout."
+        },
+        {
+          "name": "Email Verification",
+          "item": [
+            {
+              "name": "Request Confirm Email",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/request-confirm-email",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "request-confirm-email"
+                  ]
+                },
+                "description": "Sends an OTP code to the authenticated user's email to begin the email verification flow. Requires an active session.\n\n**Expected User Data**\nNone – The authenticated user is identified from the session cookie."
+              },
+              "response": []
+            },
+            {
+              "name": "Confirm Email",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"code\": \"A3F9B2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/confirm-email",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "confirm-email"
+                  ]
+                },
+                "description": "Verifies the user's email using the OTP received from `/auth/request-confirm-email`. Requires an active session.\n\n**Expected User Data**\n`code` (string) – Required, the OTP code sent to the user's email"
+              },
+              "response": []
+            }
+          ],
+          "description": "Handles the two-step email verification flow. First request an OTP, then submit it to confirm ownership of the registered email address."
+        }
+      ],
+      "description": "The Auth module manages the full user authentication lifecycle — registration, login, Google OAuth, session management, and email verification."
+    },
+    {
+      "name": "Campaign",
+      "item": [
+        {
+          "name": "Campaign Retrieval",
+          "item": [
+            {
+              "name": "Get All Campaigns",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign"
+                  ]
+                },
+                "description": "Returns a list of all active campaigns. Public endpoint — no authentication required.\n\n**Expected User Data**\nNone"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Campaign By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign/{{CAMPAIGN_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign",
+                    "{{CAMPAIGN_ID}}"
+                  ]
+                },
+                "description": "Retrieves a single campaign by its UUID. Returns the content in the appropriate language based on the request context.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target campaign"
+              },
+              "response": []
+            }
+          ],
+          "description": "Read-only endpoints for browsing and fetching individual campaign records."
+        },
+        {
+          "name": "Campaign Management",
+          "item": [
+            {
+              "name": "Create Campaign",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "title[en]",
+                      "value": "Help Gaza",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title[ar]",
+                      "value": "ساعد غزة",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description[en]",
+                      "value": "Support families in Gaza with essential aid",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description[ar]",
+                      "value": "دعم الأسر في غزة بالمساعدات الأساسية",
+                      "type": "text"
+                    },
+                    {
+                      "key": "target_amount",
+                      "value": "50000",
+                      "type": "text"
+                    },
+                    {
+                      "key": "current_amount",
+                      "value": "0",
+                      "type": "text"
+                    },
+                    {
+                      "key": "images",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign"
+                  ]
+                },
+                "description": "Creates a new donation campaign. Requires an authenticated session with ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`title` (object, multilingual) – Required, e.g. `{ \"en\": \"Help Gaza\", \"ar\": \"ساعد غزة\" }`\n`description` (object, multilingual) – Required, campaign description per supported language\n`target_amount` (number) – Required, fundraising goal (min: 1, max 2 decimal places)\n`current_amount` (number) – Optional, amount already raised (min: 0)\n`images` (file[]) – Optional, one or more image files using field key `images`"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Campaign",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "title[en]",
+                      "value": "Help Gaza – Updated",
+                      "type": "text"
+                    },
+                    {
+                      "key": "target_amount",
+                      "value": "75000",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign/{{CAMPAIGN_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign",
+                    "{{CAMPAIGN_ID}}"
+                  ]
+                },
+                "description": "Updates an existing campaign. All fields are optional — only provided fields will be updated. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target campaign\n`title` (object, multilingual) – Optional, updated title per language\n`description` (object, multilingual) – Optional, updated description per language\n`target_amount` (number) – Optional, updated fundraising goal\n`current_amount` (number) – Optional, updated amount raised\n`images` (file[]) – Optional, replacement image files using field key `images`"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Campaign",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign/{{CAMPAIGN_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign",
+                    "{{CAMPAIGN_ID}}"
+                  ]
+                },
+                "description": "Soft-deletes a campaign by UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target campaign"
+              },
+              "response": []
+            },
+            {
+              "name": "Restore Campaign",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign/restore/{{CAMPAIGN_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign",
+                    "restore",
+                    "{{CAMPAIGN_ID}}"
+                  ]
+                },
+                "description": "Restores a previously soft-deleted campaign back to active state. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target campaign"
+              },
+              "response": []
+            },
+            {
+              "name": "Approve Campaign",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/campaign/approve/{{CAMPAIGN_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "campaign",
+                    "approve",
+                    "{{CAMPAIGN_ID}}"
+                  ]
+                },
+                "description": "Approves a campaign, making it publicly visible. Requires SUPER_ADMIN role only.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target campaign"
+              },
+              "response": []
+            }
+          ],
+          "description": "Create, update, delete, restore, and approve campaign records. All endpoints require ADMIN or SUPER_ADMIN authentication."
+        }
+      ],
+      "description": "The Campaign module manages the full lifecycle of donation campaigns — creation, multilingual content, image uploads, status management, and approval workflow."
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Payment Operations",
+          "item": [
+            {
+              "name": "Create Payment",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"campaignUuid\": \"{{CAMPAIGN_ID}}\",\n    \"amount\": 50,\n    \"currency\": \"USD\",\n    \"provider\": \"STRIPE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/create",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "create"
+                  ]
+                },
+                "description": "Initiates a donation payment for a campaign. Works for both authenticated users and guests (guest checkout).\n\n**Expected User Data**\n`campaignUuid` (string) – Required, UUID of the target campaign\n`amount` (number) – Required, donation amount (min: 1)\n`currency` (string) – Optional, currency code. Default: `USD`\n`provider` (string, enum) – Required, one of: `STRIPE`, `PAYMOB`, `FAWRY`"
+              },
+              "response": []
+            },
+            {
+              "name": "Webhook Handler",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "stripe-signature",
+                    "value": "{{STRIPE_WEBHOOK_SIG}}",
+                    "type": "text",
+                    "description": "Required for Stripe. Other providers use their own signature headers."
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/webhook/{{PROVIDER}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "webhook",
+                    "{{PROVIDER}}"
+                  ]
+                },
+                "description": "Receives and processes payment status updates from a payment provider. This endpoint is called by the provider — NOT by the frontend.\n\n**Expected User Data**\n`provider` (string) – Required route parameter, e.g. `stripe`, `paymob`, `fawry`\nHeaders – Provider-specific signature header (e.g. `stripe-signature` for Stripe)\nBody – Raw payload as sent by the payment provider"
+              },
+              "response": []
+            },
+            {
+              "name": "Mock Webhook (Dev Only)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"type\": \"payment_intent.succeeded\",\n    \"data\": {\n        \"object\": {\n            \"id\": \"pi_test_123\",\n            \"metadata\": {\n                \"paymentUuid\": \"{{PAYMENT_ID}}\"\n            }\n        }\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/mock-webhook/{{PROVIDER}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "mock-webhook",
+                    "{{PROVIDER}}"
+                  ]
+                },
+                "description": "Simulates a provider webhook event for local development and testing. Do NOT expose or call this in production.\n\n**Expected User Data**\n`provider` (string) – Required route parameter, e.g. `stripe`, `paymob`, `fawry`\nBody – Any mock payload matching the provider's webhook event format"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/{{PAYMENT_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "{{PAYMENT_ID}}"
+                  ]
+                },
+                "description": "Retrieves the details and current status of a payment record by its ID.\n\n**Expected User Data**\n`id` (string) – Required route parameter, the payment ID or UUID"
+              },
+              "response": []
+            }
+          ],
+          "description": "Endpoints for initiating donations, handling provider webhooks, and retrieving payment status records."
+        }
+      ],
+      "description": "The Payment module handles donation payment flows using a pluggable provider architecture. Supports Stripe, Paymob, and Fawry. Includes idempotent webhook processing for real-time payment status updates."
+    },
+    {
+      "name": "Reels",
+      "item": [
+        {
+          "name": "Reels Retrieval",
+          "item": [
+            {
+              "name": "Get All Reels",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/reels?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Returns a paginated list of all reels.\n\n**Expected User Data**\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`, Max: `100`"
+              },
+              "response": []
+            },
+            {
+              "name": "Search Reels",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/reels/search?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "title",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "content",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "uploadedBy",
+                      "value": "",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Searches reels by title, content, or uploader. Returns paginated results.\n\n**Expected User Data**\n`title` (string) – Optional, filter by reel title\n`content` (string) – Optional, filter by reel caption or description\n`uploadedBy` (string) – Optional, filter by uploader name or ID\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`, Max: `100`"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Reel By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/reels/{{REEL_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels",
+                    "{{REEL_ID}}"
+                  ]
+                },
+                "description": "Retrieves a single reel record by its UUID.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target reel"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Reels By User ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/reels/user/{{USER_ID}}?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels",
+                    "user",
+                    "{{USER_ID}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Returns all reels uploaded by a specific user. Paginated.\n\n**Expected User Data**\n`userId` (string) – Required route parameter, valid UUID of the target user\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`, Max: `100`"
+              },
+              "response": []
+            }
+          ],
+          "description": "Read-only endpoints for listing, searching, and retrieving individual reel records."
+        },
+        {
+          "name": "Reels Management",
+          "item": [
+            {
+              "name": "Upload Reel",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": [],
+                      "description": "Required. Video file (mp4, mkv, webm, avi, mov, m4v). Max size: 100MB."
+                    },
+                    {
+                      "key": "title",
+                      "value": "Gaza Today",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "A short update from the field.",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/reels/upload",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels",
+                    "upload"
+                  ]
+                },
+                "description": "Uploads a video reel. Requires ADMIN or SUPER_ADMIN role. Accepted formats: mp4, mkv, webm, avi, mov, m4v. Max file size: 100 MB.\n\n**Expected User Data**\n`file` (file) – Required, video file using field key `file`\n`title` (string) – Optional, title of the reel\n`content` (string) – Optional, description or caption of the reel"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Reel",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Gaza Today – Updated\",\n    \"content\": \"Updated caption for this reel.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/reels/update/{{REEL_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels",
+                    "update",
+                    "{{REEL_ID}}"
+                  ]
+                },
+                "description": "Updates the metadata of an existing reel. All fields are optional. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target reel\n`title` (string) – Optional, updated reel title\n`content` (string) – Optional, updated reel description or caption"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Reel",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/reels/{{REEL_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "reels",
+                    "{{REEL_ID}}"
+                  ]
+                },
+                "description": "Deletes a reel by its UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target reel"
+              },
+              "response": []
+            }
+          ],
+          "description": "Upload, update, and delete reel records. All endpoints require ADMIN or SUPER_ADMIN authentication."
+        }
+      ],
+      "description": "The Reels module manages short-form video content. Supports upload, browsing, search by title/content/uploader, and admin management operations."
+    }
+  ]
+}
