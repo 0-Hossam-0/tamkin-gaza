@@ -65,6 +65,7 @@ services:
     environment:
       NODE_ENV: ${TEST_ENV}
       PORT: ${FRONTEND_PORT}
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
     depends_on:
       - backend-test
     networks:
@@ -143,6 +144,7 @@ services:
     environment:
       NODE_ENV: ${PROD_ENV}
       PORT: ${FRONTEND_PORT}
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID_prod}
     depends_on:
       - backend-prod
     networks:
