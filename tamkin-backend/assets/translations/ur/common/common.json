@@ -1,5 +1,6 @@
 {
   "welcome": "خوش آمدید",
   "operation_successful": "آپریشن کامیاب رہا",
-  "validation_failed": "تصدیق ناکام ہو گئی"
+  "validation_failed": "تصدیق ناکام ہو گئی",
+  "invalid_csrf_token": "غلط یا گمشدہ CSRF ٹوکن"
 }

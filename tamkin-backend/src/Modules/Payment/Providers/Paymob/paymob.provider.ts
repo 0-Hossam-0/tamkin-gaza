@@ -6,7 +6,7 @@ import {
   CheckoutSessionResult,
   WebhookVerificationResult,
 } from '../payment-provider.interface';
-import { Payment } from '../../../../DataBase/Payment/payment.model';
+import { PaymentModel } from '../../../../DataBase/Payment/payment.model';
 
 /**
  * Paymob Payment Provider
@@ -48,11 +48,7 @@ export class PaymobProvider implements IPaymentProvider {
     this.iframeId = process.env.PAYMOB_IFRAME_ID;
     this.hmacSecret = process.env.PAYMOB_HMAC_SECRET;
 
-    const hasAllCredentials = !!(
-      this.apiKey &&
-      this.integrationId &&
-      this.iframeId
-    );
+    const hasAllCredentials = !!(this.apiKey && this.integrationId && this.iframeId);
 
     this.isMockMode = !hasAllCredentials;
 
@@ -70,11 +66,11 @@ export class PaymobProvider implements IPaymentProvider {
   //  PUBLIC INTERFACE — createCheckoutSession
   // ─────────────────────────────────────────────────────────────────
 
-  async createCheckoutSession(payment: Payment): Promise<CheckoutSessionResult> {
+  async createCheckoutSession(payment: PaymentModel): Promise<CheckoutSessionResult> {
     // Paymob requires amounts in the smallest currency unit (piasters for EGP).
     // We store amounts in the major unit (e.g. 50.00 EGP) → multiply by 100.
     const amountCents = Math.round(payment.amount * 100);
-    const currency = payment.currency?.toUpperCase() || 'EGP';
+    const currency = 'EGP';
 
     // Merchant reference: unique per donation, embeds the payment UUID so we
     // can recover it during webhook processing without a DB lookup by orderId.
@@ -114,16 +110,17 @@ export class PaymobProvider implements IPaymentProvider {
       );
 
       return {
-        // Use the Paymob order ID as the canonical "session / provider reference"
         sessionId: String(paymobOrderId),
         checkoutUrl,
         merchantRefNumber,
-        // Extra Paymob-specific data stored on the entity (see payment.model.ts)
         paymobOrderId: String(paymobOrderId),
         paymentKey,
       } as CheckoutSessionResult & { paymobOrderId: string; paymentKey: string };
     } catch (error: any) {
-      this.logger.error(`Paymob checkout session failed: ${error.message}`, error.stack);
+      this.logger.error(
+        `Paymob checkout session failed: ${error.message}`,
+        JSON.stringify(error.response?.data, null, 2), // ← actual Paymob error body
+      );
       throw new Error('Payment provider session creation failed');
     }
   }
@@ -175,7 +172,7 @@ export class PaymobProvider implements IPaymentProvider {
   //  PUBLIC INTERFACE — optional hooks
   // ─────────────────────────────────────────────────────────────────
 
-  async handleSuccess(payment: Payment, eventPayload: any): Promise<void> {
+  async handleSuccess(payment: PaymentModel, eventPayload: any): Promise<void> {
     this.logger.log(
       `Paymob payment SUCCEEDED | paymentUuid=${payment.uuid} | ` +
         `providerPaymentId=${payment.providerPaymentId} | ` +
@@ -184,7 +181,7 @@ export class PaymobProvider implements IPaymentProvider {
     // Extend here: send confirmation email, fire domain events, etc.
   }
 
-  async handleFailure(payment: Payment, eventPayload: any): Promise<void> {
+  async handleFailure(payment: PaymentModel, eventPayload: any): Promise<void> {
     this.logger.warn(
       `Paymob payment FAILED | paymentUuid=${payment.uuid} | ` +
         `reason=${eventPayload?.obj?.data?.message ?? 'N/A'}`,
@@ -220,7 +217,7 @@ export class PaymobProvider implements IPaymentProvider {
     amountCents: number,
     currency: string,
     merchantOrderId: string,
-    payment: Payment,
+    payment: PaymentModel,
   ): Promise<number> {
     const body = {
       auth_token: authToken,
@@ -230,9 +227,9 @@ export class PaymobProvider implements IPaymentProvider {
       merchant_order_id: merchantOrderId,
       items: [
         {
-          name: `Donation – Campaign ${payment.campaignUuid}`,
+          name: `Payment – ${payment.targetType || 'order'} ${payment.targetUuid || ''}`,
           amount_cents: amountCents,
-          description: `Campaign donation by ${payment.userUuid || 'guest'}`,
+          description: `${payment.targetType || 'Order'} payment by ${payment.userUuid || 'guest'}`,
           quantity: 1,
         },
       ],
@@ -259,7 +256,7 @@ export class PaymobProvider implements IPaymentProvider {
     paymobOrderId: number,
     amountCents: number,
     currency: string,
-    payment: Payment,
+    payment: PaymentModel,
   ): Promise<string> {
     const body = {
       auth_token: authToken,
@@ -324,11 +321,9 @@ export class PaymobProvider implements IPaymentProvider {
     headers: Record<string, string | string[] | undefined>,
   ): boolean {
     try {
-      // The HMAC is typically passed as a query string param (hmac) attached to
-      // the webhook URL, but Paymob also documents sending it inline.
-      const receivedHmac =
-        (headers['hmac'] as string) ||
-        (data.hmac as string);
+      // The HMAC is passed as a query string param (?hmac=...) in the webhook URL,
+      // or optionally in a custom header.
+      const receivedHmac = (headers['hmac'] as string) || (data.hmac as string);
 
       if (!receivedHmac) {
         this.logger.warn('No HMAC found in Paymob webhook headers or payload');
@@ -422,7 +417,7 @@ export class PaymobProvider implements IPaymentProvider {
   // ─────────────────────────────────────────────────────────────────
 
   private buildMockCheckoutSession(
-    payment: Payment,
+    payment: PaymentModel,
     merchantRefNumber: string,
     amountCents: number,
     currency: string,
@@ -455,9 +450,7 @@ export class PaymobProvider implements IPaymentProvider {
     if (merchantOrderId && merchantOrderId.startsWith('PMB_')) {
       const withoutPrefix = merchantOrderId.slice('PMB_'.length);
       const lastUnderscore = withoutPrefix.lastIndexOf('_');
-      paymentUuid = lastUnderscore !== -1
-        ? withoutPrefix.slice(0, lastUnderscore)
-        : withoutPrefix;
+      paymentUuid = lastUnderscore !== -1 ? withoutPrefix.slice(0, lastUnderscore) : withoutPrefix;
     }
 
     const isSuccess = data.success === true || data.orderStatus === 'PAID';

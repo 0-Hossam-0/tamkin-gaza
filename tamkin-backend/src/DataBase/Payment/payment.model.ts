@@ -10,24 +10,21 @@ import {
 import { PaymentStatusEnum } from '../../Modules/Payment/Enums/payment-status.enum';
 import { PaymentProviderEnum } from '../../Modules/Payment/Enums/payment-provider.enum';
 import { UserModel } from '../Models/user.model';
-import { CampaignModel } from '../Models/campaign.model';
 
-@Entity('payment')
-export class Payment {
+@Entity('payment_model')
+export class PaymentModel {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
-  @ManyToOne(() => CampaignModel)
-  @JoinColumn({ name: 'campaign_uuid', referencedColumnName: 'uuid' })
-  campaign: CampaignModel;
+  @Column({ name: 'target_type', type: 'varchar', length: 50, nullable: true })
+  targetType: string;
 
-  @Column({ name: 'campaign_uuid', type: 'uuid' })
-  campaignUuid: string;
+  @Column({ name: 'target_uuid', type: 'uuid', nullable: true })
+  targetUuid?: string;
 
-  // Nullable to support guest checkout
   @ManyToOne(() => UserModel, { nullable: true })
   @JoinColumn({ name: 'user_uuid', referencedColumnName: 'uuid' })
-  user?: UserModel;
+  user: UserModel;
 
   @Column({ name: 'user_uuid', type: 'uuid', nullable: true })
   userUuid?: string;
@@ -54,7 +51,7 @@ export class Payment {
   @Column({ name: 'provider_payment_id', nullable: true })
   providerPaymentId?: string;
 
-  @Column({ name: 'merchant_ref_number', nullable: true })
+  @Column({ type: 'text', name: 'merchant_ref_number', nullable: true })
   merchantRefNumber?: string;
 
   /**
@@ -65,12 +62,15 @@ export class Payment {
   @Column({ name: 'order_id', nullable: true })
   orderId?: string;
 
+  @Column({ name: 'idempotency_key', nullable: true })
+  idempotencyKey?: string;
+
   /**
    * Provider-specific single-use payment token.
    * For Paymob: the payment key returned after Step 3 (used to build the iframe URL).
    * Nullable for providers that do not use a separate payment key.
    */
-  @Column({ name: 'payment_key', nullable: true, length: 512 })
+  @Column({ type: 'text', name: 'payment_key', nullable: true })
   paymentKey?: string;
 
   @CreateDateColumn({ name: 'created_at' })

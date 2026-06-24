@@ -179,4 +179,25 @@ export class CampaignService {
 
     return await this.findByUuid(campaignUuid);
   }
+
+  /**
+   * Increment the campaign's current_amount by the given amount.
+   * Called from the payment webhook when a payment succeeds.
+   */
+  async incrementRaisedAmount(campaignUuid: string, amount: number) {
+    const campaign = await this.findByUuid(campaignUuid);
+
+    if (!campaign)
+      throw this.responseService.notFound({
+        message: 'campaign.errors.campaign_not_found',
+      });
+
+    await this.campaignRepository.increment(
+      { uuid: campaign.uuid },
+      'current_amount',
+      amount,
+    );
+
+    return await this.findByUuid(campaignUuid);
+  }
 }

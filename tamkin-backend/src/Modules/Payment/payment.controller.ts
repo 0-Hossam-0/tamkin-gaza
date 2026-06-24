@@ -8,12 +8,18 @@ import {
   RawBodyRequest,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
+import { Throttle, ThrottlerGuard, SkipThrottle } from '@nestjs/throttler';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './Dtos/create-payment.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
+import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
+import { CampaignService } from 'src/Modules/Campaign/campaign.service';
+import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 
+@UseGuards(ThrottlerGuard)
 @Controller('payments')
 export class PaymentController {
   constructor(
@@ -23,13 +29,30 @@ export class PaymentController {
 
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
-  async createPayment(
-    @Body() createPaymentDto: CreatePaymentDto,
-    @Req() req: IRequest,
-  ) {
-    // If the user is authenticated, attach their uuid; otherwise undefined (guest checkout).
-    const userUuid = req.user?.uuid;
-    const data = await this.paymentService.createPayment(createPaymentDto, userUuid);
+  @UseGuards(AuthenticationGuard)
+  // @Throttle({ default: { limit: 5, ttl: 60000 } })
+  async createPayment(@Body() createPaymentDto: CreatePaymentDto, @Req() req: IRequest) {
+    const userUuid = req.user!.uuid;
+    const idempotencyKey = req.headers['idempotency-key'] as string;
+
+    if (!idempotencyKey)
+      this.responseService.badRequest({ message: 'payment.errors.idempotency_key_required' });
+
+    // Load the target model based on targetType, also passing the amount
+    // so the service can reject over-target donations upfront.
+    const targetModel = await this.paymentService.loadTargetModel(
+      createPaymentDto.targetType,
+      createPaymentDto.uuid,
+      createPaymentDto.amount,
+    );
+
+    const data = await this.paymentService.createPayment(
+      createPaymentDto,
+      userUuid,
+      idempotencyKey,
+      targetModel,
+      req.ip,
+    );
     return this.responseService.success({
       message: 'payment.success.payment_initiated',
       statusCode: HttpStatus.CREATED,
@@ -38,19 +61,19 @@ export class PaymentController {
   }
 
   @Post('webhook/:provider')
+  @SkipThrottle()
   @HttpCode(HttpStatus.OK)
   async handleWebhook(
     @Param('provider') provider: string,
     @Req() req: RawBodyRequest<IRequest>,
     @Body() body: any,
   ) {
-    // Some providers (Stripe) require the raw body buffer for signature verification.
     const payload = req.rawBody || body;
-    const data = await this.paymentService.handleWebhook(
-      provider,
-      req.headers as unknown as Record<string, string | string[] | undefined>,
-      payload,
-    );
+    const headersWithQuery = {
+      ...req.headers,
+      ...req.query,
+    } as unknown as Record<string, string | string[] | undefined>;
+    const data = await this.paymentService.handleWebhook(provider, headersWithQuery, payload);
     return this.responseService.success({ data });
   }
 
@@ -58,10 +81,8 @@ export class PaymentController {
   // Remove or guard this behind an admin role in production.
   @Post('mock-webhook/:provider')
   @HttpCode(HttpStatus.OK)
-  async handleMockWebhook(
-    @Param('provider') provider: string,
-    @Body() body: any,
-  ) {
+  @SkipThrottle()
+  async handleMockWebhook(@Param('provider') provider: string, @Body() body: any) {
     const data = await this.paymentService.handleWebhook(provider, {}, body);
     return this.responseService.success({ data });
   }

@@ -4,7 +4,7 @@ import {
   CheckoutSessionResult,
   WebhookVerificationResult,
 } from '../payment-provider.interface';
-import { Payment } from '../../../../DataBase/Payment/payment.model';
+import { PaymentModel } from '../../../../DataBase/Payment/payment.model';
 // Using dynamic import or try/catch for stripe to ensure the app doesn't crash if SDK is missing
 let Stripe: any;
 try {
@@ -22,9 +22,7 @@ export class StripeProvider implements IPaymentProvider {
   constructor() {
     const apiKey = process.env.STRIPE_SECRET_KEY;
     if (apiKey && Stripe) {
-      this.stripe = new Stripe(apiKey, {
-        apiVersion: '2023-10-16', // Use a recent valid API version
-      });
+      this.stripe = new Stripe(apiKey);
       this.isMockMode = false;
       this.logger.log('StripeProvider initialized in LIVE mode');
     } else {
@@ -35,12 +33,13 @@ export class StripeProvider implements IPaymentProvider {
     }
   }
 
-  async createCheckoutSession(payment: Payment): Promise<CheckoutSessionResult> {
+  async createCheckoutSession(payment: PaymentModel): Promise<CheckoutSessionResult> {
+    // Mock mode — same field names as real mode
     if (this.isMockMode) {
       const sessionId = `mock_session_${Date.now()}_${payment.uuid}`;
       return {
-        sessionId,
-        checkoutUrl: `https://mock-stripe-checkout.com/pay/${sessionId}`,
+        merchantRefNumber: sessionId,
+        paymentKey: `https://mock-stripe-checkout.com/pay/${sessionId}`,
       };
     }
 
@@ -52,33 +51,40 @@ export class StripeProvider implements IPaymentProvider {
             price_data: {
               currency: payment.currency.toLowerCase(),
               product_data: {
-                name: `Donation for Campaign: ${payment.campaign?.title?.en || payment.campaignUuid}`,
+                name: this.resolveProductName(payment),
               },
-              unit_amount: Math.round(payment.amount * 100), // Stripe expects amounts in cents
+              unit_amount: Math.round(payment.amount * 100),
             },
             quantity: 1,
           },
         ],
         mode: 'payment',
-        // In a real app, these should come from env or config
-        success_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment/cancel`,
+        success_url: `${process.env.FRONTEND_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
         client_reference_id: payment.uuid,
         metadata: {
           paymentUuid: payment.uuid,
-          campaignUuid: payment.campaignUuid,
-          userUuid: payment.userUuid || 'guest',
+          targetUuid: payment.targetUuid, // ✅ correct field name
+          targetType: payment.targetType, // ✅ correct field name
+          userUuid: payment.userUuid ?? 'anonymous',
         },
       });
 
+      // ✅ Now matches exactly what createPayment() service checks for
       return {
-        sessionId: session.id,
-        checkoutUrl: session.url,
+        merchantRefNumber: session.id, // cs_test_abc... → saved to DB
+        paymentKey: session.url, // https://checkout.stripe.com/... → returned to frontend
       };
     } catch (error) {
       this.logger.error('Failed to create Stripe checkout session', error);
       throw new Error('Payment provider session creation failed');
     }
+  }
+
+  private resolveProductName(payment: PaymentModel): string {
+    // Use the attached target model if available, fall back to targetType
+    const target = (payment as any)[payment.targetType];
+    return target?.title?.en ?? `Donation (${payment.targetType})`;
   }
 
   async verifyWebhook(
@@ -89,7 +95,8 @@ export class StripeProvider implements IPaymentProvider {
     if (this.isMockMode) {
       // For mock mode, parse the payload directly assuming it's JSON
       try {
-        const data = typeof payload === 'string' ? JSON.parse(payload) : JSON.parse(payload.toString());
+        const data =
+          typeof payload === 'string' ? JSON.parse(payload) : JSON.parse(payload.toString());
         return {
           isValid: true,
           eventPayload: data,
@@ -109,11 +116,7 @@ export class StripeProvider implements IPaymentProvider {
     }
 
     try {
-      const event = this.stripe.webhooks.constructEvent(
-        payload,
-        signature,
-        webhookSecret,
-      );
+      const event = this.stripe.webhooks.constructEvent(payload, signature, webhookSecret);
 
       let status: 'SUCCEEDED' | 'FAILED' | undefined;
       let providerPaymentId: string | undefined;
@@ -123,13 +126,15 @@ export class StripeProvider implements IPaymentProvider {
         case 'checkout.session.completed':
           status = 'SUCCEEDED';
           providerPaymentId = event.data.object.payment_intent;
-          paymentUuid = event.data.object.metadata?.paymentUuid || event.data.object.client_reference_id;
+          paymentUuid =
+            event.data.object.metadata?.paymentUuid || event.data.object.client_reference_id;
           break;
         case 'checkout.session.expired':
         case 'checkout.session.async_payment_failed':
           status = 'FAILED';
           providerPaymentId = event.data.object.payment_intent;
-          paymentUuid = event.data.object.metadata?.paymentUuid || event.data.object.client_reference_id;
+          paymentUuid =
+            event.data.object.metadata?.paymentUuid || event.data.object.client_reference_id;
           break;
         default:
           // We only care about specific events

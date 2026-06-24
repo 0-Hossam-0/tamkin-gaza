@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModel } from 'src/DataBase/Models/user.model';
 import { JwtModel } from 'src/DataBase/Models/jwt.model';
 import { ClientInfoService } from './Services/Security/client-info.service';
+import { CsrfService } from './Services/Security/Csrf/csrf.service';
+import { XssService } from './Services/Security/Xss/xss.service';
 import { ResponseService } from './Services/Response/response.service';
 import { CookiesService } from './Services/Cookies/cookies.service';
 import { TokenService } from './Services/Security/token.service';
@@ -12,6 +14,7 @@ import { EmailService } from './Services/Email/email.service';
 import { OTPService } from './Services/Otp/otp.service';
 import { OtpModel } from 'src/DataBase/Models/otp.model';
 import { MailModel } from 'src/DataBase/Models/mail.model';
+import { CsrfMiddleware } from './Middleware/csrf.middleware';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserModel, JwtModel, OtpModel, MailModel])],
@@ -24,6 +27,9 @@ import { MailModel } from 'src/DataBase/Models/mail.model';
     EmailService,
     OTPService,
     CookiesService,
+    CsrfService,
+    XssService,
+    CsrfMiddleware,
   ],
   exports: [
     TypeOrmModule.forFeature([UserModel, JwtModel, OtpModel]),
@@ -35,6 +41,9 @@ import { MailModel } from 'src/DataBase/Models/mail.model';
     EmailService,
     OTPService,
     CookiesService,
+    CsrfService,
+    XssService,
+    CsrfMiddleware,
   ],
 })
 export class CommonModule {}

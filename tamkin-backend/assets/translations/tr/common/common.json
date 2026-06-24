@@ -1,5 +1,6 @@
 {
   "welcome": "Hoş geldiniz",
   "operation_successful": "İşlem başarılı",
-  "validation_failed": "Doğrulama başarısız"
+  "validation_failed": "Doğrulama başarısız",
+  "invalid_csrf_token": "Geçersiz veya eksik CSRF belirteci"
 }

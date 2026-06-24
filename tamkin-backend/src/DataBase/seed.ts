@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import { HashingService } from '../Common/Services/Security/Hash/hash.service';
 import { UserModel } from './Models/user.model';
 import { ReelModel } from './Models/reel.model';
-import { Payment } from './Payment/payment.model';
+import { PaymentModel } from './Payment/payment.model';
 import { UserRoleEnum, UserProviderEnum } from '../Common/Enums/User/user.enum';
 import { CampaignStatusEnum } from '../Modules/Campaign/Enums/campaign-status.enum';
 import { PaymentStatusEnum } from '../Modules/Payment/Enums/payment-status.enum';
@@ -42,7 +42,7 @@ export async function seed() {
   const userRepository = dataSource.getRepository(UserModel);
   const campaignRepository = dataSource.getRepository(CampaignModel);
   const reelRepository = dataSource.getRepository(ReelModel);
-  const paymentRepository = dataSource.getRepository(Payment);
+  const paymentRepository = dataSource.getRepository(PaymentModel);
 
   console.log('🌱 Starting database seeding...');
 
@@ -140,9 +140,10 @@ export async function seed() {
   // 5. Seed Payments
   console.log('Creating payments...');
   const providers = [
-    PaymentProviderEnum.STRIPE,
-    PaymentProviderEnum.PAYMOB,
-    PaymentProviderEnum.FAWRY,
+    // PaymentProviderEnum.STRIPE,
+    // PaymentProviderEnum.PAYMOB,
+    // PaymentProviderEnum.FAWRY,
+    PaymentProviderEnum.IYZICO,
   ];
   const pStatuses = [
     PaymentStatusEnum.PENDING,
@@ -152,7 +153,8 @@ export async function seed() {
 
   for (let i = 0; i < 20; i++) {
     const payment = paymentRepository.create({
-      campaign: faker.helpers.arrayElement(campaigns),
+      targetType: 'campaign',
+      targetUuid: faker.helpers.arrayElement(campaigns).uuid,
       user: faker.helpers.arrayElement([...users, undefined]), // Some anonymous payments
       amount: parseFloat(faker.finance.amount({ min: 10, max: 1000, dec: 2 })),
       currency: 'USD',

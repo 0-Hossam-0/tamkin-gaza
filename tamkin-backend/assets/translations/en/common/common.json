@@ -1,5 +1,6 @@
 {
   "welcome": "Welcome",
   "operation_successful": "Operation successful",
-  "validation_failed": "Validation failed"
+  "validation_failed": "Validation failed",
+  "invalid_csrf_token": "Invalid or missing CSRF token"
 }

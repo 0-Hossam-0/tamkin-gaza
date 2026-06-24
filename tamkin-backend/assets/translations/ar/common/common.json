@@ -1,5 +1,6 @@
 {
   "welcome": "أهلاً بك",
   "operation_successful": "تمت العملية بنجاح",
-  "validation_failed": "فشل التحقق من البيانات"
+  "validation_failed": "فشل التحقق من البيانات",
+  "invalid_csrf_token": "رمز CSRF غير صالح أو مفقود"
 }

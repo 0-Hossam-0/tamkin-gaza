@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { MiddlewareConsumer, Module, OnApplicationBootstrap, RequestMethod } from '@nestjs/common';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
@@ -9,10 +9,12 @@ import { DataSource } from 'typeorm';
 import { HashingService } from './Common/Services/Security/Hash/hash.service';
 import { AuthModule } from './Modules/Auth/auth.module';
 import { CommonModule } from './Common/common.module';
+import { CsrfMiddleware } from './Common/Middleware/csrf.middleware';
 import { TypeORMConfig } from './Config/typeorm.config';
 import { CampaignModule } from './Modules/Campaign/campaign.module';
 import { LanguageMiddleware } from './Middlewares/language.middleware';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_PIPE, APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
 import { MinioModule } from './Common/Minio/minio.module';
 import { ReelsModule } from './Modules/Reels/reels.module';
@@ -52,6 +54,13 @@ import { seed, ensureAdmin } from './DataBase/seed';
       ],
       returnObjects: true,
     }),
+    // Global rate limiting (ttl in milliseconds)
+    ThrottlerModule.forRoot([
+      {
+        limit: 10,
+        ttl: 60000,
+      },
+    ]),
     CommonModule,
     AuthModule,
     CampaignModule,
@@ -63,6 +72,10 @@ import { seed, ensureAdmin } from './DataBase/seed';
   providers: [
     AppService,
     {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    {
       provide: APP_PIPE,
       useClass: CustomValidationPipe,
     },
@@ -70,7 +83,15 @@ import { seed, ensureAdmin } from './DataBase/seed';
 })
 export class AppModule implements OnApplicationBootstrap {
   configure(consumer: MiddlewareConsumer) {
-    // LanguageMiddleware removed
+    consumer
+      .apply(CsrfMiddleware)
+      .exclude(
+        { path: 'payments/webhook', method: RequestMethod.POST },
+        { path: 'payments/webhook/*', method: RequestMethod.POST },
+        { path: 'payments/mock-webhook', method: RequestMethod.POST },
+        { path: 'payments/mock-webhook/*', method: RequestMethod.POST },
+      )
+      .forRoutes('*');
   }
   constructor(
     private dataSource: DataSource,

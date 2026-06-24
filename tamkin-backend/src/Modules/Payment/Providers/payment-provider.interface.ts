@@ -1,9 +1,10 @@
-import { Payment } from '../../../DataBase/Payment/payment.model';
+import { PaymentModel } from '../../../DataBase/Payment/payment.model';
 
 export interface CheckoutSessionResult {
-  sessionId: string;
-  checkoutUrl: string;
-  merchantRefNumber?: string;
+  merchantRefNumber: string;   // provider's session/transaction ID
+  paymentKey:        string;   // URL or token frontend needs
+  orderId?:          string;   // optional, used by Paymob
+  paymobOrderId?:    string;   // optional, Paymob-specific
 }
 
 export interface WebhookVerificationResult {
@@ -18,7 +19,7 @@ export interface IPaymentProvider {
   /**
    * Creates a checkout session with the payment provider
    */
-  createCheckoutSession(payment: Payment): Promise<CheckoutSessionResult>;
+  createCheckoutSession(payment: PaymentModel, requestIp?: string): Promise<CheckoutSessionResult>;
 
   /**
    * Verifies the webhook signature and extracts event data
@@ -31,6 +32,6 @@ export interface IPaymentProvider {
   /**
    * Optional hooks for provider-specific success/failure logic
    */
-  handleSuccess?(payment: Payment, eventPayload: any): Promise<void>;
-  handleFailure?(payment: Payment, eventPayload: any): Promise<void>;
+  handleSuccess?(payment: PaymentModel, eventPayload: any): Promise<void>;
+  handleFailure?(payment: PaymentModel, eventPayload: any): Promise<void>;
 }

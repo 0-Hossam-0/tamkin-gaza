@@ -6,15 +6,16 @@ import { PaymentFactory } from './Providers/payment.factory';
 import { StripeProvider } from './Providers/Stripe/stripe.provider';
 import { FawryProvider } from './Providers/Fawry/fawry.provider';
 import { PaymobProvider } from './Providers/Paymob/paymob.provider';
-import { Payment } from 'src/DataBase/Payment/payment.model';
-import { CampaignModule } from '../Campaign/campaign.module';
+import { IyzicoProvider } from './Providers/Iyzico/iyzipay.provider';
+import { PaymentModel } from 'src/DataBase/Payment/payment.model';
 import { CommonModule } from 'src/Common/common.module';
+import { CampaignModule } from 'src/Modules/Campaign/campaign.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Payment]),
-    CampaignModule,
+    TypeOrmModule.forFeature([PaymentModel]),
     CommonModule, // For ResponseService
+    CampaignModule,
   ],
   controllers: [PaymentController],
   providers: [
@@ -23,6 +24,7 @@ import { CommonModule } from 'src/Common/common.module';
     StripeProvider,
     FawryProvider,
     PaymobProvider,
+    IyzicoProvider,
   ],
   exports: [PaymentService],
 })

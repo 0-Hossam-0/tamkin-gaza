@@ -1,19 +1,20 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 import { PaymentProviderEnum } from '../Enums/payment-provider.enum';
+import { PaymentTargetTypeEnum } from '../Enums/payment-target-type.enum';
 
 export class CreatePaymentDto {
   @IsNotEmpty()
   @IsString()
-  campaignUuid: string;
+  uuid: string;
+
+  @IsNotEmpty()
+  @IsEnum(PaymentTargetTypeEnum)
+  targetType: PaymentTargetTypeEnum;
 
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
   amount: number;
-
-  @IsOptional()
-  @IsString()
-  currency?: string = 'USD';
 
   @IsNotEmpty()
   @IsEnum(PaymentProviderEnum)

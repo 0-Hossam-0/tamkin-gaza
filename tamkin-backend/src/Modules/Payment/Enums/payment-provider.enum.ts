@@ -1,5 +1,6 @@
 export enum PaymentProviderEnum {
-  STRIPE = 'STRIPE',
-  PAYMOB = 'PAYMOB',
-  FAWRY = 'FAWRY',
+  // STRIPE = 'STRIPE',
+  // PAYMOB = 'PAYMOB',
+  // FAWRY = 'FAWRY',
+  IYZICO = 'IYZICO',
 }
