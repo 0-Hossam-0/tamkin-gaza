@@ -30,7 +30,7 @@ export class PaymentController {
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthenticationGuard)
-  // @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   async createPayment(@Body() createPaymentDto: CreatePaymentDto, @Req() req: IRequest) {
     const userUuid = req.user!.uuid;
     const idempotencyKey = req.headers['idempotency-key'] as string;
