@@ -110,8 +110,6 @@ export class AppModule implements OnApplicationBootstrap {
       } catch (err) {
         console.error('Failed to ensure admin on bootstrap:', err);
       }
-      // Do NOT call full `seed()` here — it creates a new AppModule context
-      // which would trigger `onApplicationBootstrap()` again and recurse.
       console.log('Admin ensured on bootstrap. Full seeding is reserved for CLI.');
     } else {
       console.log('Skipping automatic seed (SKIP_SEED is set)');

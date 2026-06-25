@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
 import { ValidationPipe } from '@nestjs/common';
@@ -33,7 +33,7 @@ export class AuthController {
     const { user, status } = await this.authService.loginWithGoogle(req, res, body);
 
     // Rotate CSRF token after successful login
-    const csrfToken = this.csrfService.rotateToken(req as unknown as Request, res);
+    const csrfToken = this.csrfService.rotateToken(req , res);
 
     return this.responseService.success({
       message:
@@ -57,15 +57,11 @@ export class AuthController {
   ) {
     const { user } = await this.authService.register(req, res, body);
 
-    // Rotate CSRF token after successful registration
-    const csrfToken = this.csrfService.rotateToken(req , res);
-
     return this.responseService.success({
       message: 'auth.success.registered_successfully',
       info: 'auth.success.credentials_saved_in_cookies_successfully',
       data: {
         user,
-        csrf_token: csrfToken,
       },
     });
   }
@@ -78,7 +74,7 @@ export class AuthController {
   ) {
     const { user } = await this.authService.login(req, res, body);
 
-    const csrfToken = this.csrfService.rotateToken(req as unknown as Request, res);
+    const csrfToken = this.csrfService.rotateToken(req , res);
 
     return this.responseService.success({
       message: 'auth.success.logged_successfully',
@@ -94,7 +90,6 @@ export class AuthController {
   async logout(@Req() req: IRequest, @Res({ passthrough: true }) res: Response) {
     await this.authService.logout(req as unknown as Request, res);
 
-    // Rotate CSRF token after logout (old token invalidated)
     const csrfToken = this.csrfService.rotateToken(req as unknown as Request, res);
 
     return this.responseService.success({
