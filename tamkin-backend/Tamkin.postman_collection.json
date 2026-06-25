@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "6ab577e1-fdfd-42d0-bb06-7bca88702179",
+    "_postman_id": "0beed1a5-a2f9-41a1-bc0b-8c7325d7e04c",
     "name": "Tamkin",
     "description": "This Postman collection is the central API reference for the Tamkin platform. It covers all endpoints for authentication, campaign management, donation payments, and media reels.\n\nThe collection is structured by feature module to reflect the backend architecture, making it easy for frontend developers to integrate.\n\nDesigned for:\n- Client application integration\n- API testing and payload validation\n- QA and automated test pipelines",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -27,6 +27,27 @@
             "description": "Checks that the server is running and reachable.\n\n**Expected User Data**\nNone"
           },
           "response": []
+        },
+        {
+          "name": "Get CSRF Token",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/csrf-token",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "csrf-token"
+              ]
+            },
+            "description": "Generates and returns a CSRF token. The token is also set as a cookie (`x-csrf-token`) in the response.\n\nCall this endpoint first before making any state-changing requests (POST, PUT, DELETE, PATCH). Extract the `token` from the response body and the `x-csrf-token` cookie, then include both in subsequent requests:\n- Header: `x-csrf-token: <token_value>`\n- Cookie: `x-csrf-token=<cookie_value>` (automatically handled by browsers/Postman)\n\n**Expected User Data**\nNone – Public endpoint, no authentication required.\n\n**Response**\n`token` (string) – The CSRF token to use in the `x-csrf-token` header for subsequent requests."
+          },
+          "response": []
         }
       ],
       "description": "System-level utility endpoints for verifying server health and connectivity."
@@ -41,7 +62,14 @@
               "name": "Login with Google",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n    \"id_token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6...\"\n}",
@@ -69,7 +97,14 @@
               "name": "Register",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n    \"fullName\": \"Ahmad Al-Masri\",\n    \"email\": \"ahmad@example.com\",\n    \"password\": \"StrongPass@123\",\n    \"confirmPassword\": \"StrongPass@123\",\n    \"nationality\": \"Palestinian\"\n}",
@@ -97,7 +132,14 @@
               "name": "Login",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n    \"email\": \"ahmad@example.com\",\n    \"password\": \"StrongPass@123\"\n}",
@@ -125,7 +167,14 @@
               "name": "Logout",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{BASE_URL}}/auth/logout",
                   "host": [
@@ -150,7 +199,14 @@
               "name": "Request Confirm Email",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{BASE_URL}}/auth/request-confirm-email",
                   "host": [
@@ -169,7 +225,14 @@
               "name": "Confirm Email",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n    \"code\": \"A3F9B2\"\n}",
@@ -252,7 +315,14 @@
               "name": "Create Campaign",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "formdata",
                   "formdata": [
@@ -289,7 +359,7 @@
                     {
                       "key": "images",
                       "type": "file",
-                      "src": []
+                      "value": null
                     }
                   ]
                 },
@@ -310,7 +380,14 @@
               "name": "Update Campaign",
               "request": {
                 "method": "PUT",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "formdata",
                   "formdata": [
@@ -344,7 +421,14 @@
               "name": "Delete Campaign",
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{BASE_URL}}/campaign/{{CAMPAIGN_ID}}",
                   "host": [
@@ -363,7 +447,14 @@
               "name": "Restore Campaign",
               "request": {
                 "method": "PATCH",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{BASE_URL}}/campaign/restore/{{CAMPAIGN_ID}}",
                   "host": [
@@ -383,7 +474,14 @@
               "name": "Approve Campaign",
               "request": {
                 "method": "PATCH",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{BASE_URL}}/campaign/approve/{{CAMPAIGN_ID}}",
                   "host": [
@@ -415,10 +513,23 @@
               "name": "Create Payment",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  },
+                  {
+                    "key": "idempotency-key",
+                    "value": "{{IDEMPOTENCY_KEY}}",
+                    "description": "Required. Unique key to ensure idempotent payment creation",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"campaignUuid\": \"{{CAMPAIGN_ID}}\",\n    \"amount\": 50,\n    \"currency\": \"USD\",\n    \"provider\": \"STRIPE\"\n}",
+                  "raw": "{\n    \"uuid\": \"{{CAMPAIGN_ID}}\",\n    \"targetType\": \"campaign\",\n    \"amount\": 50,\n    \"provider\": \"IYZICO\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -435,7 +546,7 @@
                     "create"
                   ]
                 },
-                "description": "Initiates a donation payment for a campaign. Works for both authenticated users and guests (guest checkout).\n\n**Expected User Data**\n`campaignUuid` (string) – Required, UUID of the target campaign\n`amount` (number) – Required, donation amount (min: 1)\n`currency` (string) – Optional, currency code. Default: `USD`\n`provider` (string, enum) – Required, one of: `STRIPE`, `PAYMOB`, `FAWRY`"
+                "description": "Initiates a donation payment for a campaign. Requires authentication and an idempotency key.\n\n**Expected User Data**\n`uuid` (string) – Required, UUID of the target campaign\n`targetType` (string, enum) – Required, type of donation target. Currently only: `campaign`\n`amount` (number) – Required, donation amount (min: 1)\n`provider` (string, enum) – Required, payment provider. Currently: `IYZICO`\n\n**Headers**\n`idempotency-key` (string) – Required, unique key to prevent duplicate payments"
               },
               "response": []
             },
@@ -447,8 +558,8 @@
                   {
                     "key": "stripe-signature",
                     "value": "{{STRIPE_WEBHOOK_SIG}}",
-                    "type": "text",
-                    "description": "Required for Stripe. Other providers use their own signature headers."
+                    "description": "Required for Stripe. Other providers use their own signature headers.",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -666,15 +777,22 @@
               "name": "Upload Reel",
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "formdata",
                   "formdata": [
                     {
                       "key": "file",
                       "type": "file",
-                      "src": [],
-                      "description": "Required. Video file (mp4, mkv, webm, avi, mov, m4v). Max size: 100MB."
+                      "description": "Required. Video file (mp4, mkv, webm, avi, mov, m4v). Max size: 100MB.",
+                      "value": null
                     },
                     {
                       "key": "title",
@@ -706,7 +824,14 @@
               "name": "Update Reel",
               "request": {
                 "method": "PUT",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n    \"title\": \"Gaza Today – Updated\",\n    \"content\": \"Updated caption for this reel.\"\n}",
@@ -735,7 +860,14 @@
               "name": "Delete Reel",
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{BASE_URL}}/reels/{{REEL_ID}}",
                   "host": [
