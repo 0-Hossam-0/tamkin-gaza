@@ -14,14 +14,26 @@ export class IyzicoProvider implements IPaymentProvider {
   private readonly callbackUrl: string;
 
   constructor(private readonly configService: ConfigService) {
-    // 2. Switched to getOrThrow to guarantee strings and fail-fast if .env is missing
-    this.iyzipay = new Iyzipay({
-      apiKey: this.configService.getOrThrow<string>('IYZICO_API_KEY'),
-      secretKey: this.configService.getOrThrow<string>('IYZICO_SECRET_KEY'),
-      uri: this.configService.getOrThrow<string>('IYZICO_BASE_URL'),
-    });
+    const apiKey = this.configService.get<string>('IYZICO_API_KEY');
+    const secretKey = this.configService.get<string>('IYZICO_SECRET_KEY');
+    const baseUrl = this.configService.get<string>('IYZICO_BASE_URL');
+    const callbackUrl = this.configService.get<string>('IYZICO_CALLBACK_URL');
 
-    this.callbackUrl = this.configService.getOrThrow<string>('IYZICO_CALLBACK_URL');
+    if (!apiKey) this.logger.warn('IYZICO_API_KEY is not defined - Iyzico payment provider will not be functional');
+    if (!secretKey) this.logger.warn('IYZICO_SECRET_KEY is not defined - Iyzico payment provider will not be functional');
+    if (!baseUrl) this.logger.warn('IYZICO_BASE_URL is not defined - Iyzico payment provider will not be functional');
+    if (!callbackUrl) this.logger.warn('IYZICO_CALLBACK_URL is not defined - Iyzico payment provider will not be functional');
+
+    // Only initialize Iyzipay client if all required config is present
+    if (apiKey && secretKey && baseUrl) {
+      this.iyzipay = new Iyzipay({
+        apiKey,
+        secretKey,
+        uri: baseUrl,
+      });
+    }
+
+    this.callbackUrl = callbackUrl || '';
   }
   /**
    * Helper: Wrap iyzico's callback-based checkout form creation in a Promise
