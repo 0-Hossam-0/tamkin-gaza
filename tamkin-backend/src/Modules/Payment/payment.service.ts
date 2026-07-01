@@ -7,7 +7,7 @@ import { PaymentFactory } from './Providers/payment.factory';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { PaymentStatusEnum } from './Enums/payment-status.enum';
 import { IPaymentProvider } from './Providers/payment-provider.interface';
-import { UserModel } from 'src/DataBase/Models/user.model';
+import { UserService } from 'src/Modules/User/user.service';
 import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
 import { CampaignService } from '../Campaign/campaign.service';
 
@@ -18,8 +18,7 @@ export class PaymentService {
   constructor(
     @InjectRepository(PaymentModel)
     private readonly paymentRepository: Repository<PaymentModel>,
-    @InjectRepository(UserModel)
-    private readonly userRepository: Repository<UserModel>,
+    private readonly userService: UserService,
     private readonly paymentFactory: PaymentFactory,
     private readonly responseService: ResponseService,
     private readonly dataSource: DataSource,
@@ -83,7 +82,7 @@ export class PaymentService {
     }
 
     // 3. Persist a PENDING payment record
-    const user = await this.userRepository.findOneBy({ uuid: userUuid });
+    const user = await this.userService.findByUuid(userUuid);
     const payment = this.paymentRepository.create({
       targetType,
       targetUuid: dto.uuid,

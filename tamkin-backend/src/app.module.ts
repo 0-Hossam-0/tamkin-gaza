@@ -26,6 +26,7 @@ import {
   HeaderResolver,
 } from 'nestjs-i18n';
 import { PaymentModule } from './Modules/Payment/payment.module';
+import { UserModule } from './Modules/User/user.module';
 import { seed, ensureAdmin } from './DataBase/seed';
 
 @Module({
@@ -67,6 +68,7 @@ import { seed, ensureAdmin } from './DataBase/seed';
     MinioModule,
     ReelsModule,
     PaymentModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

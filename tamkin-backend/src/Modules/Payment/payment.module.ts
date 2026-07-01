@@ -10,12 +10,14 @@ import { IyzicoProvider } from './Providers/Iyzico/iyzipay.provider';
 import { PaymentModel } from 'src/DataBase/Payment/payment.model';
 import { CommonModule } from 'src/Common/common.module';
 import { CampaignModule } from 'src/Modules/Campaign/campaign.module';
+import { UserModule } from '../User/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([PaymentModel]),
     CommonModule, // For ResponseService
     CampaignModule,
+    UserModule,
   ],
   controllers: [PaymentController],
   providers: [

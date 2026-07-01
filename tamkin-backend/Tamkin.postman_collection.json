@@ -641,6 +641,209 @@
       "description": "The Payment module handles donation payment flows using a pluggable provider architecture. Supports Stripe, Paymob, and Fawry. Includes idempotent webhook processing for real-time payment status updates."
     },
     {
+      "name": "User",
+      "item": [
+        {
+          "name": "Admin - User Management",
+          "item": [
+            {
+              "name": "Get All Users (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/all?isBanned=false&page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "all"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Optional. Search by first name, last name, or email. Leave empty to skip search.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "description": "Optional. Filter by role: user, admin, super_admin. Leave empty to skip.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "isBanned",
+                      "value": "false",
+                      "description": "Optional. Filter by ban status: true or false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Admin endpoint to list all users with filtering, search, and pagination. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\nNone – Admin identifies self via session cookie.\n\n**Query Parameters**\n`search` (string) – Optional, search by first name, last name, or email\n`role` (string, enum) – Optional, filter by role: `user`, `admin`, `super_admin`\n`isBanned` (boolean) – Optional, filter by ban status\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`"
+              },
+              "response": []
+            },
+            {
+              "name": "Get User Details (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}"
+                  ]
+                },
+                "description": "Admin endpoint to retrieve a single user's full details by UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user"
+              },
+              "response": []
+            },
+            {
+              "name": "Ban/Unban User",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"isBanned\": true,\n    \"reason\": \"Violation of terms of service\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}/ban",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}",
+                    "ban"
+                  ]
+                },
+                "description": "Admin endpoint to ban or unban a user. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user\n`isBanned` (boolean) – Required, set to `true` to ban, `false` to unban\n`reason` (string) – Optional, reason for the ban (stored when banning)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User Role",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"role\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}/role",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}",
+                    "role"
+                  ]
+                },
+                "description": "Admin endpoint to update a user's role. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user\n`role` (string, enum) – Required, new role: `user`, `admin`, `super_admin`"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Name\",\n    \"email\": \"updated@example.com\",\n    \"role\": \"admin\",\n    \"nationality\": \"Egyptian\",\n    \"emailVerified\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}"
+                  ]
+                },
+                "description": "Admin endpoint to update any user's data. All fields are optional. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user\n`firstName` (string) – Optional, updated first name\n`lastName` (string) – Optional, updated last name\n`email` (string) – Optional, updated email\n`password` (string) – Optional, new password\n`picture` (string) – Optional, profile picture URL\n`role` (string, enum) – Optional, user role\n`nationality` (string) – Optional, nationality\n`emailVerified` (boolean) – Optional, email verification status\n`provider` (string, enum) – Optional, authentication provider"
+              },
+              "response": []
+            }
+          ],
+          "description": "Admin-only endpoints for user management. All endpoints require ADMIN or SUPER_ADMIN authentication. Includes search, filter, ban/unban, and role management."
+        }
+      ],
+      "description": "The User module manages user accounts and profiles. Includes public user retrieval, user management, and admin-only features like banning users and role management."
+    },
+    {
       "name": "Reels",
       "item": [
         {

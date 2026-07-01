@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { GoogleAuthService } from './Google-Auth/google.auth';
-import { UserModel } from 'src/DataBase/Models/user.model';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { UserService } from 'src/Modules/User/user.service';
 import { Request, Response } from 'express';
 import { TokenTypeEnum } from 'src/Common/Enums/token.enum';
 import { CookiesService } from 'src/Common/Services/Cookies/cookies.service';
@@ -17,14 +15,14 @@ import { IRequest } from 'src/Common/Types/request.types';
 import { OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
 import { OTPService } from 'src/Common/Services/Otp/otp.service';
 import { ConfirmEmailDto } from './Dto/confirm.email.dto';
+import { CreateUserDto } from 'src/Modules/User/Dtos/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly responseService: ResponseService,
     private readonly googleAuth: GoogleAuthService,
-    @InjectRepository(UserModel)
-    private readonly userModel: Repository<UserModel>,
+    private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly clientInfoService: ClientInfoService,
     private readonly cookiesService: CookiesService,
@@ -38,22 +36,36 @@ export class AuthService {
       req,
     );
 
-    let user = await this.userModel.findOne({
-      where: { email },
-    });
+    if (!email) {
+      throw this.responseService.badRequest({
+        message: 'auth.errors.invalid_google_token',
+        info: 'auth.errors.could_not_retrieve_email_from_google',
+      });
+    }
+
+    let user = await this.userService.findByEmail(email);
 
     let status: 'login' | 'register' = 'login';
 
     if (!user) {
       status = 'register';
 
-      const newUser: UserModel = await this.userModel.save({
+      if (!given_name || !family_name) {
+        throw this.responseService.badRequest({
+          message: 'auth.errors.invalid_google_token',
+          info: 'auth.errors.could_not_retrieve_name_from_google',
+        });
+      }
+
+      const createUserDto: CreateUserDto = {
         email,
         firstName: given_name,
         lastName: family_name,
         picture,
         provider: UserProviderEnum.GOOGLE,
-      });
+      };
+
+      const newUser = await this.userService.create(createUserDto);
 
       if (!newUser) {
         throw this.responseService.serverError({
@@ -97,9 +109,7 @@ export class AuthService {
   }
 
   async register(req: IRequest, res: Response, body: RegisterDto) {
-    let user = await this.userModel.findOne({
-      where: { email: body.email },
-    });
+    let user = await this.userService.findByEmail(body.email);
 
     if (user) {
       throw this.responseService.badRequest({
@@ -114,15 +124,16 @@ export class AuthService {
       });
     }
 
-    const newUser: UserModel = await this.userModel.save({
+    const createUserDto: CreateUserDto = {
       email: body.email,
       password: await this.hashingService.generateHash({ text: body.password }),
       firstName: body.fullName.split(' ')[0],
       lastName: body.fullName.split(' ')[1],
       nationality: countries.getName(body.nationality, 'en'),
       provider: UserProviderEnum.SYSTEM,
-      test: 'sss',
-    });
+    };
+
+    const newUser = await this.userService.create(createUserDto);
 
     if (!newUser) {
       throw this.responseService.serverError({
@@ -162,9 +173,7 @@ export class AuthService {
   }
 
   async login(req: IRequest, res: Response, body: LoginDto) {
-    let user = await this.userModel.findOne({
-      where: { email: body.email },
-    });
+    let user = await this.userService.findByEmail(body.email);
 
     if (!user || !user.password) {
       throw this.responseService.badRequest({
@@ -268,7 +277,7 @@ export class AuthService {
       });
     }
 
-    await this.userModel.update(req.user!._id, { emailVerified: true });
+    await this.userService.updateById(req.user!._id, { emailVerified: true });
 
   }
 

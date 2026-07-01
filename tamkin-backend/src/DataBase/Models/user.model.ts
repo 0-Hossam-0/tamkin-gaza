@@ -56,6 +56,15 @@ export class UserModel implements IUser {
   @Column({ nullable: true })
   nationality?: string;
 
+  @Column({ default: false })
+  isBanned: boolean;
+
+  @Column({ nullable: true })
+  banReason?: string;
+
+  @Column({ nullable: true })
+  bannedAt?: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 
