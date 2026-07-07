@@ -12,7 +12,6 @@ import { CommonModule } from './Common/common.module';
 import { CsrfMiddleware } from './Common/Middleware/csrf.middleware';
 import { TypeORMConfig } from './Config/typeorm.config';
 import { CampaignModule } from './Modules/Campaign/campaign.module';
-import { LanguageMiddleware } from './Middlewares/language.middleware';
 import { APP_PIPE, APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
@@ -27,6 +26,7 @@ import {
 } from 'nestjs-i18n';
 import { PaymentModule } from './Modules/Payment/payment.module';
 import { seed, ensureAdmin } from './DataBase/seed';
+import { PostsModule } from './Modules/Posts/posts.module';
 
 @Module({
   imports: [
@@ -67,6 +67,7 @@ import { seed, ensureAdmin } from './DataBase/seed';
     MinioModule,
     ReelsModule,
     PaymentModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [

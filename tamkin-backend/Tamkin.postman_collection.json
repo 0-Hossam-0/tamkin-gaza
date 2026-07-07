@@ -887,6 +887,217 @@
         }
       ],
       "description": "The Reels module manages short-form video content. Supports upload, browsing, search by title/content/uploader, and admin management operations."
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Posts Retrieval",
+          "item": [
+            {
+              "name": "Get All Posts",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/posts?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Returns a paginated list of all published posts, newest first. Public endpoint.\n\n**Expected User Data**\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Post By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/{{POST_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "{{POST_ID}}"
+                  ]
+                },
+                "description": "Retrieves a single post by its UUID.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target post"
+              },
+              "response": []
+            }
+          ],
+          "description": "Read-only endpoints for listing and retrieving individual post records."
+        },
+        {
+          "name": "Posts Management",
+          "item": [
+            {
+              "name": "Create Post",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "description": "Required. Image file (jpeg, png, gif, webp). Max size: 10MB.",
+                      "value": null
+                    },
+                    {
+                      "key": "title_ar",
+                      "value": "عنوان المنشور",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title_en",
+                      "value": "Post Title",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title_tr",
+                      "value": "Gönderi Başlığı",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title_ur",
+                      "value": "پوسٹ کا عنوان",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_ar",
+                      "value": "محتوى المنشور باللغة العربية",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_en",
+                      "value": "Post content in English",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_tr",
+                      "value": "Gönderi içeriği Türkçe",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_ur",
+                      "value": "پوسٹ کا مواد اردو میں",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/upload",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "upload"
+                  ]
+                },
+                "description": "Creates a new post with a featured image and localized title and content fields. Requires ADMIN or SUPER_ADMIN role. Max image size: 10 MB.\n\n**Expected User Data**\n`file` (file) – Required, image file\n`title_ar`, `title_en`, `title_tr`, `title_ur` (string) – Required, titles in different languages\n`content_ar`, `content_en`, `content_tr`, `content_ur` (string) – Required, content in different languages"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Post",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "title_en",
+                      "value": "Post Title – Updated",
+                      "type": "text"
+                    },
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "description": "Optional image replacement.",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/update/{{POST_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "update",
+                    "{{POST_ID}}"
+                  ]
+                },
+                "description": "Updates an existing post. All fields are optional — only provided fields will be updated. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target post\n`file` (file) – Optional, replacement image file\n`title_ar`, `title_en`, `title_tr`, `title_ur` (string) – Optional, updated titles\n`content_ar`, `content_en`, `content_tr`, `content_ur` (string) – Optional, updated contents"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Post",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/{{POST_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "{{POST_ID}}"
+                  ]
+                },
+                "description": "Deletes a post by its UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target post"
+              },
+              "response": []
+            }
+          ],
+          "description": "Create, update, and delete post records. All endpoints require ADMIN or SUPER_ADMIN authentication."
+        }
+      ],
+      "description": "The Posts module manages blog-style articles with multilingual support for title and content, alongside image attachments."
     }
   ]
 }

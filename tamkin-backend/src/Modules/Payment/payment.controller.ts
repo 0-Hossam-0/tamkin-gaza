@@ -15,8 +15,6 @@ import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './Dtos/create-payment.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
-import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
-import { CampaignService } from 'src/Modules/Campaign/campaign.service';
 import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 
 @UseGuards(ThrottlerGuard)
