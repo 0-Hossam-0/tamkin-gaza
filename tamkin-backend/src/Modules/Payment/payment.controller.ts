@@ -18,8 +18,6 @@ import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
 import { PaginationDto } from 'src/Modules/User/Dtos/pagination.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
-import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
-import { CampaignService } from 'src/Modules/Campaign/campaign.service';
 import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
 import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
