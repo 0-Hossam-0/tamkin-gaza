@@ -616,6 +616,73 @@
               "response": []
             },
             {
+              "name": "Get All Payments (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments?status=&provider=&userUuid=&targetUuid=&search=&page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Optional. Search by merchant reference number.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "description": "Optional. Filter by status: PENDING, SUCCEEDED, FAILED. Leave empty to skip.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "provider",
+                      "value": "",
+                      "description": "Optional. Filter by provider: IYZICO. Leave empty to skip.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "userUuid",
+                      "value": "",
+                      "description": "Optional. Filter by user UUID.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "targetUuid",
+                      "value": "",
+                      "description": "Optional. Filter by target UUID (e.g., campaign UUID).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Optional. Page number. Default: 1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Optional. Results per page. Default: 10"
+                    }
+                  ]
+                },
+                "description": "Admin endpoint to retrieve all payments with pagination and optional filters. Requires authentication.\n\n**Query Parameters**\n`search` (string) – Optional, search by merchant reference number\n`status` (string, enum) – Optional, filter by payment status: PENDING, SUCCEEDED, FAILED\n`provider` (string, enum) – Optional, filter by payment provider: IYZICO\n`userUuid` (string) – Optional, filter by user UUID\n`targetUuid` (string) – Optional, filter by target UUID (e.g., campaign UUID)\n`page` (number) – Optional, page number. Default: 1\n`limit` (number) – Optional, results per page. Default: 10\n\n**Expected User Data**\nNone – Authenticated user is identified from the session cookie."
+              },
+              "response": []
+            },
+            {
               "name": "Get Payment By ID",
               "request": {
                 "method": "GET",
@@ -631,6 +698,64 @@
                   ]
                 },
                 "description": "Retrieves the details and current status of a payment record by its ID.\n\n**Expected User Data**\n`id` (string) – Required route parameter, the payment ID or UUID"
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Payments",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/my-payments?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "my-payments"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Optional. Page number. Default: 1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Optional. Results per page. Default: 10"
+                    }
+                  ]
+                },
+                "description": "Retrieves the paginated list of payments made by the authenticated user.\n\n**Query Parameters**\n`page` (number) – Optional, page number. Default: 1\n`limit` (number) – Optional, results per page. Default: 10\n\n**Expected User Data**\nNone – Authenticated user is identified from the session cookie."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Target Payments (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/{{TARGET_TYPE}}/{{TARGET_UUID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "{{TARGET_TYPE}}",
+                    "{{TARGET_UUID}}"
+                  ]
+                },
+                "description": "Admin endpoint to retrieve all payments for a specific target type and UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`target` (string, enum) – Required route parameter, target type. Currently: `campaign`\n`id` (string) – Required route parameter, valid UUID of the target entity"
               },
               "response": []
             }

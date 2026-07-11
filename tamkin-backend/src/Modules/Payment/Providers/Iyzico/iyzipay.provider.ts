@@ -84,7 +84,6 @@ private buildIyzicoPaymentRequest(payment: PaymentModel, requestIp: string) {
     // TODO: UserModel has no phone field yet. gsmNumber is required by iyzico.
     // Either add phone collection to the donation flow, or confirm with iyzico
     // whether a clearly-marked placeholder is acceptable for guest donations.
-    gsmNumber: '+900000000000',
     identityNumber: '11111111111', // TODO: confirm iyzico's stance for non-Turkish donors
     registrationDate: this.formatIyzicoDate(payment.user.createdAt),
     registrationAddress: `${location.city}, ${location.country}`,
@@ -140,6 +139,7 @@ private buildIyzicoPaymentRequest(payment: PaymentModel, requestIp: string) {
       checkoutUrl: result.paymentPageUrl, // Send user to Iyzico Hosted Page
       merchantRefNumber: payment.uuid,
       orderId: result.token,
+      paymentKey: result.token,
     };
   }
 

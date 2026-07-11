@@ -9,6 +9,7 @@ import { UserRoleEnum, UserProviderEnum } from '../Common/Enums/User/user.enum';
 import { CampaignStatusEnum } from '../Modules/Campaign/Enums/campaign-status.enum';
 import { PaymentStatusEnum } from '../Modules/Payment/Enums/payment-status.enum';
 import { PaymentProviderEnum } from '../Modules/Payment/Enums/payment-provider.enum';
+import { PaymentTargetTypeEnum } from '../Modules/Payment/Enums/payment-target-type.enum';
 import { faker } from '@faker-js/faker';
 import { CampaignModel } from './Models/campaign.model';
 
@@ -153,7 +154,7 @@ export async function seed() {
 
   for (let i = 0; i < 20; i++) {
     const payment = paymentRepository.create({
-      targetType: 'campaign',
+      targetType: PaymentTargetTypeEnum.CAMPAIGN,
       targetUuid: faker.helpers.arrayElement(campaigns).uuid,
       user: faker.helpers.arrayElement([...users, undefined]), // Some anonymous payments
       amount: parseFloat(faker.finance.amount({ min: 10, max: 1000, dec: 2 })),

@@ -66,7 +66,7 @@ export class PaymobProvider implements IPaymentProvider {
   //  PUBLIC INTERFACE — createCheckoutSession
   // ─────────────────────────────────────────────────────────────────
 
-  async createCheckoutSession(payment: PaymentModel): Promise<CheckoutSessionResult> {
+  async createCheckoutSession(payment: PaymentModel, requestIp?: string): Promise<CheckoutSessionResult> {
     // Paymob requires amounts in the smallest currency unit (piasters for EGP).
     // We store amounts in the major unit (e.g. 50.00 EGP) → multiply by 100.
     const amountCents = Math.round(payment.amount * 100);
@@ -113,6 +113,7 @@ export class PaymobProvider implements IPaymentProvider {
         sessionId: String(paymobOrderId),
         checkoutUrl,
         merchantRefNumber,
+        orderId: String(paymobOrderId),
         paymobOrderId: String(paymobOrderId),
         paymentKey,
       } as CheckoutSessionResult & { paymobOrderId: string; paymentKey: string };
@@ -435,6 +436,7 @@ export class PaymobProvider implements IPaymentProvider {
       sessionId: mockOrderId,
       checkoutUrl,
       merchantRefNumber,
+      orderId: mockOrderId,
       // Extra Paymob-specific fields
       paymobOrderId: mockOrderId,
       paymentKey: mockPaymentKey,

@@ -33,13 +33,15 @@ export class StripeProvider implements IPaymentProvider {
     }
   }
 
-  async createCheckoutSession(payment: PaymentModel): Promise<CheckoutSessionResult> {
+  async createCheckoutSession(payment: PaymentModel, requestIp?: string): Promise<CheckoutSessionResult> {
     // Mock mode — same field names as real mode
     if (this.isMockMode) {
       const sessionId = `mock_session_${Date.now()}_${payment.uuid}`;
       return {
         merchantRefNumber: sessionId,
         paymentKey: `https://mock-stripe-checkout.com/pay/${sessionId}`,
+        orderId: sessionId,
+        providerPaymentId: `mock_pi_${Date.now()}`,
       };
     }
 
@@ -74,6 +76,8 @@ export class StripeProvider implements IPaymentProvider {
       return {
         merchantRefNumber: session.id, // cs_test_abc... → saved to DB
         paymentKey: session.url, // https://checkout.stripe.com/... → returned to frontend
+        orderId: session.id,
+        providerPaymentId: typeof session.payment_intent === 'string' ? session.payment_intent : undefined,
       };
     } catch (error) {
       this.logger.error('Failed to create Stripe checkout session', error);

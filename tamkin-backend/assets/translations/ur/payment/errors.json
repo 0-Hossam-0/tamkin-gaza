@@ -1,12 +1,11 @@
 {
-  "campaign_not_found": "مہم نہیں ملی",
-  "campaign_target_reached": "یہ مہم اپنی ہدفی رقم تک پہنچ چکی ہے اور نئے عطیات قبول نہیں کر سکتی۔",
-  "campaign_would_exceed_target": "عطیہ کی رقم مہم کے باقی ماندہ ہدف سے تجاوز کر جائے گی۔ براہ کرم کم رقم عطیہ کریں۔",
-  "session_creation_failed": "ادائیگی کا سیشن نہیں بنایا جا سکا۔ براہ کرم دوبارہ کوشش کریں۔",
-  "invalid_signature": "ویب ہک دستخط غلط ہے۔ درخواست مسترد کر دی گئی۔",
-  "payment_uuid_missing": "ویب ہک ڈیٹا میں ادائیگی کا حوالہ نمبر موجود نہیں۔",
-  "payment_not_found": "ادائیگی کا ریکارڈ نہیں ملا۔",
-  "provider_not_found": "ادائیگی فراہم کنندہ '{{provider}}' تعاون یافتہ نہیں ہے۔",
-  "invalid_provider": "غلط ادائیگی فراہم کنندہ درج کیا گیا۔",
-  "idempotency_key_required": "آئیڈیمپوٹنسی کلید ضروری ہے"
+  "idempotency_key_required": "idempotency کلید درکار ہے",
+  "session_creation_failed": "ادائیگی کا سیشن بنانے میں ناکامی",
+  "campaign_target_reached": "مہم کا ہدف پہلے ہی پورا ہو چکا ہے",
+  "campaign_would_exceed_target": "یہ ادائیگی مہم کے ہدف سے تجاوز کر جائے گی",
+  "invalid_target_type": "غلط ہدف کی قسم",
+  "invalid_signature": "غلط webhook دستخط",
+  "payment_uuid_missing": "webhook میں ادائیگی کا UUID غائب ہے",
+  "payment_not_found": "ادائیگی نہیں ملی",
+  "provider_not_found": "ادائیگی فراہم کنندہ نہیں ملا"
 }

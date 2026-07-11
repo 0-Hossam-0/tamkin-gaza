@@ -1,12 +1,11 @@
 {
-  "campaign_not_found": "Kampanya bulunamadı",
-  "campaign_target_reached": "Bu kampanya hedef miktara ulaştı ve yeni bağış kabul edemiyor.",
-  "campaign_would_exceed_target": "Bağış miktarı kampanyanın kalan hedefini aşacaktır. Lütfen daha küçük bir miktar bağışlayın.",
-  "session_creation_failed": "Ödeme oturumu oluşturulamadı. Lütfen tekrar deneyin.",
-  "invalid_signature": "Geçersiz webhook imzası. İstek reddedildi.",
-  "payment_uuid_missing": "Webhook verilerinde ödeme referansı eksik.",
-  "payment_not_found": "Ödeme kaydı bulunamadı.",
-  "provider_not_found": "Ödeme sağlayıcısı '{{provider}}' desteklenmiyor.",
-  "invalid_provider": "Geçersiz bir ödeme sağlayıcısı belirtildi.",
-  "idempotency_key_required": "İdempotency anahtarı gereklidir"
+  "idempotency_key_required": "Tekrarlama anahtarı gerekli",
+  "session_creation_failed": "Ödeme oturumu oluşturulamadı",
+  "campaign_target_reached": "Kampanya hedefine zaten ulaşıldı",
+  "campaign_would_exceed_target": "Bu ödeme kampanya hedefini aşacak",
+  "invalid_target_type": "Geçersiz hedef türü",
+  "invalid_signature": "Geçersiz webhook imzası",
+  "payment_uuid_missing": "Webhook'ta ödeme UUID'si eksik",
+  "payment_not_found": "Ödeme bulunamadı",
+  "provider_not_found": "Ödeme sağlayıcısı bulunamadı"
 }

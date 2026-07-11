@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   RawBodyRequest,
   HttpCode,
@@ -13,11 +14,15 @@ import {
 import { Throttle, ThrottlerGuard, SkipThrottle } from '@nestjs/throttler';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
+import { PaginationDto } from 'src/Modules/User/Dtos/pagination.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
 import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
 import { CampaignService } from 'src/Modules/Campaign/campaign.service';
 import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
+import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
+import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
 
 @UseGuards(ThrottlerGuard)
 @Controller('payments')
@@ -87,11 +92,46 @@ export class PaymentController {
     return this.responseService.success({ data });
   }
 
+  @Get('my-payments')
+  @UseGuards(AuthenticationGuard)
+  async getMyPayments(@Query() paginationDto: PaginationDto, @Req() req: IRequest) {
+    const userUuid = req.user!.uuid;
+    const data = await this.paymentService.findUserPayments(userUuid, paginationDto);
+    return this.responseService.success({
+      message: 'payment.success.payments_fetched',
+      data,
+    });
+  }
+
+  @Get()
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
+  async getAllPayments(@Query() filterDto: AdminFilterPaymentsDto) {
+    const data = await this.paymentService.findAll(filterDto);
+    return this.responseService.success({
+      message: 'payment.success.payments_fetched',
+      data,
+    });
+  }
+
   @Get(':id')
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
   async getPayment(@Param('id') id: string) {
     const data = await this.paymentService.findOne(id);
     return this.responseService.success({
       message: 'payment.success.payment_fetched',
+      data,
+    });
+  }
+
+  @Get(':target/:id')
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
+  async getCampaignPayments(
+    @Param('target') targetType: PaymentTargetTypeEnum,
+    @Param('id') targetUuid: string,
+  ) {
+    const data = await this.paymentService.getTargetPayments(targetUuid, targetType);
+    return this.responseService.success({
+      message: 'payment.success.target_payments_fetched',
       data,
     });
   }

@@ -10,14 +10,15 @@ import {
 import { PaymentStatusEnum } from '../../Modules/Payment/Enums/payment-status.enum';
 import { PaymentProviderEnum } from '../../Modules/Payment/Enums/payment-provider.enum';
 import { UserModel } from '../Models/user.model';
+import { PaymentTargetTypeEnum } from 'src/Modules/Payment/Enums/payment-target-type.enum';
 
 @Entity('payment_model')
 export class PaymentModel {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
-  @Column({ name: 'target_type', type: 'varchar', length: 50, nullable: true })
-  targetType: string;
+  @Column({ type: 'enum', enum: PaymentTargetTypeEnum, name: 'target_type' })
+  targetType: PaymentTargetTypeEnum;
 
   @Column({ name: 'target_uuid', type: 'uuid', nullable: true })
   targetUuid?: string;
@@ -72,6 +73,9 @@ export class PaymentModel {
    */
   @Column({ type: 'text', name: 'payment_key', nullable: true })
   paymentKey?: string;
+
+  @Column({ name: 'location', type: 'varchar', length: 255, nullable: true })
+  location?: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

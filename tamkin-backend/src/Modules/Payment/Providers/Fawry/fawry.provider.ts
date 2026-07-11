@@ -28,43 +28,41 @@ export class FawryProvider implements IPaymentProvider {
       );
     }
   }
-  createCheckoutSession(payment: PaymentModel): Promise<CheckoutSessionResult> {
-    throw new Error('Method not implemented.');
+  async createCheckoutSession(payment: PaymentModel, requestIp?: string): Promise<CheckoutSessionResult> {
+    // Generate a unique merchant reference.
+    // Use underscores to easily split the UUID back out later, since UUIDs contain hyphens.
+    const merchantRefNumber = `FAW_${payment.uuid}_${Date.now()}`;
+
+    if (this.isMockMode) {
+      const mockOrderId = `mock_fawry_order_${Date.now()}`;
+      return {
+        merchantRefNumber,
+        paymentKey: `https://mock-fawry-checkout.com/pay/${merchantRefNumber}`,
+        orderId: mockOrderId,
+        providerPaymentId: `mock_fawry_ref_${Date.now()}`,
+      };
+    }
+
+    try {
+      // Real Fawry Implementation logic placeholder
+      const fawryUrl =
+        process.env.FAWRY_URL || 'https://atfawry.com/fawrypay-api/api/payments/init';
+
+      const signaturePayload = `${this.merchantCode}${merchantRefNumber}${payment.userUuid || 'guest'}${fawryUrl}${this.secureKey}`;
+      const signature = crypto.createHash('sha256').update(signaturePayload).digest('hex');
+
+      const checkoutUrl = `${fawryUrl}?merchantCode=${this.merchantCode}&merchantRefNum=${merchantRefNumber}&signature=${signature}`;
+
+      return {
+        merchantRefNumber,
+        paymentKey: checkoutUrl,
+        orderId: merchantRefNumber,
+      };
+    } catch (error) {
+      this.logger.error('Failed to create Fawry checkout session', error);
+      throw new Error('Payment provider session creation failed');
+    }
   }
-
-  // async createCheckoutSession(payment: PaymentModel): Promise<CheckoutSessionResult> {
-  //   // Generate a unique merchant reference.
-  //   // Use underscores to easily split the UUID back out later, since UUIDs contain hyphens.
-  //   const merchantRefNumber = `FAW_${payment.uuid}_${Date.now()}`;
-
-  //   if (this.isMockMode) {
-  //     return {
-  //       sessionId: `mock_fawry_session_${Date.now()}`,
-  //       checkoutUrl: `https://mock-fawry-checkout.com/pay/${merchantRefNumber}`,
-  //       merchantRefNumber,
-  //     };
-  //   }
-
-  //   try {
-  //     // Real Fawry Implementation logic placeholder
-  //     const fawryUrl =
-  //       process.env.FAWRY_URL || 'https://atfawry.com/fawrypay-api/api/payments/init';
-
-  //     const signaturePayload = `${this.merchantCode}${merchantRefNumber}${payment.userUuid || 'guest'}${fawryUrl}${this.secureKey}`;
-  //     const signature = crypto.createHash('sha256').update(signaturePayload).digest('hex');
-
-  //     const checkoutUrl = `${fawryUrl}?merchantCode=${this.merchantCode}&merchantRefNum=${merchantRefNumber}&signature=${signature}`;
-
-  //     return {
-  //       sessionId: merchantRefNumber,
-  //       checkoutUrl,
-  //       merchantRefNumber,
-  //     };
-  //   } catch (error) {
-  //     this.logger.error('Failed to create Fawry checkout session', error);
-  //     throw new Error('Payment provider session creation failed');
-  //   }
-  // }
 
   async verifyWebhook(
     headers: Record<string, string | string[] | undefined>,

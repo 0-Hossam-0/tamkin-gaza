@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { UpdateUserDto } from './Dtos/update-user.dto';
 import { AdminFilterUsersDto } from './Dtos/admin-filter-users.dto';
 import { BanUserDto } from './Dtos/ban-user.dto';
@@ -19,14 +20,20 @@ import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly responseService: ResponseService,
+  ) {}
 
   // Admin Endpoints
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
   @SetAccessRoles([UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN])
   @Get('admin/all')
   async findAllAdmin(@Query() filters: AdminFilterUsersDto) {
-    return this.userService.findAllAdmin(filters);
+    const result = await this.userService.findAllAdmin(filters);
+    return this.responseService.success({
+      data: result,
+    });
   }
 
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
@@ -35,9 +42,11 @@ export class UserController {
   async findOneAdmin(@Param('uuid', ParseUUIDPipe) uuid: string) {
     const user = await this.userService.findOneAdmin(uuid);
     if (!user) {
-      return { message: 'User not found' };
+      this.responseService.notFound({ message: 'common.common.user_not_found' });
     }
-    return user;
+    return this.responseService.success({
+      data: user,
+    });
   }
 
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
@@ -49,12 +58,15 @@ export class UserController {
   ) {
     const user = await this.userService.banUser(uuid, banUserDto);
     if (!user) {
-      return { message: 'User not found' };
+      this.responseService.notFound({ message: 'common.common.user_not_found' });
     }
-    return {
-      message: user.isBanned ? 'User banned successfully' : 'User unbanned successfully',
-      user,
-    };
+    const message = user!.isBanned
+      ? 'common.common.user_banned_successfully'
+      : 'common.common.user_unbanned_successfully';
+    return this.responseService.success({
+      message,
+      data: user!,
+    });
   }
 
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
@@ -66,12 +78,12 @@ export class UserController {
   ) {
     const user = await this.userService.updateUserRole(uuid, role);
     if (!user) {
-      return { message: 'User not found' };
+      this.responseService.notFound({ message: 'common.common.user_not_found' });
     }
-    return {
-      message: 'User role updated successfully',
-      user,
-    };
+    return this.responseService.success({
+      message: 'common.common.user_role_updated_successfully',
+      data: user,
+    });
   }
 
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
@@ -83,12 +95,12 @@ export class UserController {
   ) {
     const user = await this.userService.update(uuid, updateUserDto);
     if (!user) {
-      return { message: 'User not found' };
+      this.responseService.notFound({ message: 'common.common.user_not_found' });
     }
-    return {
-      message: 'User updated successfully',
-      user,
-    };
+    return this.responseService.success({
+      message: 'common.common.user_updated_successfully',
+      data: user,
+    });
   }
 
 }
