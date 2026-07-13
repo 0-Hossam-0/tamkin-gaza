@@ -2,5 +2,7 @@
   "payment_initiated": "Payment initiated successfully",
   "payments_fetched": "Payments fetched successfully",
   "payment_fetched": "Payment fetched successfully",
-  "target_payments_fetched": "Target payments fetched successfully"
+  "target_payments_fetched": "Target payments fetched successfully",
+  "bank_transfer_fetched": "Bank transfer info fetched successfully",
+  "bank_transfer_updated": "Bank transfer info updated successfully"
 }

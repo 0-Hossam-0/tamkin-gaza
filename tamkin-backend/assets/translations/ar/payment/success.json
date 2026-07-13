@@ -2,5 +2,7 @@
   "payment_initiated": "تم بدء الدفع بنجاح",
   "payments_fetched": "تم جلب المدفوعات بنجاح",
   "payment_fetched": "تم جلب الدفعة بنجاح",
-  "target_payments_fetched": "تم جلب مدفوعات الهدف بنجاح"
+  "target_payments_fetched": "تم جلب مدفوعات الهدف بنجاح",
+  "bank_transfer_fetched": "تم جلب معلومات التحويل البنكي بنجاح",
+  "bank_transfer_updated": "تم تحديث معلومات التحويل البنكي بنجاح"
 }

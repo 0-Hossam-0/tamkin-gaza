@@ -7,5 +7,8 @@
   "invalid_signature": "توقيع webhook غير صالح",
   "payment_uuid_missing": "معرف الدفع مفقود في webhook",
   "payment_not_found": "الدفعة غير موجودة",
-  "provider_not_found": "موفر الدفع غير موجود"
+  "provider_not_found": "موفر الدفع غير موجود",
+  "bank_transfer_not_found": "معلومات التحويل البنكي غير موجودة",
+  "invalid_image_type": "نوع الصورة غير صالح. الصيغ المقبولة: jpeg, png, gif, webp",
+  "invalid_ibans_format": "يجب أن تكون الأيبان بصيغة JSON صالحة"
 }

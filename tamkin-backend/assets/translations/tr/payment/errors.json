@@ -7,5 +7,8 @@
   "invalid_signature": "Geçersiz webhook imzası",
   "payment_uuid_missing": "Webhook'ta ödeme UUID'si eksik",
   "payment_not_found": "Ödeme bulunamadı",
-  "provider_not_found": "Ödeme sağlayıcısı bulunamadı"
+  "provider_not_found": "Ödeme sağlayıcısı bulunamadı",
+  "bank_transfer_not_found": "Banka havalesi bilgisi bulunamadı",
+  "invalid_image_type": "Geçersiz görsel türü. Kabul edilen formatlar: jpeg, png, gif, webp",
+  "invalid_ibans_format": "IBAN'lar geçerli bir JSON nesnesi olmalıdır"
 }

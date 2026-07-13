@@ -7,5 +7,8 @@
   "invalid_signature": "غلط webhook دستخط",
   "payment_uuid_missing": "webhook میں ادائیگی کا UUID غائب ہے",
   "payment_not_found": "ادائیگی نہیں ملی",
-  "provider_not_found": "ادائیگی فراہم کنندہ نہیں ملا"
+  "provider_not_found": "ادائیگی فراہم کنندہ نہیں ملا",
+  "bank_transfer_not_found": "بینک ٹرانسفر کی معلومات نہیں ملی",
+  "invalid_image_type": "غلط تصویر کی قسم۔ قبول شدہ فارمیٹس: jpeg, png, gif, webp",
+  "invalid_ibans_format": "IBANs ایک درست JSON آبجیکٹ ہونا چاہیے"
 }

@@ -758,6 +758,148 @@
                 "description": "Admin endpoint to retrieve all payments for a specific target type and UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`target` (string, enum) – Required route parameter, target type. Currently: `campaign`\n`id` (string) – Required route parameter, valid UUID of the target entity"
               },
               "response": []
+            },
+            {
+              "name": "Bank Transfer",
+              "item": [
+                {
+                  "name": "Get Bank Transfer Info",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/payments/bank-transfer/info",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "payments",
+                        "bank-transfer",
+                        "info"
+                      ]
+                    },
+                    "description": "Returns the active bank transfer account details for donors to make manual transfers. Public endpoint — no authentication required.\n\n**Expected User Data**\nNone"
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update Bank Transfer Info (Admin)",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "x-csrf-token",
+                        "value": "{{CSRF_TOKEN}}",
+                        "description": "CSRF protection token",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "accountName",
+                          "value": "Tamkin Foundation",
+                          "description": "Optional. Account holder name",
+                          "type": "text"
+                        },
+                        {
+                          "key": "bankName",
+                          "value": "Ziraat Bankası",
+                          "description": "Optional. Bank name",
+                          "type": "text"
+                        },
+                        {
+                          "key": "branch",
+                          "value": "İstanbul Merkez",
+                          "description": "Optional. Bank branch",
+                          "type": "text"
+                        },
+                        {
+                          "key": "swiftCode",
+                          "value": "TCZBTR2A",
+                          "description": "Optional. SWIFT/BIC code",
+                          "type": "text"
+                        },
+                        {
+                          "key": "accountNo",
+                          "value": "1234-5678-9012",
+                          "description": "Optional. Account number",
+                          "type": "text"
+                        },
+                        {
+                          "key": "ibans",
+                          "value": "{\"TL\":\"TR12 3456 7890 1234 5678 9000\",\"USD\":\"US12 3456 7890 1234 5678 9000\",\"EUR\":\"DE12 3456 7890 1234 5678 9000\"}",
+                          "description": "Optional. IBANs per currency as a JSON string (e.g. {\"TL\":\"...\",\"USD\":\"...\"})",
+                          "type": "text"
+                        },
+                        {
+                          "key": "isActive",
+                          "value": "true",
+                          "description": "Optional. Whether this bank account is active",
+                          "type": "text"
+                        },
+                        {
+                          "key": "image",
+                          "type": "file",
+                          "description": "Optional. Bank account/QR image (jpeg, png, gif, webp). Max size: 10MB.",
+                          "value": null
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/payments/bank-transfer/info",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "payments",
+                        "bank-transfer",
+                        "info"
+                      ]
+                    },
+                    "description": "Admin endpoint to create or update bank transfer information, including an optional image upload. All fields are optional — only provided fields will be updated. Send as multipart/form-data. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`accountName` (string) – Optional, account holder name\n`bankName` (string) – Optional, bank name\n`branch` (string) – Optional, bank branch\n`swiftCode` (string) – Optional, SWIFT/BIC code\n`accountNo` (string) – Optional, account number\n`ibans` (string) – Optional, IBANs per currency code as a JSON string (e.g. {\"TL\":\"...\",\"USD\":\"...\"})\n`isActive` (string) – Optional, \"true\" or \"false\"\n`image` (file) – Optional, image file (jpeg, png, gif, webp). Max size: 10 MB."
+                  },
+                  "response": [
+                    {
+                      "name": "Bank transfer updated - success",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "x-csrf-token",
+                            "value": "{{CSRF_TOKEN}}",
+                            "type": "text"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{BASE_URL}}/payments/bank-transfer/info",
+                          "host": [
+                            "{{BASE_URL}}"
+                          ],
+                          "path": [
+                            "payments",
+                            "bank-transfer",
+                            "info"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"message\": \"payment.success.bank_transfer_updated\",\n  \"data\": {\n    \"uuid\": \"{{BANK_TRANSFER_UUID}}\",\n    \"accountName\": \"Tamkin Foundation\",\n    \"bankName\": \"Ziraat Bankası\",\n    \"branch\": \"İstanbul Merkez\",\n    \"swiftCode\": \"TCZBTR2A\",\n    \"accountNo\": \"1234-5678-9012\",\n    \"ibans\": {\n      \"TL\": \"TR12 3456 7890 1234 5678 9000\",\n      \"USD\": \"US12 3456 7890 1234 5678 9000\",\n      \"EUR\": \"DE12 3456 7890 1234 5678 9000\"\n    },\n    \"image\": \"https://minio.example.com/bank-transfer/qr.png\",\n    \"imageName\": \"bank-transfer-qr.png\",\n    \"isActive\": true,\n    \"createdAt\": \"2026-07-01T12:00:00.000Z\",\n    \"updatedAt\": \"2026-07-12T09:30:00.000Z\"\n  }\n}"
+                    }
+                  ]
+                }
+              ],
+              "description": "Bank transfer account details for manual donations. Includes a public info endpoint and an admin update endpoint with optional image upload."
             }
           ],
           "description": "Endpoints for initiating donations, handling provider webhooks, and retrieving payment status records."

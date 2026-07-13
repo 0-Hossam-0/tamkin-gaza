@@ -4,29 +4,39 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Req,
   RawBodyRequest,
   HttpCode,
   HttpStatus,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 import { Throttle, ThrottlerGuard, SkipThrottle } from '@nestjs/throttler';
 import { PaymentService } from './payment.service';
+import { BankTransferService } from './bank-transfer.service';
 import { CreatePaymentDto } from './Dtos/create-payment.dto';
 import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
+import { UpdateBankTransferDto } from './Dtos/update-bank-transfer.dto';
 import { PaginationDto } from 'src/Modules/User/Dtos/pagination.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
 import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
 import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
+import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
 
 @UseGuards(ThrottlerGuard)
 @Controller('payments')
 export class PaymentController {
   constructor(
     private readonly paymentService: PaymentService,
+    private readonly bankTransferService: BankTransferService,
     private readonly responseService: ResponseService,
   ) {}
 
@@ -119,6 +129,27 @@ export class PaymentController {
       message: 'payment.success.payment_fetched',
       data,
     });
+  }
+
+  @Get('bank-transfer/info')
+  async getBankTransferInfo() {
+    const data = await this.bankTransferService.getActiveBankTransfer();
+    return this.responseService.success({
+      message: 'payment.success.bank_transfer_fetched',
+      data,
+    });
+  }
+
+  @Post('bank-transfer/info')
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
+  @UseInterceptors(
+    FileInterceptor('image', {
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }),
+  )
+  async updateBankTransfer(@Body() dto: UpdateBankTransferDto, @UploadedFile() image?: Express.Multer.File) {
+    const data = await this.bankTransferService.upsertBankTransfer(dto, image);
+    return this.responseService.success({ message: 'payment.success.bank_transfer_updated', data });
   }
 
   @Get(':target/:id')
