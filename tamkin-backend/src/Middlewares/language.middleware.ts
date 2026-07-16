@@ -13,7 +13,7 @@ export class LanguageMiddleware implements NestMiddleware {
     const requestedLang = header.split(',')[0].split('-')[0].toLowerCase();
 
     const isSupported = SUPPORTED_LANGUAGES.some(
-      (item) => Object.keys(item)[0] === requestedLang,
+      (lang) => lang === requestedLang,
     );
 
     if (isSupported) {

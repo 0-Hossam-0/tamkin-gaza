@@ -10,5 +10,7 @@
   "provider_not_found": "ادائیگی فراہم کنندہ نہیں ملا",
   "bank_transfer_not_found": "بینک ٹرانسفر کی معلومات نہیں ملی",
   "invalid_image_type": "غلط تصویر کی قسم۔ قبول شدہ فارمیٹس: jpeg, png, gif, webp",
-  "invalid_ibans_format": "IBANs ایک درست JSON آبجیکٹ ہونا چاہیے"
+  "invalid_ibans_format": "IBANs ایک درست JSON آبجیکٹ ہونا چاہیے",
+  "invalid_amount": "رقم کی قیمت غلط ہے",
+  "image_required": "تصویر کی فائل درکار ہے"
 }

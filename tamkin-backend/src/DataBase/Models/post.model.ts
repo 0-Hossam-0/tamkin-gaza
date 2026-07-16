@@ -33,15 +33,19 @@ export class PostModel {
   title_ur: string;
 
   @Column({ type: 'text', nullable: false })
+  // Supports HTML content (safe tags are preserved by @AllowHtml decorator)
   content_ar: string;
 
   @Column({ type: 'text', nullable: false })
+  // Supports HTML content (safe tags are preserved by @AllowHtml decorator)
   content_en: string;
 
   @Column({ type: 'text', nullable: false })
+  // Supports HTML content (safe tags are preserved by @AllowHtml decorator)
   content_tr: string;
 
   @Column({ type: 'text', nullable: false })
+  // Supports HTML content (safe tags are preserved by @AllowHtml decorator)
   content_ur: string;
 
   @ManyToOne(() => UserModel, (user) => user.posts, { onDelete: 'CASCADE' })

@@ -4,5 +4,6 @@
   "payment_fetched": "Payment fetched successfully",
   "target_payments_fetched": "Target payments fetched successfully",
   "bank_transfer_fetched": "Bank transfer info fetched successfully",
-  "bank_transfer_updated": "Bank transfer info updated successfully"
+  "bank_transfer_updated": "Bank transfer info updated successfully",
+  "bank_transfer_receipt_submitted": "Bank transfer receipt submitted successfully"
 }

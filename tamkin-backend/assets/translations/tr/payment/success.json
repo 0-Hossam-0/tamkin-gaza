@@ -4,5 +4,6 @@
   "payment_fetched": "Ödeme başarıyla getirildi",
   "target_payments_fetched": "Hedef ödemeler başarıyla getirildi",
   "bank_transfer_fetched": "Banka havalesi bilgileri başarıyla getirildi",
-  "bank_transfer_updated": "Banka havalesi bilgileri başarıyla güncellendi"
+  "bank_transfer_updated": "Banka havalesi bilgileri başarıyla güncellendi",
+  "bank_transfer_receipt_submitted": "Banka havalesi dekontu başarıyla gönderildi"
 }

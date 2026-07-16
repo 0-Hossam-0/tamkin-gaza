@@ -19,6 +19,7 @@ export class CampaignModel {
   title: CampaignDto['title'];
 
   @Column({ type: 'jsonb' })
+  // Supports HTML content (safe tags are preserved by @AllowHtml decorator)
   description: CampaignDto['description'];
 
   @Column({ type: 'decimal', precision: 12, scale: 2 })

@@ -1,5 +1,6 @@
 import { IsOptional, IsString, IsInt, Min, Max, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
+import { AllowHtml } from 'src/Common/Decorators/AllowHtml/allow-html.decorator';
 
 export class PaginationDto {
   @IsOptional()
@@ -33,18 +34,22 @@ export class UploadPostDto {
   @IsString({ message: 'validation.global.is_string' })
   title_ur: string;
 
+  @AllowHtml()
   @IsNotEmpty({ message: 'validation.global.is_not_empty' })
   @IsString({ message: 'validation.global.is_string' })
   content_ar: string;
 
+  @AllowHtml()
   @IsNotEmpty({ message: 'validation.global.is_not_empty' })
   @IsString({ message: 'validation.global.is_string' })
   content_en: string;
 
+  @AllowHtml()
   @IsNotEmpty({ message: 'validation.global.is_not_empty' })
   @IsString({ message: 'validation.global.is_string' })
   content_tr: string;
 
+  @AllowHtml()
   @IsNotEmpty({ message: 'validation.global.is_not_empty' })
   @IsString({ message: 'validation.global.is_string' })
   content_ur: string;
@@ -67,18 +72,22 @@ export class UpdatePostDto {
   @IsString({ message: 'validation.global.is_string' })
   title_ur?: string;
 
+  @AllowHtml()
   @IsOptional()
   @IsString({ message: 'validation.global.is_string' })
   content_ar?: string;
 
+  @AllowHtml()
   @IsOptional()
   @IsString({ message: 'validation.global.is_string' })
   content_en?: string;
 
+  @AllowHtml()
   @IsOptional()
   @IsString({ message: 'validation.global.is_string' })
   content_tr?: string;
 
+  @AllowHtml()
   @IsOptional()
   @IsString({ message: 'validation.global.is_string' })
   content_ur?: string;

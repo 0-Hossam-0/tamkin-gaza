@@ -10,5 +10,7 @@
   "provider_not_found": "Ödeme sağlayıcısı bulunamadı",
   "bank_transfer_not_found": "Banka havalesi bilgisi bulunamadı",
   "invalid_image_type": "Geçersiz görsel türü. Kabul edilen formatlar: jpeg, png, gif, webp",
-  "invalid_ibans_format": "IBAN'lar geçerli bir JSON nesnesi olmalıdır"
+  "invalid_ibans_format": "IBAN'lar geçerli bir JSON nesnesi olmalıdır",
+  "invalid_amount": "Geçersiz tutar",
+  "image_required": "Görsel dosyası gerekli"
 }

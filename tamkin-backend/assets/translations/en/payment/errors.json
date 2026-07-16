@@ -10,5 +10,7 @@
   "provider_not_found": "Payment provider not found",
   "bank_transfer_not_found": "Bank transfer info not found",
   "invalid_image_type": "Invalid image type. Accepted formats: jpeg, png, gif, webp",
-  "invalid_ibans_format": "IBANs must be a valid JSON object"
+  "invalid_ibans_format": "IBANs must be a valid JSON object",
+  "invalid_amount": "Invalid amount value",
+  "image_required": "Image file is required"
 }

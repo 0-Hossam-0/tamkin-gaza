@@ -783,6 +783,55 @@
                   "response": []
                 },
                 {
+                  "name": "Submit Bank Transfer Receipt",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "fullName",
+                          "value": "John Doe",
+                          "description": "Required. Full name of the person who made the transfer",
+                          "type": "text"
+                        },
+                        {
+                          "key": "amount",
+                          "value": "100.00",
+                          "description": "Required. Amount transferred",
+                          "type": "text"
+                        },
+                        {
+                          "key": "notes",
+                          "value": "Donation for Gaza relief",
+                          "description": "Optional. Additional notes",
+                          "type": "text"
+                        },
+                        {
+                          "key": "image",
+                          "type": "file",
+                          "description": "Required. Picture of the transfer receipt (jpeg, png, gif, webp). Max size: 10MB.",
+                          "value": null
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/payments/bank-transfer/receipt",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "payments",
+                        "bank-transfer",
+                        "receipt"
+                      ]
+                    },
+                    "description": "Submits a bank transfer receipt for manual review. Requires login (cookie-based auth). Send as multipart/form-data.\n\n**Expected User Data**\n`fullName` (string) – Required, donor's full name\n`amount` (string) – Required, amount transferred\n`notes` (string) – Optional, additional notes\n`image` (file) – Required, receipt image (jpeg, png, gif, webp). Max size: 10 MB."
+                  },
+                  "response": []
+                },
+                {
                   "name": "Update Bank Transfer Info (Admin)",
                   "request": {
                     "method": "PUT",
@@ -899,7 +948,7 @@
                   ]
                 }
               ],
-              "description": "Bank transfer account details for manual donations. Includes a public info endpoint and an admin update endpoint with optional image upload."
+              "description": "Bank transfer account details for manual donations. Includes a public info endpoint, a user receipt submission endpoint, and an admin update endpoint with optional image upload."
             }
           ],
           "description": "Endpoints for initiating donations, handling provider webhooks, and retrieving payment status records."
@@ -910,6 +959,40 @@
     {
       "name": "User",
       "item": [
+        {
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Update Profile",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Name\",\n    \"nationality\": \"Egyptian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/profile",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Updates the authenticated user's profile. Email cannot be changed. Requires login (cookie-based auth).\n\n**Expected User Data**\n`firstName` (string) – Optional\n`lastName` (string) – Optional\n`picture` (string) – Optional\n`nationality` (string) – Optional"
+              },
+              "response": []
+            }
+          ],
+          "description": "Endpoints for authenticated users to manage their own profile."
+        },
         {
           "name": "Admin - User Management",
           "item": [

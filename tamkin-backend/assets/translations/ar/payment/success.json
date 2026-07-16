@@ -4,5 +4,6 @@
   "payment_fetched": "تم جلب الدفعة بنجاح",
   "target_payments_fetched": "تم جلب مدفوعات الهدف بنجاح",
   "bank_transfer_fetched": "تم جلب معلومات التحويل البنكي بنجاح",
-  "bank_transfer_updated": "تم تحديث معلومات التحويل البنكي بنجاح"
+  "bank_transfer_updated": "تم تحديث معلومات التحويل البنكي بنجاح",
+  "bank_transfer_receipt_submitted": "تم تقديم إيصال التحويل البنكي بنجاح"
 }

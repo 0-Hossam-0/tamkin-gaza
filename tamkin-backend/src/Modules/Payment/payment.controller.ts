@@ -23,6 +23,7 @@ import { BankTransferService } from './bank-transfer.service';
 import { CreatePaymentDto } from './Dtos/create-payment.dto';
 import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
 import { UpdateBankTransferDto } from './Dtos/update-bank-transfer.dto';
+import { CreateBankTransferReceiptDto } from './Dtos/create-bank-transfer-receipt.dto';
 import { PaginationDto } from 'src/Modules/User/Dtos/pagination.dto';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
@@ -136,6 +137,47 @@ export class PaymentController {
     const data = await this.bankTransferService.getActiveBankTransfer();
     return this.responseService.success({
       message: 'payment.success.bank_transfer_fetched',
+      data,
+    });
+  }
+
+  @Post('bank-transfer/receipt')
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(FileInterceptor('image', { limits: { fileSize: 10 * 1024 * 1024 } }))
+  @HttpCode(HttpStatus.CREATED)
+  async createBankTransferReceipt(
+    @Body() body: any,
+    @UploadedFile() image: Express.Multer.File,
+    @Req() req: IRequest,
+  ) {
+    if (!image) {
+      this.responseService.badRequest({ message: 'payment.errors.image_required' });
+    }
+    if (!image.mimetype.match(/^image\/(jpeg|png|gif|webp)$/)) {
+      this.responseService.badRequest({ message: 'payment.errors.invalid_image_type' });
+    }
+    if (typeof body.amount === 'string') {
+      const parsed = parseFloat(body.amount);
+      if (isNaN(parsed)) {
+        this.responseService.badRequest({ message: 'payment.errors.invalid_amount' });
+      }
+      body.amount = parsed;
+    }
+    const dto = plainToInstance(CreateBankTransferReceiptDto, body);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      this.responseService.badRequest({
+        message: 'common.common.validation_failed',
+        issues: errors.map((e) => ({
+          path: e.property,
+          error: Object.values(e.constraints || {}),
+        })),
+      });
+    }
+    const data = await this.bankTransferService.createReceipt(dto, image, req.user!.uuid);
+    return this.responseService.success({
+      message: 'payment.success.bank_transfer_receipt_submitted',
+      statusCode: HttpStatus.CREATED,
       data,
     });
   }

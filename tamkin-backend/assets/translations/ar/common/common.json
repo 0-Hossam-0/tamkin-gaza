@@ -2,5 +2,10 @@
   "welcome": "أهلاً بك",
   "operation_successful": "تمت العملية بنجاح",
   "validation_failed": "فشل التحقق من البيانات",
-  "invalid_csrf_token": "رمز CSRF غير صالح أو مفقود"
+  "invalid_csrf_token": "رمز CSRF غير صالح أو مفقود",
+  "user_not_found": "المستخدم غير موجود",
+  "user_updated_successfully": "تم تحديث المستخدم بنجاح",
+  "user_banned_successfully": "تم حظر المستخدم بنجاح",
+  "user_unbanned_successfully": "تم إلغاء حظر المستخدم بنجاح",
+  "user_role_updated_successfully": "تم تحديث دور المستخدم بنجاح"
 }

@@ -7,16 +7,21 @@ import {
   Query,
   ParseUUIDPipe,
   UseGuards,
+  Req,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { UpdateUserDto } from './Dtos/update-user.dto';
+import { UpdateProfileDto } from './Dtos/update-profile.dto';
 import { AdminFilterUsersDto } from './Dtos/admin-filter-users.dto';
 import { BanUserDto } from './Dtos/ban-user.dto';
 import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 import { AuthorizationGuard } from 'src/Common/Guards/Authorization/authorization.guard';
 import { SetAccessRoles } from 'src/Common/Decorators/Auth/roles.decorator';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
+import type { IRequest } from 'src/Common/Types/request.types';
 
 @Controller('users')
 export class UserController {
@@ -24,6 +29,22 @@ export class UserController {
     private readonly userService: UserService,
     private readonly responseService: ResponseService,
   ) {}
+
+  // Self-service endpoints
+  @UseGuards(AuthenticationGuard)
+  @Patch('profile')
+  @HttpCode(HttpStatus.OK)
+  async updateProfile(@Body() dto: UpdateProfileDto, @Req() req: IRequest) {
+    const user = await this.userService.update(req.user!.uuid, dto);
+    if (!user) {
+      this.responseService.notFound({ message: 'common.common.user_not_found' });
+    }
+    return this.responseService.success({
+      message: 'user.success.profile_updated',
+      statusCode: HttpStatus.OK,
+      data: user,
+    });
+  }
 
   // Admin Endpoints
   @UseGuards(AuthenticationGuard, AuthorizationGuard)

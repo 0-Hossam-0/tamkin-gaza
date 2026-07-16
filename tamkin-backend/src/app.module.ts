@@ -16,6 +16,7 @@ import { HashingService } from './Common/Services/Security/Hash/hash.service';
 import { AuthModule } from './Modules/Auth/auth.module';
 import { CommonModule } from './Common/common.module';
 import { CsrfMiddleware } from './Common/Middleware/csrf.middleware';
+import { LanguageMiddleware } from './Middlewares/language.middleware';
 import { TypeORMConfig } from './Config/typeorm.config';
 import { CampaignModule } from './Modules/Campaign/campaign.module';
 import { APP_PIPE, APP_GUARD } from '@nestjs/core';
@@ -84,6 +85,7 @@ import { BankTransferModel } from './DataBase/Models/bank-transfer.model';
   controllers: [AppController],
   providers: [
     AppService,
+    LanguageMiddleware,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
@@ -96,6 +98,9 @@ import { BankTransferModel } from './DataBase/Models/bank-transfer.model';
 })
 export class AppModule implements OnApplicationBootstrap {
   configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LanguageMiddleware)
+      .forRoutes('*');
     consumer
       .apply(CsrfMiddleware)
       .exclude(

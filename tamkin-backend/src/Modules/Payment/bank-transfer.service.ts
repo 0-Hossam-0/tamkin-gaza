@@ -3,9 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BankTransferModel } from 'src/DataBase/Models/bank-transfer.model';
+import { BankTransferReceiptModel } from 'src/DataBase/Models/bank-transfer-receipt.model';
 import { MinioService } from 'src/Common/Minio/minio.service';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { UpdateBankTransferDto } from './Dtos/update-bank-transfer.dto';
+import { CreateBankTransferReceiptDto } from './Dtos/create-bank-transfer-receipt.dto';
 import { seedBankTransferIfEmpty } from 'src/DataBase/seed';
 
 @Injectable()
@@ -15,6 +17,8 @@ export class BankTransferService implements OnModuleInit {
   constructor(
     @InjectRepository(BankTransferModel)
     private readonly bankTransferRepository: Repository<BankTransferModel>,
+    @InjectRepository(BankTransferReceiptModel)
+    private readonly receiptRepository: Repository<BankTransferReceiptModel>,
     private readonly configService: ConfigService,
     private readonly minioService: MinioService,
     private readonly responseService: ResponseService,
@@ -76,5 +80,24 @@ export class BankTransferService implements OnModuleInit {
     }
 
     return this.bankTransferRepository.save(bankTransfer);
+  }
+
+  async createReceipt(
+    dto: CreateBankTransferReceiptDto,
+    image: Express.Multer.File,
+    userUuid?: string,
+  ): Promise<BankTransferReceiptModel> {
+    const { fileName, fileUrl } = await this.minioService.uploadFile(image);
+
+    const receipt = this.receiptRepository.create({
+      fullName: dto.fullName,
+      amount: dto.amount,
+      notes: dto.notes,
+      image: fileUrl,
+      imageName: fileName,
+      userUuid,
+    });
+
+    return this.receiptRepository.save(receipt);
   }
 }

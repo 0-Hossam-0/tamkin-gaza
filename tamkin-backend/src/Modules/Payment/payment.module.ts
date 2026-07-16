@@ -10,13 +10,14 @@ import { PaymobProvider } from './Providers/Paymob/paymob.provider';
 import { IyzicoProvider } from './Providers/Iyzico/iyzipay.provider';
 import { PaymentModel } from 'src/DataBase/Payment/payment.model';
 import { BankTransferModel } from 'src/DataBase/Models/bank-transfer.model';
+import { BankTransferReceiptModel } from 'src/DataBase/Models/bank-transfer-receipt.model';
 import { CommonModule } from 'src/Common/common.module';
 import { CampaignModule } from 'src/Modules/Campaign/campaign.module';
 import { UserModule } from '../User/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PaymentModel, BankTransferModel]),
+    TypeOrmModule.forFeature([PaymentModel, BankTransferModel, BankTransferReceiptModel]),
     CommonModule, // For ResponseService
     CampaignModule,
     UserModule,
