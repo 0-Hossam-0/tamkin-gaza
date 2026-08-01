@@ -1,13 +1,21 @@
-import { Body, Controller, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
-import { ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
-import type { IRequest } from 'src/Common/Types/request.types';
-import { ConfirmEmailDto } from './Dto/confirm.email.dto';
-import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 import { CsrfService } from 'src/Common/Services/Security/Csrf/csrf.service';
+import type { IRequest } from 'src/Common/Types/request.types';
+import { AuthenticationGuard } from '../../Common/Guards/Authentication/authentication.guard';
+import { AuthService } from './auth.service';
+import { ConfirmEmailDto } from './Dto/confirm.email.dto';
+import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -33,7 +41,7 @@ export class AuthController {
     const { user, status } = await this.authService.loginWithGoogle(req, res, body);
 
     // Rotate CSRF token after successful login
-    const csrfToken = this.csrfService.rotateToken(req , res);
+    const csrfToken = this.csrfService.rotateToken(req, res);
 
     return this.responseService.success({
       message:
@@ -74,7 +82,7 @@ export class AuthController {
   ) {
     const { user } = await this.authService.login(req, res, body);
 
-    const csrfToken = this.csrfService.rotateToken(req , res);
+    const csrfToken = this.csrfService.rotateToken(req, res);
 
     return this.responseService.success({
       message: 'auth.success.logged_successfully',

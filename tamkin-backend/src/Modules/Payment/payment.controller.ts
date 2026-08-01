@@ -2,22 +2,20 @@ import {
   Body,
   Controller,
   Get,
-  Param,
-  Post,
-  Req,
-  RawBodyRequest,
   HttpCode,
   HttpStatus,
+  Param,
+  Post,
+  RawBodyRequest,
+  Req,
   UseGuards,
 } from '@nestjs/common';
-import { Throttle, ThrottlerGuard, SkipThrottle } from '@nestjs/throttler';
-import { PaymentService } from './payment.service';
-import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
-import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
-import { CampaignService } from 'src/Modules/Campaign/campaign.service';
-import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
+import { AuthenticationGuard } from '../../Common/Guards/Authentication/authentication.guard';
+import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { PaymentService } from './payment.service';
 
 @UseGuards(ThrottlerGuard)
 @Controller('payments')
