@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
-import { GoogleAuthService } from './Google-Auth/google.auth';
-import { UserModel } from 'src/DataBase/Models/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Request, Response } from 'express';
-import { TokenTypeEnum } from 'src/Common/Enums/token.enum';
-import { CookiesService } from 'src/Common/Services/Cookies/cookies.service';
-import { UserProviderEnum } from 'src/Common/Enums/User/user.enum';
 import countries from 'i18n-iso-countries';
-import { TokenService } from 'src/Common/Services/Security/token.service';
+import { OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
+import { TokenTypeEnum } from 'src/Common/Enums/token.enum';
+import { UserProviderEnum } from 'src/Common/Enums/User/user.enum';
+import { CookiesService } from 'src/Common/Services/Cookies/cookies.service';
+import { OTPService } from 'src/Common/Services/Otp/otp.service';
+import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { ClientInfoService } from 'src/Common/Services/Security/client-info.service';
 import { HashingService } from 'src/Common/Services/Security/Hash/hash.service';
+import { TokenService } from 'src/Common/Services/Security/token.service';
 import { IRequest } from 'src/Common/Types/request.types';
-import { OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
-import { OTPService } from 'src/Common/Services/Otp/otp.service';
+import { UserModel } from 'src/DataBase/Models/user.model';
+import { Repository } from 'typeorm';
 import { ConfirmEmailDto } from './Dto/confirm.email.dto';
+import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
+import { GoogleAuthService } from './Google-Auth/google.auth';
 
 @Injectable()
 export class AuthService {
@@ -29,8 +29,8 @@ export class AuthService {
     private readonly clientInfoService: ClientInfoService,
     private readonly cookiesService: CookiesService,
     private readonly hashingService: HashingService,
-    private readonly otpService: OTPService
-  ) { }
+    private readonly otpService: OTPService,
+  ) {}
 
   async loginWithGoogle(req: IRequest, res: Response, body: GoogleLoginDto) {
     const { email, picture, given_name, family_name } = await this.googleAuth.verifyGmailAccount(
@@ -173,7 +173,12 @@ export class AuthService {
       });
     }
 
-    if (!(await this.hashingService.compareHash({ plainText: body.password, hashText: user.password }))) {
+    if (
+      !(await this.hashingService.compareHash({
+        plainText: body.password,
+        hashText: user.password,
+      }))
+    ) {
       throw this.responseService.badRequest({
         message: 'auth.errors.invalid_credentials',
         info: 'auth.errors.invalid_credentials_info',
@@ -221,11 +226,10 @@ export class AuthService {
   }
 
   async requestConfirmEmail(req: IRequest, res: Response) {
-
     if (req.user?.emailVerified) {
       throw this.responseService.badRequest({
         message: 'auth.errors.email_already_verified',
-        info: 'auth.errors.email_already_verified_info'
+        info: 'auth.errors.email_already_verified_info',
       });
     }
 
@@ -234,24 +238,21 @@ export class AuthService {
       email: req.user!.email,
       userName: req.user!.firstName,
       type: OTPTypeEnum.CONFIRM_EMAIL,
-
     });
 
     if (!result) {
       throw this.responseService.badRequest({
         message: 'auth.errors.fail_to_send_otp',
-        info: 'auth.errors.fail_to_send_otp_info'
+        info: 'auth.errors.fail_to_send_otp_info',
       });
     }
-
   }
 
   async confirmEmail(req: IRequest, body: ConfirmEmailDto) {
-
     if (req.user?.emailVerified) {
       throw this.responseService.badRequest({
         message: 'email.errors.email_already_verified',
-        info: 'email.errors.email_already_verified_info'
+        info: 'email.errors.email_already_verified_info',
       });
     }
 
@@ -264,12 +265,10 @@ export class AuthService {
     if (!result) {
       throw this.responseService.badRequest({
         message: 'email.errors.otp_invalid',
-        info: 'email.errors.otp_invalid_info'
+        info: 'email.errors.otp_invalid_info',
       });
     }
 
     await this.userModel.update(req.user!._id, { emailVerified: true });
-
   }
-
 }

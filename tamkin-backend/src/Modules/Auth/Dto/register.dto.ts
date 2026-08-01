@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, Matches } from 'class-validator';
 import { PickType } from '@nestjs/mapped-types';
-import { UserValidators } from 'src/Common/Validators/user.validate';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { UserValidators } from '../../../Common/Validators/user.validate';
 
 export class GoogleLoginDto {
   @IsString({ message: 'validation.global.is_string' })

@@ -5,22 +5,21 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Put,
-  ParseUUIDPipe,
-  UseInterceptors,
   UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CampaignFormDataInterceptor } from './Interceptors/campaign-form-data.interceptor';
-import { CreateCampaignDto } from './Dtos/create-campaign.dto';
+import { Auth } from '../../Common/Decorators/Auth/auth.decorator';
+import { UserRoleEnum } from '../../Common/Enums/User/user.enum';
+import { ResponseService } from '../../Common/Services/Response/response.service';
 import { CampaignService } from './campaign.service';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
+import { CreateCampaignDto } from './Dtos/create-campaign.dto';
 import { UpdateCampaignDto } from './Dtos/update-campaign.dto';
-import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
-import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
-import { Multer } from 'multer';
+import { CampaignFormDataInterceptor } from './Interceptors/campaign-form-data.interceptor';
 
 @Controller('campaign')
 export class CampaignController {

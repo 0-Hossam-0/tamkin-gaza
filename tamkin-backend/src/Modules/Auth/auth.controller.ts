@@ -9,10 +9,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
-import { CsrfService } from 'src/Common/Services/Security/Csrf/csrf.service';
-import type { IRequest } from 'src/Common/Types/request.types';
 import { AuthenticationGuard } from '../../Common/Guards/Authentication/authentication.guard';
+import { ResponseService } from '../../Common/Services/Response/response.service';
+import { CsrfService } from '../../Common/Services/Security/Csrf/csrf.service';
+import { IRequest } from '../../Common/Types/request.types';
 import { AuthService } from './auth.service';
 import { ConfirmEmailDto } from './Dto/confirm.email.dto';
 import { GoogleLoginDto, LoginDto, RegisterDto } from './Dto/register.dto';
