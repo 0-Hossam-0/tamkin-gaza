@@ -14,6 +14,7 @@ import {
 import { Expose } from 'class-transformer';
 import { IUser } from 'src/Common/Interfaces/User/user.interface';
 import { ReelModel } from './reel.model';
+import { PostModel } from './post.model';
 
 @Entity()
 export class UserModel implements IUser {
@@ -56,6 +57,15 @@ export class UserModel implements IUser {
   @Column({ nullable: true })
   nationality?: string;
 
+  @Column({ default: false })
+  isBanned: boolean;
+
+  @Column({ nullable: true })
+  banReason?: string;
+
+  @Column({ nullable: true })
+  bannedAt?: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -64,4 +74,7 @@ export class UserModel implements IUser {
 
   @OneToMany(() => ReelModel, (reel) => reel.user)
   reels: ReelModel[];
+
+  @OneToMany(() => PostModel, (post) => post.user)
+  posts: PostModel[];
 }

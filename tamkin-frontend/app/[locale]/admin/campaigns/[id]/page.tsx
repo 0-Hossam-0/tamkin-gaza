@@ -42,7 +42,7 @@ const CampaignShowPage = () => {
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">{campaign.description}</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700">
-                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2"><Target className="w-4 h-4 text-indigo-500" /> Goal</div>
+                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2"><Target className="w-4 h-4 text-primary-500" /> Goal</div>
                 <div className="text-xl font-bold text-gray-900 dark:text-white">${target.toLocaleString()}</div>
               </div>
               <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700">
@@ -61,10 +61,10 @@ const CampaignShowPage = () => {
             <div className="mt-6">
               <div className="flex justify-between text-sm mb-2">
                 <span className="font-medium text-gray-700 dark:text-gray-300">Progress</span>
-                <span className="font-bold text-indigo-600">{progress}%</span>
+                <span className="font-bold text-primary-600">{progress}%</span>
               </div>
               <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                <div className="bg-indigo-600 dark:bg-indigo-500 h-3 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                <div className="bg-primary-600 dark:bg-primary-500 h-3 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
               </div>
             </div>
           </div>

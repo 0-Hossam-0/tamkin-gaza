@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { HashingService } from '../Common/Services/Security/Hash/hash.service';
 import { UserModel } from './Models/user.model';
 import { ReelModel } from './Models/reel.model';
@@ -9,8 +9,51 @@ import { UserRoleEnum, UserProviderEnum } from '../Common/Enums/User/user.enum';
 import { CampaignStatusEnum } from '../Modules/Campaign/Enums/campaign-status.enum';
 import { PaymentStatusEnum } from '../Modules/Payment/Enums/payment-status.enum';
 import { PaymentProviderEnum } from '../Modules/Payment/Enums/payment-provider.enum';
+import { PaymentTargetTypeEnum } from '../Modules/Payment/Enums/payment-target-type.enum';
 import { faker } from '@faker-js/faker';
 import { CampaignModel } from './Models/campaign.model';
+import { BankTransferModel } from './Models/bank-transfer.model';
+import { ConfigService } from '@nestjs/config';
+
+export async function seedBankTransferIfEmpty(
+  bankTransferRepository: Repository<BankTransferModel>,
+  configService: ConfigService,
+): Promise<void> {
+  const count = await bankTransferRepository.count();
+
+  if (count > 0) {
+    return;
+  }
+
+  const accountName = configService.get<string>('BANK_TRANSFER_ACCOUNT_NAME');
+  const bankName = configService.get<string>('BANK_TRANSFER_BANK_NAME');
+  const accountNo = configService.get<string>('BANK_TRANSFER_ACCOUNT_NO');
+
+  if (!accountName || !bankName || !accountNo) {
+    return;
+  }
+
+  const ibans: Record<string, string> = {};
+  const tl = configService.get<string>('BANK_TRANSFER_IBAN_TL');
+  const usd = configService.get<string>('BANK_TRANSFER_IBAN_USD');
+  const eur = configService.get<string>('BANK_TRANSFER_IBAN_EUR');
+
+  if (tl) ibans.TL = tl;
+  if (usd) ibans.USD = usd;
+  if (eur) ibans.EUR = eur;
+
+  const bankTransfer = bankTransferRepository.create({
+    accountName,
+    bankName,
+    branch: configService.get<string>('BANK_TRANSFER_BRANCH') || undefined,
+    swiftCode: configService.get<string>('BANK_TRANSFER_SWIFT_CODE') || undefined,
+    accountNo,
+    ibans: Object.keys(ibans).length > 0 ? ibans : undefined,
+    isActive: true,
+  });
+
+  await bankTransferRepository.save(bankTransfer);
+}
 
 export async function ensureAdmin(dataSource: DataSource, hashingService: HashingService) {
   const userRepository = dataSource.getRepository(UserModel);
@@ -153,7 +196,7 @@ export async function seed() {
 
   for (let i = 0; i < 20; i++) {
     const payment = paymentRepository.create({
-      targetType: 'campaign',
+      targetType: PaymentTargetTypeEnum.CAMPAIGN,
       targetUuid: faker.helpers.arrayElement(campaigns).uuid,
       user: faker.helpers.arrayElement([...users, undefined]), // Some anonymous payments
       amount: parseFloat(faker.finance.amount({ min: 10, max: 1000, dec: 2 })),

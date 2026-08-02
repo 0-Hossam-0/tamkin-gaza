@@ -1,8 +1,8 @@
 import React from "react";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { Button } from "@/components/ui/button";
+import { NavAuth } from "./NavAuth";
 import NavMobile from "./NavMobile";
-import AppButton from "../buttons/AppButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,43 +17,47 @@ export default async function NavBar() {
   const t = await getTranslations("navbar");
 
   return (
-    <nav className="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800 shadow-sm transition-all">
+    <nav className="w-full min-h-[100px] flex items-center bg-white dark:bg-gray-950 backdrop-blur-md sticky top-0 z-[60] border-b border-gray-100 dark:border-gray-800 shadow-sm transition-all">
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between h-20 px-6 lg:px-8">
         {/* LEFT SIDE: Logo + Links */}
-        <div className="flex items-center gap-12">
-          <div className="font-extrabold text-3xl tracking-tight ">
+          <div className="flex items-center gap-12">
             <Link href="/" className="hover:opacity-90 transition-opacity">
-              تمكين
+              <Image
+                src="/favicon.ico"
+                alt="Tamkin"
+                width={36}
+                height={36}
+                className="object-contain"
+              />
             </Link>
-          </div>
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8">
             <Link
               href="/campaigns"
-              className="text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors relative group"
+              className="text-2xl font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative group"
             >
               {t("campaigns")}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all group-hover:w-full"></span>
             </Link>
             <Link
               href="/stories"
-              className="text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors relative group"
+              className="text-2xl font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative group"
             >
               {t("stories")}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all group-hover:w-full"></span>
             </Link>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors outline-none group">
+              <DropdownMenuTrigger className="flex items-center gap-1 text-2xl font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors outline-none group">
                 {t("more")}
-                <ChevronDown className="w-4 h-4 text-gray-500 group-hover:text-indigo-600 transition-transform group-data-[state=open]:rotate-180" />
+                <ChevronDown className="w-4 h-4 text-gray-500 group-hover:text-primary-600 transition-transform group-data-[state=open]:rotate-180" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-48 p-2 rounded-xl border border-gray-100 dark:border-gray-800 shadow-lg"
+                className="w-48 p-2 rounded-xl border border-gray-100 dark:border-gray-800 shadow-lg z-[100]"
                 align="end"
               >
-                <DropdownMenuItem className="cursor-pointer rounded-lg focus:bg-indigo-50 focus:text-indigo-600 dark:focus:bg-gray-800 dark:focus:text-indigo-400 p-0">
+                <DropdownMenuItem className="cursor-pointer rounded-lg focus:bg-primary-50 focus:text-primary-600 dark:focus:bg-gray-800 dark:focus:text-primary-400 p-0">
                   <Link
                     href="/about"
                     className="w-full px-4 py-2 text-base block"
@@ -86,19 +90,7 @@ export default async function NavBar() {
           <div className="hidden lg:flex items-center gap-4">
             <LanguageSwitcher />
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-800 mx-2" />
-            <Link href="/login">
-              <AppButton
-                variant="ghost"
-                className="text-lg font-medium px-6 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                {t("login")}
-              </AppButton>
-            </Link>
-            <Link href="/register">
-              <AppButton variant="default" className="text-lg font-medium px-6">
-                {t("register")}
-              </AppButton>
-            </Link>
+            <NavAuth loginLabel={t("login")} registerLabel={t("register")} />
           </div>
         </div>
       </div>

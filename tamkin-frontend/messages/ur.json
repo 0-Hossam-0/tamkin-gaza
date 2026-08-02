@@ -1,6 +1,52 @@
 {
   "homePage": {
-    "title": "ہیلو"
+    "title": "ہیلو",
+    "activeCampaigns": "فعال مہمات",
+    "subtitle": "غزہ میں ہماری انسانی امداد کی کوششوں کی حمایت کریں",
+    "searchPlaceholder": "مہمات تلاش کریں...",
+    "allStatuses": "تمام حالتیں",
+    "noCampaigns": "کوئی مہم نہیں ملی",
+    "pageOf": "صفحہ {page} از {total}",
+    "search": "تلاش",
+    "active": "فعال",
+    "completed": "مکمل",
+    "draft": "مسودہ",
+    "canceled": "منسوخ",
+    "clearFilters": "فلٹر صاف کریں",
+    "viewAll": "سب دیکھیں"
+  },
+  "campaignCard": {
+    "active": "فعال",
+    "paused": "موقوف",
+    "completed": "مکمل",
+    "fundingProgress": "فنڈنگ کی پیشرفت",
+    "left": "باقی",
+    "raised": "اکٹھا ہوا",
+    "raisedLabel": "اکٹھا ہوا",
+    "goalLabel": "ہدف"
+  },
+  "campaignDetail": {
+    "notFound": "مہم نہیں ملی",
+    "notFoundDesc": "یہ مہم موجود نہیں ہے یا ہٹا دی گئی ہے۔",
+    "backToCampaigns": "مہمات پر واپس جائیں",
+    "home": "ہوم",
+    "campaigns": "مہمات",
+    "donationAmount": "عطیہ کی رقم (USD)",
+    "paymentProvider": "ادائیگی فراہم کنندہ",
+    "donate": "عطیہ کریں",
+    "paymentInitiated": "ادائیگی شروع ہوگئی! مکمل کرنے کے لیے نیا ٹیب چیک کریں۔",
+    "paymentFailed": "ادائیگی ناکام۔ دوبارہ کوشش کریں۔",
+    "secureTransaction": "محفوظ لین دین",
+    "of": "میں سے"
+  },
+  "campaigns": {
+    "title": "تمام مہمات",
+    "subtitle": "تمام دستیاب مہمات دیکھیں",
+    "searchPlaceholder": "مہمات تلاش کریں...",
+    "allCategories": "تمام",
+    "noCampaigns": "آپ کے فلٹر سے مماثل کوئی مہم نہیں ملی",
+    "clearFilters": "تمام فلٹر صاف کریں",
+    "search": "تلاش"
   },
   "navbar": {
     "campaigns": "مہمات",
@@ -12,7 +58,36 @@
     "terms": "شرائط",
     "about": "ہمارے بارے میں",
     "login": "لاگ ان",
-    "register": "رجسٹر"
+    "register": "رجسٹر",
+    "dashboard": "ڈیش بورڈ",
+    "profile": "پروفائل",
+    "signOut": "سائن آؤٹ"
+  },
+  "auth": {
+    "welcomeBack": "خوش آمدید",
+    "signInToAccount": "اپنے Tamkin اکاؤنٹ میں سائن ان کریں",
+    "email": "ای میل",
+    "emailPlaceholder": "test@gmail.com",
+    "password": "پاس ورڈ",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "سائن ان",
+    "signingIn": "سائن ان ہو رہا ہے...",
+    "orContinueWith": "یا جاری رکھیں",
+    "noAccount": "اکاؤنٹ نہیں ہے؟",
+    "signUp": "سائن اپ",
+    "createAccount": "اکاؤنٹ بنائیں",
+    "joinTamkin": "Tamkin میں شامل ہوں اور فرق پیدا کرنا شروع کریں",
+    "fullName": "پورا نام",
+    "fullNamePlaceholder": "John Doe",
+    "nationality": "قومیت",
+    "confirm": "تصدیق کریں",
+    "creatingAccount": "اکاؤنٹ بنا رہا ہے...",
+    "alreadyHaveAccount": "پہلے سے اکاؤنٹ ہے؟",
+    "loggedIn": "کامیابی سے سائن ان!",
+    "failedLogin": "سائن ان ناکام",
+    "accountCreated": "اکاؤنٹ کامیابی سے بن گیا!",
+    "failedRegister": "رجسٹریشن ناکام",
+    "passwordsNoMatch": "پاس ورڈ مماثل نہیں ہیں"
   },
   "errors": {
     "forbidden": {
@@ -49,14 +124,17 @@
     "changes": "شرائط کسی بھی وقت تبدیل ہو سکتی ہیں۔"
   },
   "footer": {
-    "description": "Next.js کے ساتھ بنایا گیا جدید SaaS پلیٹ فارم",
-    "company": "کمپنی",
+    "description": "غزہ میں امدادی کوششوں، طبی امداد اور فوری انسانی ضروریات کے لیے فنڈز اکٹھا کرنے اور تعاون فراہم کرنے میں مدد کرنے والا ایک انسانی پلیٹ فارم۔",
+    "company": "تنظیم",
+    "campaigns": "مہمات",
+    "stories": "کہانیاں",
+    "support": "تعاون",
     "legal": "قانونی",
     "about": "ہمارے بارے میں",
     "contact": "رابطہ",
     "privacy": "رازداری",
     "terms": "شرائط",
-    "rights": "جملہ حقوق محفوظ ہیں"
+    "rights": "جملہ حقوق محفوظ ہیں۔"
   },
   "dashboard": {
     "dashboard": "ڈیش بورڈ",
@@ -71,5 +149,58 @@
     "logout": "لاگ آؤٹ",
     "search": "تلاش...",
     "profile": "پروفائل"
+  },
+  "reels": {
+    "heading": "ریلز",
+    "subtitle": "مختصر کہانیاں",
+    "seeAll": "سب دیکھیں"
+  },
+  "emailVerification": {
+    "title": "اپنی ای میل تصدیق کریں",
+    "sendCode": "تصدیقی کوڈ بھیجیں",
+    "enterCode": "6 ہندسوں کا کوڈ درج کریں",
+    "verify": "تصدیق کریں",
+    "resend": "دوبارہ بھیجیں",
+    "codeSent": "تصدیقی کوڈ آپ کی ای میل پر بھیج دیا گیا",
+    "codeFailed": "تصدیقی کوڈ بھیجنے میں ناکام",
+    "verifiedSuccess": "ای میل کامیابی سے تصدیق ہوگئی!",
+    "invalidCode": "غلط یا میعاد ختم شدہ کوڈ"
+  },
+  "profile": {
+    "title": "پروفائل",
+    "notSignedIn": "سائن ان نہیں کیا",
+    "signInToView": "اپنا پروفائل دیکھنے کے لیے سائن ان کریں۔",
+    "signIn": "سائن ان",
+    "back": "واپس",
+    "name": "نام",
+    "email": "ای میل",
+    "role": "کردار",
+    "nationality": "قومیت",
+    "memberSince": "رکنیت از",
+    "notVerified": "ای میل تصدیق شدہ نہیں"
+  },
+  "mediaSection": {
+    "heading": "میڈیا اور اپ ڈیٹس",
+    "subtitle": "میدان سے تازہ ترین",
+    "showMedia": "میڈیا دیکھیں",
+    "scrollLeft": "بائیں جانب اسکرول کریں",
+    "scrollRight": "دائیں جانب اسکرول کریں"
+  },
+  "contactSection": {
+    "heading": "رابطہ کریں",
+    "subtitle": "ہم آپ سے سن کر خوش ہوں گے",
+    "description": "چاہے آپ کو ہماری مہمات کے بارے میں کوئی سوال ہو، رضاکارانہ طور پر کام کرنا چاہتے ہوں، یا صرف ہیلو کہنا چاہتے ہوں — ہم یہاں ہیں اور ہر پیغام پڑھتے ہیں۔",
+    "nameLabel": "آپ کا نام",
+    "namePlaceholder": "اپنا نام درج کریں",
+    "emailLabel": "ای میل پتہ",
+    "emailPlaceholder": "you@example.com",
+    "subjectLabel": "موضوع",
+    "subjectPlaceholder": "یہ کس بارے میں ہے؟",
+    "messageLabel": "پیغام",
+    "messagePlaceholder": "ہمیں مزید بتائیں...",
+    "submit": "پیغام بھیجیں",
+    "sending": "بھیجا جا رہا ہے...",
+    "success": "پیغام کامیابی سے بھیج دیا گیا! ہم جلد آپ سے رابطہ کریں گے۔",
+    "error": "کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔"
   }
 }

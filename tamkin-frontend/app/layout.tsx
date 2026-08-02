@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import * as React from "react";
 
@@ -8,11 +8,18 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import QueryProvider from "@/components/QueryProvider";
 import { AuthProvider } from "@/components/AuthProvider";
+import QuranQuote from "@/components/common/QuranQuote";
 
-const roboto = Roboto({
-  variable: "--font-roboto",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+const fontArabic = localFont({
+  src: "../FormaDJRArabicDisplay-Medium-Testing.otf",
+  variable: "--font-arabic",
+  display: "swap",
+});
+
+const fontEnglish = localFont({
+  src: "../cofibuk/COFIBUK.otf",
+  variable: "--font-english",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -72,14 +79,21 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={isRTL ? "rtl" : "ltr"}
-      className={`${roboto.variable} h-full overflow-x-hidden max-w-screen antialiased ${isRTL ? "rtl" : "ltr"}`}
+      className={`${isRTL ? fontArabic.variable : fontEnglish.variable} h-full max-w-screen antialiased ${isRTL ? "rtl" : "ltr"}`}
+      style={
+        {
+          "--font-sans": isRTL ? "var(--font-arabic)" : "var(--font-english)",
+        } as React.CSSProperties
+      }
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900">
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             <QueryProvider>
               <Toaster position="top-center" />
-              <main className="flex-1">{children}</main>
+              <QuranQuote></QuranQuote>
+
+              <main className="flex-1 overflow-x-clip">{children}</main>
             </QueryProvider>
           </AuthProvider>
         </NextIntlClientProvider>

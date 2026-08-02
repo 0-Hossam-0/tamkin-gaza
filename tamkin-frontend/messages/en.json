@@ -1,6 +1,82 @@
 {
     "homePage":{
-        "title":"Hello"
+        "title":"Hello",
+        "activeCampaigns": "Active Campaigns",
+        "subtitle": "Support our ongoing humanitarian efforts in Gaza",
+        "searchPlaceholder": "Search campaigns...",
+        "allStatuses": "All Statuses",
+        "noCampaigns": "No campaigns found",
+        "pageOf": "Page {page} of {total}",
+        "search": "Search",
+        "active": "Active",
+        "completed": "Completed",
+        "draft": "Draft",
+        "canceled": "Canceled",
+        "clearFilters": "Clear filters",
+    "viewAll": "View all"
+
+    },
+    "campaignCard": {
+        "active": "Active",
+        "paused": "Paused",
+        "completed": "Completed",
+        "fundingProgress": "Funding Progress",
+        "left": "left",
+        "raised": "raised",
+        "raisedLabel": "Raised",
+        "goalLabel": "Goal"
+    },
+    "campaignDetail": {
+        "notFound": "Campaign Not Found",
+        "notFoundDesc": "This campaign doesn't exist or has been removed.",
+        "backToCampaigns": "Back to Campaigns",
+        "home": "Home",
+        "campaigns": "Campaigns",
+        "donationAmount": "Donation Amount (USD)",
+        "paymentProvider": "Payment Provider",
+        "donate": "Donate",
+        "paymentInitiated": "Payment initiated! Check the new tab to complete.",
+        "paymentFailed": "Payment failed. Try again.",
+        "secureTransaction": "Secure Transaction",
+        "of": "of"
+    },
+    "reels": {
+        "heading": "Reels",
+        "subtitle": "Short Stories",
+        "seeAll": "See All"
+    },
+    "emailVerification": {
+        "title": "Verify your email",
+        "sendCode": "Send verification code",
+        "enterCode": "Enter 6-digit code",
+        "verify": "Verify",
+        "resend": "Resend",
+        "codeSent": "Verification code sent to your email",
+        "codeFailed": "Failed to send verification code",
+        "verifiedSuccess": "Email verified successfully!",
+        "invalidCode": "Invalid or expired code"
+    },
+    "profile": {
+        "title": "Profile",
+        "notSignedIn": "Not signed in",
+        "signInToView": "Sign in to view your profile.",
+        "signIn": "Sign in",
+        "back": "Back",
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "nationality": "Nationality",
+        "memberSince": "Member since",
+        "notVerified": "Email not verified"
+    },
+    "campaigns": {
+        "title": "All Campaigns",
+        "subtitle": "Browse all available campaigns",
+        "searchPlaceholder": "Search campaigns...",
+        "allCategories": "All",
+        "noCampaigns": "No campaigns found matching your filters",
+        "clearFilters": "Clear all filters",
+        "search": "Search"
     },
     "navbar":{
         "campaigns":"Campaigns",
@@ -12,7 +88,36 @@
         "terms":"Terms",
         "about":"About",
         "login":"Login",
-        "register":"Register"
+        "register":"Register",
+        "dashboard":"Dashboard",
+        "profile":"Profile",
+        "signOut":"Sign out"
+    },
+    "auth": {
+        "welcomeBack": "Welcome back",
+        "signInToAccount": "Sign in to your Tamkin account",
+        "email": "Email",
+        "emailPlaceholder": "test@gmail.com",
+        "password": "Password",
+        "passwordPlaceholder": "••••••••",
+        "signIn": "Sign in",
+        "signingIn": "Signing in...",
+        "orContinueWith": "or continue with",
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign up",
+        "createAccount": "Create an account",
+        "joinTamkin": "Join Tamkin and start making a difference",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "John Doe",
+        "nationality": "Nationality",
+        "confirm": "Confirm",
+        "creatingAccount": "Creating account...",
+        "alreadyHaveAccount": "Already have an account?",
+        "loggedIn": "Logged in successfully!",
+        "failedLogin": "Failed to login",
+        "accountCreated": "Account created successfully!",
+        "failedRegister": "Failed to register",
+        "passwordsNoMatch": "Passwords do not match"
     },
     "errors": {
     "forbidden": {
@@ -49,14 +154,17 @@
     "changes": "Terms may change anytime."
   },
   "footer": {
-    "description": "Modern SaaS platform built with Next.js",
-    "company": "Company",
+    "description": "A humanitarian platform helping raise funds and support for Gaza relief efforts, medical aid, and urgent humanitarian needs.",
+    "company": "Organization",
+    "campaigns": "Campaigns",
+    "stories": "Stories",
+    "support": "Support",
     "legal": "Legal",
     "about": "About",
     "contact": "Contact",
     "privacy": "Privacy",
     "terms": "Terms",
-    "rights": "All rights reserved"
+    "rights": "All rights reserved."
   },
   "dashboard":{
     "dashboard":"Dashboard",
@@ -71,5 +179,29 @@
     "logout": "Logout",
     "search": "Search...",
     "profile": "Profile"
+  },
+  "mediaSection": {
+    "heading": "Media & Updates",
+    "subtitle": "Latest From The Ground",
+    "showMedia": "Show Media",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
+  },
+  "contactSection": {
+    "heading": "Get In Touch",
+    "subtitle": "We'd love to hear from you",
+    "description": "Whether you have a question about our campaigns, want to volunteer, or just want to say hello — we're here and we read every message.",
+    "nameLabel": "Your Name",
+    "namePlaceholder": "Enter your name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "What is this about?",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us more...",
+    "submit": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent successfully! We'll get back to you soon.",
+    "error": "Something went wrong. Please try again."
   }
 }

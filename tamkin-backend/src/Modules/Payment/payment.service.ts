@@ -1,13 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Repository, Like, FindOptionsWhere } from 'typeorm';
 import { PaymentModel } from '../../DataBase/Payment/payment.model';
 import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
 import { PaymentFactory } from './Providers/payment.factory';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { PaymentStatusEnum } from './Enums/payment-status.enum';
 import { IPaymentProvider } from './Providers/payment-provider.interface';
-import { UserModel } from 'src/DataBase/Models/user.model';
+import { UserService } from 'src/Modules/User/user.service';
 import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
 import { CampaignService } from '../Campaign/campaign.service';
 
@@ -18,8 +19,7 @@ export class PaymentService {
   constructor(
     @InjectRepository(PaymentModel)
     private readonly paymentRepository: Repository<PaymentModel>,
-    @InjectRepository(UserModel)
-    private readonly userRepository: Repository<UserModel>,
+    private readonly userService: UserService,
     private readonly paymentFactory: PaymentFactory,
     private readonly responseService: ResponseService,
     private readonly dataSource: DataSource,
@@ -83,7 +83,7 @@ export class PaymentService {
     }
 
     // 3. Persist a PENDING payment record
-    const user = await this.userRepository.findOneBy({ uuid: userUuid });
+    const user = await this.userService.findByUuid(userUuid);
     const payment = this.paymentRepository.create({
       targetType,
       targetUuid: dto.uuid,
@@ -100,6 +100,12 @@ export class PaymentService {
     // Attach target model for provider use if provided
     if (targetModel) (savedPayment as any)[targetType] = targetModel;
 
+    // Save location if requestIp is provided
+    if (requestIp) {
+      savedPayment.location = requestIp;
+      await this.paymentRepository.save(savedPayment);
+    }
+
     // 4. Call the provider to create a checkout session
     try {
       const sessionResult = await provider.createCheckoutSession(savedPayment, requestIp);
@@ -112,11 +118,21 @@ export class PaymentService {
         savedPayment.merchantRefNumber = sessionResult.merchantRefNumber;
         needsSave = true;
       }
-      if (extra.paymobOrderId) {
+      if (sessionResult.orderId) {
+        savedPayment.orderId = sessionResult.orderId;
+        needsSave = true;
+      } else if (extra.paymobOrderId) {
         savedPayment.orderId = extra.paymobOrderId;
         needsSave = true;
       }
-      if (extra.paymentKey) {
+      if (sessionResult.providerPaymentId) {
+        savedPayment.providerPaymentId = sessionResult.providerPaymentId;
+        needsSave = true;
+      }
+      if (sessionResult.paymentKey) {
+        savedPayment.paymentKey = sessionResult.paymentKey;
+        needsSave = true;
+      } else if (extra.paymentKey) {
         savedPayment.paymentKey = extra.paymentKey;
         needsSave = true;
       }
@@ -145,11 +161,7 @@ export class PaymentService {
    * @param amount The payment amount being attempted
    * @returns The loaded target entity
    */
-  async loadTargetModel(
-    targetType: PaymentTargetTypeEnum,
-    targetUuid: string,
-    amount: number,
-  ) {
+  async loadTargetModel(targetType: PaymentTargetTypeEnum, targetUuid: string, amount: number) {
     switch (targetType) {
       case PaymentTargetTypeEnum.CAMPAIGN:
         const campaign = await this.campaignService.findByUuid(targetUuid);
@@ -267,6 +279,117 @@ export class PaymentService {
       this.responseService.notFound({ message: 'payment.errors.payment_not_found' });
     }
     return payment!;
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  //  GET /payments/my-payments (User - Paginated)
+  // ─────────────────────────────────────────────────────────────────
+
+  /**
+   * Find all payments for a specific user with pagination.
+   *
+   * @param userUuid User UUID
+   * @param paginationDto Page and limit parameters
+   * @returns Paginated list of user payments and metadata
+   */
+  async findUserPayments(userUuid: string, paginationDto: any) {
+    const { page = 1, limit = 10 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await this.paymentRepository.findAndCount({
+      where: { userUuid },
+      skip,
+      take: limit,
+      order: { createdAt: 'DESC' },
+    });
+
+    const totalPages = Math.ceil(total / limit);
+    const currentPage = page;
+
+    return {
+      data,
+      meta: {
+        total,
+        page: currentPage,
+        limit,
+        totalPages,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1,
+      },
+    };
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  //  GET /payments (Admin - Paginated)
+  // ─────────────────────────────────────────────────────────────────
+
+  /**
+   * Find all payments with pagination and optional filters.
+   * Intended for admin use only.
+   *
+   * @param filterDto Filter and pagination parameters
+   * @returns Paginated list of payments and metadata
+   */
+  async findAll(filterDto: AdminFilterPaymentsDto) {
+    const { search, status, provider, userUuid, targetUuid, page = 1, limit = 10 } = filterDto;
+
+    // Build where conditions dynamically
+    const where: FindOptionsWhere<PaymentModel> = {};
+
+    if (search) {
+      where.merchantRefNumber = Like(`%${search}%`);
+    }
+
+    if (status) {
+      where.status = status;
+    }
+
+    if (provider) {
+      where.provider = provider;
+    }
+
+    if (userUuid) {
+      where.userUuid = userUuid;
+    }
+
+    if (targetUuid) {
+      where.targetUuid = targetUuid;
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+
+    // Fetch data and total count in parallel
+    const [data, total] = await this.paymentRepository.findAndCount({
+      where,
+      relations: ['user'],
+      skip,
+      take: limit,
+      order: { createdAt: 'DESC' },
+    });
+
+    const totalPages = Math.ceil(total / limit);
+    const currentPage = page;
+
+    return {
+      data,
+      meta: {
+        total,
+        page: currentPage,
+        limit,
+        totalPages,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1,
+      },
+    };
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  //  GET /payments/target/:id (Admin - Super Admin)
+  // ─────────────────────────────────────────────────────────────────
+  async getTargetPayments(targetUuID: string, targetType: PaymentTargetTypeEnum) {
+    const payments = await this.paymentRepository.find({ where: { targetUuid: targetUuID, targetType: targetType } });
+    return payments;
   }
 
   // ─────────────────────────────────────────────────────────────────

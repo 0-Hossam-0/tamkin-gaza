@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
-import { IRequest } from 'src/Common/Types/request.types';
+import { ResponseService } from '../../../Common/Services/Response/response.service';
+import { IRequest } from '../../../Common/Types/request.types';
 
 @Injectable()
 export class GoogleAuthService {
-  constructor(
-    private readonly responseService: ResponseService,
-  ) { }
+  constructor(private readonly responseService: ResponseService) {}
 
   verifyGmailAccount = async (id_token: string, req: IRequest): Promise<TokenPayload> => {
     try {

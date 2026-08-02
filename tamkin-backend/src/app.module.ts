@@ -1,18 +1,24 @@
-import { MiddlewareConsumer, Module, OnApplicationBootstrap, RequestMethod } from '@nestjs/common';
+import {
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  OnApplicationBootstrap,
+  RequestMethod,
+} from '@nestjs/common';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { HashingService } from './Common/Services/Security/Hash/hash.service';
 import { AuthModule } from './Modules/Auth/auth.module';
 import { CommonModule } from './Common/common.module';
 import { CsrfMiddleware } from './Common/Middleware/csrf.middleware';
+import { LanguageMiddleware } from './Middlewares/language.middleware';
 import { TypeORMConfig } from './Config/typeorm.config';
 import { CampaignModule } from './Modules/Campaign/campaign.module';
-import { LanguageMiddleware } from './Middlewares/language.middleware';
 import { APP_PIPE, APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { CustomValidationPipe } from './Common/Pipes/custom.validation.pipe';
@@ -26,7 +32,12 @@ import {
   HeaderResolver,
 } from 'nestjs-i18n';
 import { PaymentModule } from './Modules/Payment/payment.module';
-import { seed, ensureAdmin } from './DataBase/seed';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserModule } from './Modules/User/user.module';
+import { ensureAdmin, seedBankTransferIfEmpty } from './DataBase/seed';
+import { PostsModule } from './Modules/Posts/posts.module';
+import { BankTransferModel } from './DataBase/Models/bank-transfer.model';
 
 @Module({
   imports: [
@@ -39,6 +50,7 @@ import { seed, ensureAdmin } from './DataBase/seed';
       serveRoot: '/pictures',
     }),
     TypeOrmModule.forRootAsync(TypeORMConfig),
+    TypeOrmModule.forFeature([BankTransferModel]),
     I18nModule.forRoot({
       fallbackLanguage: 'ar',
       loader: I18nJsonLoader,
@@ -67,10 +79,13 @@ import { seed, ensureAdmin } from './DataBase/seed';
     MinioModule,
     ReelsModule,
     PaymentModule,
+    UserModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    LanguageMiddleware,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
@@ -84,6 +99,9 @@ import { seed, ensureAdmin } from './DataBase/seed';
 export class AppModule implements OnApplicationBootstrap {
   configure(consumer: MiddlewareConsumer) {
     consumer
+      .apply(LanguageMiddleware)
+      .forRoutes('*');
+    consumer
       .apply(CsrfMiddleware)
       .exclude(
         { path: 'payments/webhook', method: RequestMethod.POST },
@@ -96,6 +114,9 @@ export class AppModule implements OnApplicationBootstrap {
   constructor(
     private dataSource: DataSource,
     private hashingService: HashingService,
+    @InjectRepository(BankTransferModel)
+    private readonly bankTransferRepository: Repository<BankTransferModel>,
+    private readonly configService: ConfigService,
   ) {}
 
   async onApplicationBootstrap() {
@@ -111,6 +132,12 @@ export class AppModule implements OnApplicationBootstrap {
         console.error('Failed to ensure admin on bootstrap:', err);
       }
       console.log('Admin ensured on bootstrap. Full seeding is reserved for CLI.');
+
+      try {
+        await seedBankTransferIfEmpty(this.bankTransferRepository, this.configService);
+      } catch (err) {
+        console.error('Failed to seed bank transfer info:', err);
+      }
     } else {
       console.log('Skipping automatic seed (SKIP_SEED is set)');
     }

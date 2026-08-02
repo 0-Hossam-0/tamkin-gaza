@@ -1,7 +1,9 @@
 {
-  "payment_initiated": "تم بدء الدفع بنجاح. يرجى إتمام عملية الدفع.",
-  "payment_fetched": "تم استرجاع تفاصيل الدفع بنجاح.",
-  "webhook_received": "تم استلام حدث الدفع بنجاح.",
-  "payment_succeeded": "تمت عملية الدفع بنجاح.",
-  "payment_failed": "لم تكتمل عملية الدفع."
+  "payment_initiated": "تم بدء الدفع بنجاح",
+  "payments_fetched": "تم جلب المدفوعات بنجاح",
+  "payment_fetched": "تم جلب الدفعة بنجاح",
+  "target_payments_fetched": "تم جلب مدفوعات الهدف بنجاح",
+  "bank_transfer_fetched": "تم جلب معلومات التحويل البنكي بنجاح",
+  "bank_transfer_updated": "تم تحديث معلومات التحويل البنكي بنجاح",
+  "bank_transfer_receipt_submitted": "تم تقديم إيصال التحويل البنكي بنجاح"
 }

@@ -2,28 +2,43 @@ import {
   Body,
   Controller,
   Get,
-  Param,
-  Post,
-  Req,
-  RawBodyRequest,
+  Put,
+  Query,
   HttpCode,
   HttpStatus,
+  Param,
+  Post,
+  RawBodyRequest,
+  Req,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { Throttle, ThrottlerGuard, SkipThrottle } from '@nestjs/throttler';
-import { PaymentService } from './payment.service';
-import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import { BankTransferService } from './bank-transfer.service';
+import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
+import { UpdateBankTransferDto } from './Dtos/update-bank-transfer.dto';
+import { CreateBankTransferReceiptDto } from './Dtos/create-bank-transfer-receipt.dto';
+import { PaginationDto } from 'src/Modules/User/Dtos/pagination.dto';
+import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
+import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
+import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import type { IRequest } from 'src/Common/Types/request.types';
-import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
-import { CampaignService } from 'src/Modules/Campaign/campaign.service';
-import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
+import { AuthenticationGuard } from '../../Common/Guards/Authentication/authentication.guard';
+import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { PaymentService } from './payment.service';
+import { Multer } from 'multer';
 
 @UseGuards(ThrottlerGuard)
 @Controller('payments')
 export class PaymentController {
   constructor(
     private readonly paymentService: PaymentService,
+    private readonly bankTransferService: BankTransferService,
     private readonly responseService: ResponseService,
   ) {}
 
@@ -87,11 +102,111 @@ export class PaymentController {
     return this.responseService.success({ data });
   }
 
+  @Get('my-payments')
+  @UseGuards(AuthenticationGuard)
+  async getMyPayments(@Query() paginationDto: PaginationDto, @Req() req: IRequest) {
+    const userUuid = req.user!.uuid;
+    const data = await this.paymentService.findUserPayments(userUuid, paginationDto);
+    return this.responseService.success({
+      message: 'payment.success.payments_fetched',
+      data,
+    });
+  }
+
+  @Get()
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
+  async getAllPayments(@Query() filterDto: AdminFilterPaymentsDto) {
+    const data = await this.paymentService.findAll(filterDto);
+    return this.responseService.success({
+      message: 'payment.success.payments_fetched',
+      data,
+    });
+  }
+
   @Get(':id')
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
   async getPayment(@Param('id') id: string) {
     const data = await this.paymentService.findOne(id);
     return this.responseService.success({
       message: 'payment.success.payment_fetched',
+      data,
+    });
+  }
+
+  @Get('bank-transfer/info')
+  async getBankTransferInfo() {
+    const data = await this.bankTransferService.getActiveBankTransfer();
+    return this.responseService.success({
+      message: 'payment.success.bank_transfer_fetched',
+      data,
+    });
+  }
+
+  @Post('bank-transfer/receipt')
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(FileInterceptor('image', { limits: { fileSize: 10 * 1024 * 1024 } }))
+  @HttpCode(HttpStatus.CREATED)
+  async createBankTransferReceipt(
+    @Body() body: any,
+    @UploadedFile() image: Express.Multer.File,
+    @Req() req: IRequest,
+  ) {
+    if (!image) {
+      this.responseService.badRequest({ message: 'payment.errors.image_required' });
+    }
+    if (!image.mimetype.match(/^image\/(jpeg|png|gif|webp)$/)) {
+      this.responseService.badRequest({ message: 'payment.errors.invalid_image_type' });
+    }
+    if (typeof body.amount === 'string') {
+      const parsed = parseFloat(body.amount);
+      if (isNaN(parsed)) {
+        this.responseService.badRequest({ message: 'payment.errors.invalid_amount' });
+      }
+      body.amount = parsed;
+    }
+    const dto = plainToInstance(CreateBankTransferReceiptDto, body);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      this.responseService.badRequest({
+        message: 'common.common.validation_failed',
+        issues: errors.map((e) => ({
+          path: e.property,
+          error: Object.values(e.constraints || {}),
+        })),
+      });
+    }
+    const data = await this.bankTransferService.createReceipt(dto, image, req.user!.uuid);
+    return this.responseService.success({
+      message: 'payment.success.bank_transfer_receipt_submitted',
+      statusCode: HttpStatus.CREATED,
+      data,
+    });
+  }
+
+  @Post('bank-transfer/info')
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
+  @UseInterceptors(
+    FileInterceptor('image', {
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }),
+  )
+  async updateBankTransfer(
+    @Body() dto: UpdateBankTransferDto,
+    @UploadedFile() image?: Express.Multer.File,
+  ) {
+    const data = await this.bankTransferService.upsertBankTransfer(dto, image);
+    return this.responseService.success({ message: 'payment.success.bank_transfer_updated', data });
+  }
+
+  @Get(':target/:id')
+  @Auth([UserRoleEnum.ADMIN, UserRoleEnum.SUPER_ADMIN])
+  async getCampaignPayments(
+    @Param('target') targetType: PaymentTargetTypeEnum,
+    @Param('id') targetUuid: string,
+  ) {
+    const data = await this.paymentService.getTargetPayments(targetUuid, targetType);
+    return this.responseService.success({
+      message: 'payment.success.target_payments_fetched',
       data,
     });
   }

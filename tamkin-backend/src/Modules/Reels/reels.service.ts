@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ReelModel } from 'src/DataBase/Models/reel.model';
-import { UserModel } from 'src/DataBase/Models/user.model';
+import { UserService } from 'src/Modules/User/user.service';
 import { MinioService } from 'src/Common/Minio/minio.service';
 import { IUser } from 'src/Common/Interfaces/User/user.interface';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
@@ -14,8 +14,7 @@ export class ReelsService {
   constructor(
     @InjectRepository(ReelModel)
     private readonly reelRepository: Repository<ReelModel>,
-    @InjectRepository(UserModel)
-    private readonly userRepository: Repository<UserModel>,
+    private readonly userService: UserService,
     private readonly minioService: MinioService,
     private readonly responseService: ResponseService,
   ) { }

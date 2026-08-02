@@ -2,5 +2,10 @@
   "welcome": "Hoş geldiniz",
   "operation_successful": "İşlem başarılı",
   "validation_failed": "Doğrulama başarısız",
-  "invalid_csrf_token": "Geçersiz veya eksik CSRF belirteci"
+  "invalid_csrf_token": "Geçersiz veya eksik CSRF belirteci",
+  "user_not_found": "Kullanıcı bulunamadı",
+  "user_updated_successfully": "Kullanıcı başarıyla güncellendi",
+  "user_banned_successfully": "Kullanıcı başarıyla yasaklandı",
+  "user_unbanned_successfully": "Kullanıcının yasağı başarıyla kaldırıldı",
+  "user_role_updated_successfully": "Kullanıcı rolü başarıyla güncellendi"
 }

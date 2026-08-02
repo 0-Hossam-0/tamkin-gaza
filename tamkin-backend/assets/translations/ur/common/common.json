@@ -2,5 +2,10 @@
   "welcome": "خوش آمدید",
   "operation_successful": "آپریشن کامیاب رہا",
   "validation_failed": "تصدیق ناکام ہو گئی",
-  "invalid_csrf_token": "غلط یا گمشدہ CSRF ٹوکن"
+  "invalid_csrf_token": "غلط یا گمشدہ CSRF ٹوکن",
+  "user_not_found": "صارف نہیں ملا",
+  "user_updated_successfully": "صارف کامیابی سے اپ ڈیٹ ہو گیا",
+  "user_banned_successfully": "صارف کامیابی سے بلاک ہو گیا",
+  "user_unbanned_successfully": "صارف کی بلاک کامیابی سے ختم ہو گئی",
+  "user_role_updated_successfully": "صارف کا کردار کامیابی سے اپ ڈیٹ ہو گیا"
 }

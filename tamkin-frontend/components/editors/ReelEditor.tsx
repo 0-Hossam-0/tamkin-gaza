@@ -48,7 +48,7 @@ const ReelEditor = ({ reel, open, onClose }: ReelEditorProps) => {
             <input type="text" placeholder="Reel title..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
             />
           </div>
           <div>
@@ -56,7 +56,7 @@ const ReelEditor = ({ reel, open, onClose }: ReelEditorProps) => {
             <input type="text" placeholder="Short description..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
             />
           </div>
         </div>
@@ -67,7 +67,7 @@ const ReelEditor = ({ reel, open, onClose }: ReelEditorProps) => {
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={isPending}
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50">
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50">
             {isPending ? "Updating..." : "Update Reel"}
           </button>
         </div>

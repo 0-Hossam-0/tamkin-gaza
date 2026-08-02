@@ -3,8 +3,9 @@ import { PaymentModel } from '../../../DataBase/Payment/payment.model';
 export interface CheckoutSessionResult {
   merchantRefNumber: string;   // provider's session/transaction ID
   paymentKey:        string;   // URL or token frontend needs
-  orderId?:          string;   // optional, used by Paymob
+  orderId?:          string;   // provider's order identifier
   paymobOrderId?:    string;   // optional, Paymob-specific
+  providerPaymentId?: string; // provider's payment identifier
 }
 
 export interface WebhookVerificationResult {

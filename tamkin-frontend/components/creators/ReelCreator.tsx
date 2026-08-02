@@ -41,7 +41,7 @@ const ReelCreator = () => {
           <p className="text-sm text-gray-500 dark:text-gray-400">Manage video reels</p>
         </div>
         <button onClick={() => setOpen(true)}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           <span>Add Reel</span>
@@ -64,7 +64,7 @@ const ReelCreator = () => {
                 <input type="text" placeholder="Reel title..."
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
                 />
               </div>
               <div>
@@ -72,7 +72,7 @@ const ReelCreator = () => {
                 <input type="text" placeholder="Short description..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
                 />
               </div>
               <div>
@@ -83,7 +83,7 @@ const ReelCreator = () => {
                     onChange={(e) => { const f = e.target.files?.[0]; if (f) setFile(f); }} className="hidden" id="reel-video" />
                   <label htmlFor="reel-video" className="cursor-pointer">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <span className="text-indigo-600 dark:text-indigo-400 font-medium">Click to upload</span> or drag and drop
+                      <span className="text-primary-600 dark:text-primary-400 font-medium">Click to upload</span> or drag and drop
                     </p>
                     <p className="text-xs text-gray-500 mt-1">MP4, MKV, WebM, AVI (max. 100MB)</p>
                   </label>
@@ -98,7 +98,7 @@ const ReelCreator = () => {
                 Cancel
               </button>
               <button onClick={handleSubmit} disabled={isPending || !file}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50">
+                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50">
                 {isPending ? "Uploading..." : "Create Reel"}
               </button>
             </div>

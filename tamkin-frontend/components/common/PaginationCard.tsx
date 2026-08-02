@@ -48,7 +48,7 @@ const PaginationCard = ({
               size="sm"
               variant={p === page ? "default" : "outline"}
               onClick={() => setPage(p)}
-              className={`w-8 h-8 p-0 ${p === page ? "bg-indigo-400" : ""}`}
+              className={`w-8 h-8 p-0 ${p === page ? "bg-primary-400" : ""}`}
             >
               {p}
             </Button>

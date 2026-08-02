@@ -53,7 +53,7 @@ const CampaignCreator = () => {
           <p className="text-sm text-gray-500 dark:text-gray-400">Manage fundraising campaigns</p>
         </div>
         <button onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           <span>Create Campaign</span>
@@ -75,12 +75,12 @@ const CampaignCreator = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title (English) *</label>
                   <input type="text" placeholder="Enter English title" value={titleEn} onChange={(e) => setTitleEn(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title (Arabic)</label>
                   <input type="text" placeholder="أدخل العنوان بالعربية" value={titleAr} onChange={(e) => setTitleAr(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white" />
                 </div>
               </div>
 
@@ -88,12 +88,12 @@ const CampaignCreator = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description (English) *</label>
                   <textarea placeholder="Enter English description" rows={3} value={descEn} onChange={(e) => setDescEn(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white resize-none" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white resize-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description (Arabic)</label>
                   <textarea placeholder="أدخل الوصف بالعربية" rows={3} value={descAr} onChange={(e) => setDescAr(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white resize-none" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white resize-none" />
                 </div>
               </div>
 
@@ -101,12 +101,12 @@ const CampaignCreator = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Target Amount ($) *</label>
                   <input type="number" placeholder="10000" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current Amount</label>
                   <input type="number" placeholder="0" value={currentAmount} onChange={(e) => setCurrentAmount(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white" />
                 </div>
               </div>
 
@@ -116,7 +116,7 @@ const CampaignCreator = () => {
                   <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                   <input type="file" multiple accept="image/*" onChange={(e) => setFiles(e.target.files)} className="hidden" id="campaign-images" />
                   <label htmlFor="campaign-images" className="cursor-pointer">
-                    <p className="text-sm text-gray-600 dark:text-gray-400"><span className="text-indigo-600 dark:text-indigo-400 font-medium">Click to upload</span> or drag and drop</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400"><span className="text-primary-600 dark:text-primary-400 font-medium">Click to upload</span> or drag and drop</p>
                     <p className="text-xs text-gray-500 mt-1">SVG, PNG, JPG or GIF (max. 5MB each)</p>
                   </label>
                 </div>
@@ -126,7 +126,7 @@ const CampaignCreator = () => {
             <div className="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 bg-gray-50 dark:bg-gray-800/50">
               <button onClick={() => setIsOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
               <button onClick={handleSubmit} disabled={isPending}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50">
+                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50">
                 {isPending ? "Creating..." : "Create Campaign"}
               </button>
             </div>

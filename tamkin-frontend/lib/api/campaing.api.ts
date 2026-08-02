@@ -10,6 +10,11 @@ export const campaignApi = {
     return res.data.data!;
   },
 
+  search: async (params?: { q?: string; status?: string; page?: number; limit?: number }) => {
+    const res = await axiosInstance.get<IResponse<TCampaign[]>>(`${baseUrl}/search`, { params });
+    return res.data.data!;
+  },
+
   getById: async (id: string) => {
     const res = await axiosInstance.get<IResponse<TCampaign>>(`${baseUrl}/${id}`);
     return res.data.data!;

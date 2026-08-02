@@ -2,5 +2,10 @@
   "welcome": "Welcome",
   "operation_successful": "Operation successful",
   "validation_failed": "Validation failed",
-  "invalid_csrf_token": "Invalid or missing CSRF token"
+  "invalid_csrf_token": "Invalid or missing CSRF token",
+  "user_not_found": "User not found",
+  "user_updated_successfully": "User updated successfully",
+  "user_banned_successfully": "User banned successfully",
+  "user_unbanned_successfully": "User unbanned successfully",
+  "user_role_updated_successfully": "User role updated successfully"
 }

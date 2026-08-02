@@ -616,6 +616,73 @@
               "response": []
             },
             {
+              "name": "Get All Payments (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments?status=&provider=&userUuid=&targetUuid=&search=&page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Optional. Search by merchant reference number.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "description": "Optional. Filter by status: PENDING, SUCCEEDED, FAILED. Leave empty to skip.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "provider",
+                      "value": "",
+                      "description": "Optional. Filter by provider: IYZICO. Leave empty to skip.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "userUuid",
+                      "value": "",
+                      "description": "Optional. Filter by user UUID.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "targetUuid",
+                      "value": "",
+                      "description": "Optional. Filter by target UUID (e.g., campaign UUID).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Optional. Page number. Default: 1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Optional. Results per page. Default: 10"
+                    }
+                  ]
+                },
+                "description": "Admin endpoint to retrieve all payments with pagination and optional filters. Requires authentication.\n\n**Query Parameters**\n`search` (string) – Optional, search by merchant reference number\n`status` (string, enum) – Optional, filter by payment status: PENDING, SUCCEEDED, FAILED\n`provider` (string, enum) – Optional, filter by payment provider: IYZICO\n`userUuid` (string) – Optional, filter by user UUID\n`targetUuid` (string) – Optional, filter by target UUID (e.g., campaign UUID)\n`page` (number) – Optional, page number. Default: 1\n`limit` (number) – Optional, results per page. Default: 10\n\n**Expected User Data**\nNone – Authenticated user is identified from the session cookie."
+              },
+              "response": []
+            },
+            {
               "name": "Get Payment By ID",
               "request": {
                 "method": "GET",
@@ -633,12 +700,498 @@
                 "description": "Retrieves the details and current status of a payment record by its ID.\n\n**Expected User Data**\n`id` (string) – Required route parameter, the payment ID or UUID"
               },
               "response": []
+            },
+            {
+              "name": "Get My Payments",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/my-payments?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "my-payments"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Optional. Page number. Default: 1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Optional. Results per page. Default: 10"
+                    }
+                  ]
+                },
+                "description": "Retrieves the paginated list of payments made by the authenticated user.\n\n**Query Parameters**\n`page` (number) – Optional, page number. Default: 1\n`limit` (number) – Optional, results per page. Default: 10\n\n**Expected User Data**\nNone – Authenticated user is identified from the session cookie."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Target Payments (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/payments/{{TARGET_TYPE}}/{{TARGET_UUID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "{{TARGET_TYPE}}",
+                    "{{TARGET_UUID}}"
+                  ]
+                },
+                "description": "Admin endpoint to retrieve all payments for a specific target type and UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`target` (string, enum) – Required route parameter, target type. Currently: `campaign`\n`id` (string) – Required route parameter, valid UUID of the target entity"
+              },
+              "response": []
+            },
+            {
+              "name": "Bank Transfer",
+              "item": [
+                {
+                  "name": "Get Bank Transfer Info",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/payments/bank-transfer/info",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "payments",
+                        "bank-transfer",
+                        "info"
+                      ]
+                    },
+                    "description": "Returns the active bank transfer account details for donors to make manual transfers. Public endpoint — no authentication required.\n\n**Expected User Data**\nNone"
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Submit Bank Transfer Receipt",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "fullName",
+                          "value": "John Doe",
+                          "description": "Required. Full name of the person who made the transfer",
+                          "type": "text"
+                        },
+                        {
+                          "key": "amount",
+                          "value": "100.00",
+                          "description": "Required. Amount transferred",
+                          "type": "text"
+                        },
+                        {
+                          "key": "notes",
+                          "value": "Donation for Gaza relief",
+                          "description": "Optional. Additional notes",
+                          "type": "text"
+                        },
+                        {
+                          "key": "image",
+                          "type": "file",
+                          "description": "Required. Picture of the transfer receipt (jpeg, png, gif, webp). Max size: 10MB.",
+                          "value": null
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/payments/bank-transfer/receipt",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "payments",
+                        "bank-transfer",
+                        "receipt"
+                      ]
+                    },
+                    "description": "Submits a bank transfer receipt for manual review. Requires login (cookie-based auth). Send as multipart/form-data.\n\n**Expected User Data**\n`fullName` (string) – Required, donor's full name\n`amount` (string) – Required, amount transferred\n`notes` (string) – Optional, additional notes\n`image` (file) – Required, receipt image (jpeg, png, gif, webp). Max size: 10 MB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update Bank Transfer Info (Admin)",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "x-csrf-token",
+                        "value": "{{CSRF_TOKEN}}",
+                        "description": "CSRF protection token",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "accountName",
+                          "value": "Tamkin Foundation",
+                          "description": "Optional. Account holder name",
+                          "type": "text"
+                        },
+                        {
+                          "key": "bankName",
+                          "value": "Ziraat Bankası",
+                          "description": "Optional. Bank name",
+                          "type": "text"
+                        },
+                        {
+                          "key": "branch",
+                          "value": "İstanbul Merkez",
+                          "description": "Optional. Bank branch",
+                          "type": "text"
+                        },
+                        {
+                          "key": "swiftCode",
+                          "value": "TCZBTR2A",
+                          "description": "Optional. SWIFT/BIC code",
+                          "type": "text"
+                        },
+                        {
+                          "key": "accountNo",
+                          "value": "1234-5678-9012",
+                          "description": "Optional. Account number",
+                          "type": "text"
+                        },
+                        {
+                          "key": "ibans",
+                          "value": "{\"TL\":\"TR12 3456 7890 1234 5678 9000\",\"USD\":\"US12 3456 7890 1234 5678 9000\",\"EUR\":\"DE12 3456 7890 1234 5678 9000\"}",
+                          "description": "Optional. IBANs per currency as a JSON string (e.g. {\"TL\":\"...\",\"USD\":\"...\"})",
+                          "type": "text"
+                        },
+                        {
+                          "key": "isActive",
+                          "value": "true",
+                          "description": "Optional. Whether this bank account is active",
+                          "type": "text"
+                        },
+                        {
+                          "key": "image",
+                          "type": "file",
+                          "description": "Optional. Bank account/QR image (jpeg, png, gif, webp). Max size: 10MB.",
+                          "value": null
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/payments/bank-transfer/info",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "payments",
+                        "bank-transfer",
+                        "info"
+                      ]
+                    },
+                    "description": "Admin endpoint to create or update bank transfer information, including an optional image upload. All fields are optional — only provided fields will be updated. Send as multipart/form-data. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`accountName` (string) – Optional, account holder name\n`bankName` (string) – Optional, bank name\n`branch` (string) – Optional, bank branch\n`swiftCode` (string) – Optional, SWIFT/BIC code\n`accountNo` (string) – Optional, account number\n`ibans` (string) – Optional, IBANs per currency code as a JSON string (e.g. {\"TL\":\"...\",\"USD\":\"...\"})\n`isActive` (string) – Optional, \"true\" or \"false\"\n`image` (file) – Optional, image file (jpeg, png, gif, webp). Max size: 10 MB."
+                  },
+                  "response": [
+                    {
+                      "name": "Bank transfer updated - success",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "x-csrf-token",
+                            "value": "{{CSRF_TOKEN}}",
+                            "type": "text"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{BASE_URL}}/payments/bank-transfer/info",
+                          "host": [
+                            "{{BASE_URL}}"
+                          ],
+                          "path": [
+                            "payments",
+                            "bank-transfer",
+                            "info"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"message\": \"payment.success.bank_transfer_updated\",\n  \"data\": {\n    \"uuid\": \"{{BANK_TRANSFER_UUID}}\",\n    \"accountName\": \"Tamkin Foundation\",\n    \"bankName\": \"Ziraat Bankası\",\n    \"branch\": \"İstanbul Merkez\",\n    \"swiftCode\": \"TCZBTR2A\",\n    \"accountNo\": \"1234-5678-9012\",\n    \"ibans\": {\n      \"TL\": \"TR12 3456 7890 1234 5678 9000\",\n      \"USD\": \"US12 3456 7890 1234 5678 9000\",\n      \"EUR\": \"DE12 3456 7890 1234 5678 9000\"\n    },\n    \"image\": \"https://minio.example.com/bank-transfer/qr.png\",\n    \"imageName\": \"bank-transfer-qr.png\",\n    \"isActive\": true,\n    \"createdAt\": \"2026-07-01T12:00:00.000Z\",\n    \"updatedAt\": \"2026-07-12T09:30:00.000Z\"\n  }\n}"
+                    }
+                  ]
+                }
+              ],
+              "description": "Bank transfer account details for manual donations. Includes a public info endpoint, a user receipt submission endpoint, and an admin update endpoint with optional image upload."
             }
           ],
           "description": "Endpoints for initiating donations, handling provider webhooks, and retrieving payment status records."
         }
       ],
       "description": "The Payment module handles donation payment flows using a pluggable provider architecture. Supports Stripe, Paymob, and Fawry. Includes idempotent webhook processing for real-time payment status updates."
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Update Profile",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Name\",\n    \"nationality\": \"Egyptian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/profile",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Updates the authenticated user's profile. Email cannot be changed. Requires login (cookie-based auth).\n\n**Expected User Data**\n`firstName` (string) – Optional\n`lastName` (string) – Optional\n`picture` (string) – Optional\n`nationality` (string) – Optional"
+              },
+              "response": []
+            }
+          ],
+          "description": "Endpoints for authenticated users to manage their own profile."
+        },
+        {
+          "name": "Admin - User Management",
+          "item": [
+            {
+              "name": "Get All Users (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/all?isBanned=false&page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "all"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Optional. Search by first name, last name, or email. Leave empty to skip search.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "description": "Optional. Filter by role: user, admin, super_admin. Leave empty to skip.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "isBanned",
+                      "value": "false",
+                      "description": "Optional. Filter by ban status: true or false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Admin endpoint to list all users with filtering, search, and pagination. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\nNone – Admin identifies self via session cookie.\n\n**Query Parameters**\n`search` (string) – Optional, search by first name, last name, or email\n`role` (string, enum) – Optional, filter by role: `user`, `admin`, `super_admin`\n`isBanned` (boolean) – Optional, filter by ban status\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`"
+              },
+              "response": []
+            },
+            {
+              "name": "Get User Details (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}"
+                  ]
+                },
+                "description": "Admin endpoint to retrieve a single user's full details by UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user"
+              },
+              "response": []
+            },
+            {
+              "name": "Ban/Unban User",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"isBanned\": true,\n    \"reason\": \"Violation of terms of service\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}/ban",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}",
+                    "ban"
+                  ]
+                },
+                "description": "Admin endpoint to ban or unban a user. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user\n`isBanned` (boolean) – Required, set to `true` to ban, `false` to unban\n`reason` (string) – Optional, reason for the ban (stored when banning)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User Role",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"role\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}/role",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}",
+                    "role"
+                  ]
+                },
+                "description": "Admin endpoint to update a user's role. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user\n`role` (string, enum) – Required, new role: `user`, `admin`, `super_admin`"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Name\",\n    \"email\": \"updated@example.com\",\n    \"role\": \"admin\",\n    \"nationality\": \"Egyptian\",\n    \"emailVerified\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/admin/{{USER_UUID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "admin",
+                    "{{USER_UUID}}"
+                  ]
+                },
+                "description": "Admin endpoint to update any user's data. All fields are optional. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`uuid` (string) – Required route parameter, valid UUID of the target user\n`firstName` (string) – Optional, updated first name\n`lastName` (string) – Optional, updated last name\n`email` (string) – Optional, updated email\n`password` (string) – Optional, new password\n`picture` (string) – Optional, profile picture URL\n`role` (string, enum) – Optional, user role\n`nationality` (string) – Optional, nationality\n`emailVerified` (boolean) – Optional, email verification status\n`provider` (string, enum) – Optional, authentication provider"
+              },
+              "response": []
+            }
+          ],
+          "description": "Admin-only endpoints for user management. All endpoints require ADMIN or SUPER_ADMIN authentication. Includes search, filter, ban/unban, and role management."
+        }
+      ],
+      "description": "The User module manages user accounts and profiles. Includes public user retrieval, user management, and admin-only features like banning users and role management."
     },
     {
       "name": "Reels",
@@ -887,6 +1440,217 @@
         }
       ],
       "description": "The Reels module manages short-form video content. Supports upload, browsing, search by title/content/uploader, and admin management operations."
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Posts Retrieval",
+          "item": [
+            {
+              "name": "Get All Posts",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/posts?page=1&limit=10",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Returns a paginated list of all published posts, newest first. Public endpoint.\n\n**Expected User Data**\n`page` (number) – Optional, page number. Default: `1`\n`limit` (number) – Optional, results per page. Default: `10`"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Post By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/{{POST_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "{{POST_ID}}"
+                  ]
+                },
+                "description": "Retrieves a single post by its UUID.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target post"
+              },
+              "response": []
+            }
+          ],
+          "description": "Read-only endpoints for listing and retrieving individual post records."
+        },
+        {
+          "name": "Posts Management",
+          "item": [
+            {
+              "name": "Create Post",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "description": "Required. Image file (jpeg, png, gif, webp). Max size: 10MB.",
+                      "value": null
+                    },
+                    {
+                      "key": "title_ar",
+                      "value": "عنوان المنشور",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title_en",
+                      "value": "Post Title",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title_tr",
+                      "value": "Gönderi Başlığı",
+                      "type": "text"
+                    },
+                    {
+                      "key": "title_ur",
+                      "value": "پوسٹ کا عنوان",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_ar",
+                      "value": "محتوى المنشور باللغة العربية",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_en",
+                      "value": "Post content in English",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_tr",
+                      "value": "Gönderi içeriği Türkçe",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content_ur",
+                      "value": "پوسٹ کا مواد اردو میں",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/upload",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "upload"
+                  ]
+                },
+                "description": "Creates a new post with a featured image and localized title and content fields. Requires ADMIN or SUPER_ADMIN role. Max image size: 10 MB.\n\n**Expected User Data**\n`file` (file) – Required, image file\n`title_ar`, `title_en`, `title_tr`, `title_ur` (string) – Required, titles in different languages\n`content_ar`, `content_en`, `content_tr`, `content_ur` (string) – Required, content in different languages"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Post",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "title_en",
+                      "value": "Post Title – Updated",
+                      "type": "text"
+                    },
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "description": "Optional image replacement.",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/update/{{POST_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "update",
+                    "{{POST_ID}}"
+                  ]
+                },
+                "description": "Updates an existing post. All fields are optional — only provided fields will be updated. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target post\n`file` (file) – Optional, replacement image file\n`title_ar`, `title_en`, `title_tr`, `title_ur` (string) – Optional, updated titles\n`content_ar`, `content_en`, `content_tr`, `content_ur` (string) – Optional, updated contents"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Post",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-csrf-token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "description": "CSRF protection token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/posts/{{POST_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "{{POST_ID}}"
+                  ]
+                },
+                "description": "Deletes a post by its UUID. Requires ADMIN or SUPER_ADMIN role.\n\n**Expected User Data**\n`id` (string) – Required route parameter, valid UUID of the target post"
+              },
+              "response": []
+            }
+          ],
+          "description": "Create, update, and delete post records. All endpoints require ADMIN or SUPER_ADMIN authentication."
+        }
+      ],
+      "description": "The Posts module manages blog-style articles with multilingual support for title and content, alongside image attachments."
     }
   ]
 }

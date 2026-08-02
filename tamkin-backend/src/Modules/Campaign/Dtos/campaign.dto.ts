@@ -14,21 +14,23 @@ import {
   LanguageCode,
 } from 'src/Common/Interfaces/Language/languages-config.interface';
 import { IsLanguageRecord } from 'src/Common/Decorators/Language/isLanguageRecord.decorator';
+import { AllowHtml } from 'src/Common/Decorators/AllowHtml/allow-html.decorator';
 
 export class CampaignDto {
   @IsDefined({
     message: `validation.campaign.title_required`,
   })
   @IsLanguageRecord({
-    message: `validation.campaign.title_invalid|{"prop": "${SUPPORTED_LANGUAGES.join(', ')}"}`,
+    message: `validation.campaign.title_invalid|${SUPPORTED_LANGUAGES.join(', ')}`,
   })
   title: Record<LanguageCode, string>;
 
+  @AllowHtml()
   @IsDefined({
     message: `validation.campaign.description_required`,
   })
   @IsLanguageRecord({
-    message: `validation.campaign.description_invalid|{"prop": "${SUPPORTED_LANGUAGES.join(', ')}"}`,
+    message: `validation.campaign.description_invalid|${SUPPORTED_LANGUAGES.join(', ')}`,
   })
   description: Record<LanguageCode[number], string>;
 

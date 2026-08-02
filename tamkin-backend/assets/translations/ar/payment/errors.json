@@ -1,12 +1,16 @@
 {
-  "campaign_not_found": "الحملة غير موجودة",
-  "campaign_target_reached": "هذه الحملة وصلت إلى المبلغ المستهدف ولا يمكنها قبول تبرعات جديدة.",
-  "campaign_would_exceed_target": "مبلغ التبرع سيتجاوز المبلغ المتبقي للحملة. يرجى التبرع بمبلغ أقل.",
-  "session_creation_failed": "تعذّر إنشاء جلسة الدفع. يرجى المحاولة مرة أخرى.",
-  "invalid_signature": "توقيع الطلب غير صالح. تم رفض الطلب.",
-  "payment_uuid_missing": "مرجع الدفع مفقود من بيانات الطلب.",
-  "payment_not_found": "سجل الدفع غير موجود.",
-  "provider_not_found": "مزود الدفع '{{provider}}' غير مدعوم.",
-  "invalid_provider": "تم تحديد مزود دفع غير صالح.",
-  "idempotency_key_required": "مفتاح عدم التكرار مطلوب"
+  "idempotency_key_required": "مفتاح التكرار مطلوب",
+  "session_creation_failed": "فشل في إنشاء جلسة الدفع",
+  "campaign_target_reached": "تم الوصول إلى هدف الحملة بالفعل",
+  "campaign_would_exceed_target": "ستتجاوز هذه الدفعة هدف الحملة",
+  "invalid_target_type": "نوع الهدف غير صالح",
+  "invalid_signature": "توقيع webhook غير صالح",
+  "payment_uuid_missing": "معرف الدفع مفقود في webhook",
+  "payment_not_found": "الدفعة غير موجودة",
+  "provider_not_found": "موفر الدفع غير موجود",
+  "bank_transfer_not_found": "معلومات التحويل البنكي غير موجودة",
+  "invalid_image_type": "نوع الصورة غير صالح. الصيغ المقبولة: jpeg, png, gif, webp",
+  "invalid_ibans_format": "يجب أن تكون الأيبان بصيغة JSON صالحة",
+  "invalid_amount": "قيمة المبلغ غير صالحة",
+  "image_required": "ملف الصورة مطلوب"
 }

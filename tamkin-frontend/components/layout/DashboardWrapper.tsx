@@ -182,7 +182,7 @@ export default function DashboardWrapper({
   if (authLoading || !user || !isAdmin) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-indigo-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-primary-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -208,7 +208,7 @@ export default function DashboardWrapper({
       >
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b bg-main border-neutral-100 dark:border-neutral-800 shrink-0 gap-2.5">
-          <div className="w-7 h-7 rounded-xl bg-indigo-500 flex items-center justify-center shadow-sm">
+          <div className="w-7 h-7 rounded-xl bg-primary-500 flex items-center justify-center shadow-sm">
             <div className="w-3 h-3 rounded-sm bg-white/90" />
           </div>
           <span className="text-sm font-semibold text-neutral-800 dark:text-neutral-100 tracking-tight">
@@ -249,8 +249,8 @@ export default function DashboardWrapper({
                     `}
                   >
                     {item.icon && (
-                      <span className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center shrink-0 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors duration-150">
-                        <item.icon className="w-4 h-4 text-neutral-500 group-hover:text-indigo-500 transition-colors duration-150" />
+                      <span className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center shrink-0 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors duration-150">
+                        <item.icon className="w-4 h-4 text-neutral-500 group-hover:text-primary-500 transition-colors duration-150" />
                       </span>
                     )}
                     {!isCollapsed && (
@@ -285,7 +285,7 @@ export default function DashboardWrapper({
                               ${isArabic ? "flex-row-reverse text-right" : "flex-row text-left"}
                               ${
                                 isChildActive
-                                  ? "bg-indigo-10 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+                                  ? "bg-primary-10 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
                                   : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
                               }
                             `}
@@ -296,7 +296,7 @@ export default function DashboardWrapper({
                             {!isCollapsed && <span>{child.label}</span>}
                             {isChildActive && (
                               <div
-                                className={`absolute w-1 h-4 bg-indigo-500 rounded-full top-1/2 -translate-y-1/2 ${isArabic ? "left-2" : "right-2"}`}
+                                className={`absolute w-1 h-4 bg-primary-500 rounded-full top-1/2 -translate-y-1/2 ${isArabic ? "left-2" : "right-2"}`}
                               />
                             )}
                           </Link>
@@ -315,7 +315,7 @@ export default function DashboardWrapper({
                     ${isArabic ? "flex-row-reverse" : "flex-row"}
                     ${
                       pathname === item.href
-                        ? "bg-indigo-10 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+                        ? "bg-primary-10 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
                         : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
                     }
                   `}
@@ -334,8 +334,8 @@ export default function DashboardWrapper({
                         className={`w-4 h-4 transition-colors duration-150 
                         ${
                           pathname === item.href
-                            ? "text-indigo-600"
-                            : "text-neutral-500 group-hover:text-indigo-500"
+                            ? "text-primary-600"
+                            : "text-neutral-500 group-hover:text-primary-500"
                         }`}
                       />
                     </span>
@@ -349,7 +349,7 @@ export default function DashboardWrapper({
                   )}
                   {pathname === item.href && (
                     <div
-                      className={`absolute w-1 h-5 bg-indigo-500 rounded-full top-1/2 -translate-y-1/2 ${isArabic ? "left-2" : "right-2"}`}
+                      className={`absolute w-1 h-5 bg-primary-500 rounded-full top-1/2 -translate-y-1/2 ${isArabic ? "left-2" : "right-2"}`}
                     />
                   )}
                 </Link>
@@ -372,15 +372,15 @@ export default function DashboardWrapper({
         <div className="p-3 border-t border-neutral-100 dark:border-neutral-800 shrink-0">
           <div className="relative rounded-2xl bg-neutral-50 dark:bg-neutral-800/60 p-3.5 overflow-hidden">
             {/* Bubble decorations */}
-            <div className="absolute -top-5 -right-5 w-16 h-16 rounded-full border border-indigo-400/10 pointer-events-none" />
-            <div className="absolute bottom-2 right-3 w-6 h-6 rounded-full bg-indigo-400/6 border border-indigo-400/12 pointer-events-none" />
+            <div className="absolute -top-5 -right-5 w-16 h-16 rounded-full border border-primary-400/10 pointer-events-none" />
+            <div className="absolute bottom-2 right-3 w-6 h-6 rounded-full bg-primary-400/6 border border-primary-400/12 pointer-events-none" />
 
             <div
               className={`flex items-center gap-3 relative ${isArabic ? "flex-row-reverse" : "flex-row"}`}
             >
               {isCollapsed ? (
                 <div className="flex justify-center">
-                  <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-9 h-9 rounded-xl bg-linear-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-xs font-bold">
                     {initials}
                   </div>
                 </div>
@@ -447,7 +447,7 @@ export default function DashboardWrapper({
                   rounded-xl text-sm
                   text-neutral-700 dark:text-neutral-200
                   placeholder:text-neutral-400
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400
+                  focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400
                   transition-all duration-150
                 "
               />
@@ -461,7 +461,7 @@ export default function DashboardWrapper({
             {/* Bell */}
             <button className="relative w-9 h-9 rounded-xl flex items-center justify-center text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-150">
               <Bell className="w-4 h-4" />
-              <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary-500" />
             </button>
 
             {/* Settings */}
@@ -505,7 +505,7 @@ export default function DashboardWrapper({
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center gap-2.5 h-9 pl-2 pr-3 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 transition-all duration-150"
               >
-                <div className="w-6 h-6 rounded-lg bg-linear-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-linear-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
                   {initials}
                 </div>
                       <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200 hidden sm:block">
