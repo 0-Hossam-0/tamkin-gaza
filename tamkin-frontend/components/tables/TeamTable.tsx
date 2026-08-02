@@ -79,7 +79,7 @@ const TeamTable = () => {
 
   const getTypeBadge = (type: TTeamMember["type"]) => {
     return type === "Employee" ? (
-      <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400 rounded">Employee</span>
+      <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400 rounded">Employee</span>
     ) : (
       <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 rounded">Member</span>
     );
@@ -95,7 +95,7 @@ const TeamTable = () => {
             placeholder="Search team members..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all dark:text-gray-200"
+            className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none transition-all dark:text-gray-200"
           />
         </div>
         <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full sm:w-auto">
@@ -120,7 +120,7 @@ const TeamTable = () => {
               <tr key={member.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 flex items-center justify-center font-bold text-sm">
                       {member.name.charAt(0)}
                     </div>
                     <div>
@@ -158,7 +158,7 @@ const TeamTable = () => {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center justify-end gap-2">
-                    <button className="p-1.5 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-500/10">
+                    <button className="p-1.5 text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-md hover:bg-primary-50 dark:hover:bg-primary-500/10">
                       <Edit className="w-4 h-4" />
                     </button>
                     <button className="p-1.5 text-gray-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors rounded-md hover:bg-rose-50 dark:hover:bg-rose-500/10">

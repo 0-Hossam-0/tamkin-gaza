@@ -1,32 +1,32 @@
 import {
+  Body,
   Controller,
-  Post,
-  UseInterceptors,
-  UploadedFile,
   Delete,
-  Param,
   Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
   Put,
   Query,
-  Body,
   Req,
-  ParseUUIDPipe,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ReelsService } from './reels.service';
-import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
-import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
-import { IRequest } from 'src/Common/Types/request.types';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
+
+import { Auth } from '../../Common/Decorators/Auth/auth.decorator';
+import { UserRoleEnum } from '../../Common/Enums/User/user.enum';
+import { ResponseService } from '../../Common/Services/Response/response.service';
+import { IRequest } from '../../Common/Types/request.types';
 import { PaginationDto, SearchReelsDto, UpdateReelDto, UploadReelDto } from './Dto/reels.dto';
 
 @Controller('reels')
 export class ReelsController {
-
   constructor(
     private readonly reelsService: ReelsService,
     private readonly responseService: ResponseService,
-  ) { }
+  ) {}
 
   @Auth([UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN])
   @Post('upload')
@@ -46,14 +46,9 @@ export class ReelsController {
     @UploadedFile() file: Express.Multer.File,
     @Body() dto: UploadReelDto,
   ) {
-
     const { password: _password, provider, nationality, ...user } = req.user!;
 
-    const reel = await this.reelsService.uploadReel(
-      file,
-      user,
-      dto
-    );
+    const reel = await this.reelsService.uploadReel(file, user, dto);
     return this.responseService.success({
       message: 'reels.success.uploaded_successfully',
       data: reel,
@@ -70,7 +65,10 @@ export class ReelsController {
   }
 
   @Get('user/:userId')
-  async getReelsByUserId(@Param('userId', ParseUUIDPipe) userId: string, @Query() query: PaginationDto) {
+  async getReelsByUserId(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Query() query: PaginationDto,
+  ) {
     const data = await this.reelsService.getReelsByUserId(userId, query);
     return this.responseService.success({
       message: 'reels.success.fetched_successfully',
@@ -98,14 +96,17 @@ export class ReelsController {
 
   @Auth([UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN])
   @Put('update/:id')
-  async updateReel(@Req() req: IRequest, @Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateReelDto) {
+  async updateReel(
+    @Req() req: IRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateReelDto,
+  ) {
     const data = await this.reelsService.updateReel(id, dto, req.user!);
     return this.responseService.success({
       message: 'reels.success.updated_successfully',
       data,
     });
   }
-
 
   @Auth([UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN])
   @Delete(':id')
@@ -115,5 +116,4 @@ export class ReelsController {
       message: 'reels.success.deleted_successfully',
     });
   }
-
 }

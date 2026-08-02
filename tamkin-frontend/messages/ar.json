@@ -1,6 +1,68 @@
 {
   "homePage": {
-    "title": "مرحبا"
+    "title": "مرحبا",
+    "activeCampaigns": "الحملات النشطة",
+    "subtitle": "ادعم جهودنا الإنسانية المستمرة في غزة",
+    "searchPlaceholder": "ابحث عن حملات...",
+    "allStatuses": "جميع الحالات",
+    "noCampaigns": "لا توجد حملات",
+    "pageOf": "الصفحة {page} من {total}",
+    "search": "بحث",
+    "active": "نشط",
+    "completed": "مكتمل",
+    "draft": "مسودة",
+    "canceled": "ملغي",
+    "clearFilters": "مسح التصفية",
+    "viewAll": "عرض الكل"
+  },
+  "campaignCard": {
+    "active": "نشط",
+    "paused": "موقوف",
+    "completed": "مكتمل",
+    "fundingProgress": "تقدم التمويل",
+    "left": "متبقي",
+    "raised": "تم جمعه",
+    "raisedLabel": "تم جمعه",
+    "goalLabel": "الهدف"
+  },
+  "campaignDetail": {
+    "notFound": "الحملة غير موجودة",
+    "notFoundDesc": "هذه الحملة غير موجودة أو تمت إزالتها.",
+    "backToCampaigns": "العودة إلى الحملات",
+    "home": "الرئيسية",
+    "campaigns": "الحملات",
+    "donationAmount": "مبلغ التبرع (دولار)",
+    "paymentProvider": "مزود الدفع",
+    "donate": "تبرع",
+    "paymentInitiated": "تم بدء الدفع! تحقق من التبويب الجديد لإكماله.",
+    "paymentFailed": "فشل الدفع. حاول مرة أخرى.",
+    "secureTransaction": "معاملة آمنة",
+    "of": "من"
+  },
+  "reels": {
+    "heading": "ريلز",
+    "subtitle": "قصص قصيرة",
+    "seeAll": "عرض الكل"
+  },
+  "emailVerification": {
+    "title": "تحقق من بريدك الإلكتروني",
+    "sendCode": "إرسال رمز التحقق",
+    "enterCode": "أدخل الرمز المكون من 6 أرقام",
+    "verify": "تحقق",
+    "resend": "إعادة إرسال",
+    "codeSent": "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+    "codeFailed": "فشل إرسال رمز التحقق",
+    "verifiedSuccess": "تم التحقق من البريد الإلكتروني بنجاح!",
+    "invalidCode": "رمز غير صالح أو منتهي الصلاحية"
+  },
+  "campaigns": {
+    "title": "جميع الحملات",
+    "subtitle": "تصفح جميع الحملات المتاحة",
+    "searchPlaceholder": "ابحث عن حملات...",
+    "allCategories": "الكل",
+    "noCampaigns": "لا توجد حملات تطابق مرشحاتك",
+    "clearFilters": "مسح جميع المرشحات",
+    "search": "بحث"
   },
   "navbar": {
     "campaigns": "الحملات",
@@ -12,7 +74,36 @@
     "terms": "الشروط",
     "about": "من نحن",
     "login": "تسجيل الدخول",
-    "register": "تسجيل حساب جديد"
+    "register": "تسجيل حساب جديد",
+    "dashboard": "لوحة التحكم",
+    "profile": "الملف الشخصي",
+    "signOut": "تسجيل الخروج"
+  },
+  "auth": {
+    "welcomeBack": "مرحباً بعودتك",
+    "signInToAccount": "سجل الدخول إلى حسابك في تمكين",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "test@gmail.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جارٍ تسجيل الدخول...",
+    "orContinueWith": "أو تابع بواسطة",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "إنشاء حساب",
+    "createAccount": "إنشاء حساب",
+    "joinTamkin": "انضم إلى تمكين وابدأ في صنع الفرق",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "John Doe",
+    "nationality": "الجنسية",
+    "confirm": "تأكيد",
+    "creatingAccount": "جارٍ إنشاء الحساب...",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "loggedIn": "تم تسجيل الدخول بنجاح!",
+    "failedLogin": "فشل تسجيل الدخول",
+    "accountCreated": "تم إنشاء الحساب بنجاح!",
+    "failedRegister": "فشل إنشاء الحساب",
+    "passwordsNoMatch": "كلمات المرور غير متطابقة"
   },
   "errors": {
     "forbidden": {
@@ -49,14 +140,17 @@
     "changes": "قد يتم تعديل الشروط في أي وقت."
   },
   "footer": {
-    "description": "منصة SaaS حديثة مبنية باستخدام Next.js",
-    "company": "الشركة",
+    "description": "منصة إنسانية تساعد في جمع التبرعات والدعم لجهود الإغاثة في غزة والمساعدات الطبية والاحتياجات الإنسانية العاجلة.",
+    "company": "المؤسسة",
+    "campaigns": "الحملات",
+    "stories": "القصص",
+    "support": "الدعم",
     "legal": "قانوني",
     "about": "من نحن",
     "contact": "تواصل معنا",
     "privacy": "الخصوصية",
     "terms": "الشروط",
-    "rights": "جميع الحقوق محفوظة"
+    "rights": "جميع الحقوق محفوظة."
   },
   "dashboard": {
     "dashboard": "لوحة التحكم",
@@ -71,5 +165,53 @@
     "logout": "تسجيل الخروج",
     "search": "بحث...",
     "profile": "الملف الشخصي"
+  },
+  "emailVerification": {
+    "title": "تحقق من بريدك الإلكتروني",
+    "sendCode": "إرسال رمز التحقق",
+    "enterCode": "أدخل الرمز المكون من 6 أرقام",
+    "verify": "تحقق",
+    "resend": "إعادة إرسال",
+    "codeSent": "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+    "codeFailed": "فشل إرسال رمز التحقق",
+    "verifiedSuccess": "تم التحقق من البريد الإلكتروني بنجاح!",
+    "invalidCode": "رمز غير صالح أو منتهي الصلاحية"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "notSignedIn": "غير مسجل الدخول",
+    "signInToView": "سجل الدخول لعرض ملفك الشخصي.",
+    "signIn": "تسجيل الدخول",
+    "back": "رجوع",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "nationality": "الجنسية",
+    "memberSince": "عضو منذ",
+    "notVerified": "البريد الإلكتروني غير موثق"
+  },
+  "mediaSection": {
+    "heading": "وسائط وتحديثات",
+    "subtitle": "آخر المستجدات من الميدان",
+    "showMedia": "عرض الوسائط",
+    "scrollLeft": "التمرير لليسار",
+    "scrollRight": "التمرير لليمين"
+  },
+  "contactSection": {
+    "heading": "تواصل معنا",
+    "subtitle": "يسعدنا سماع رأيك",
+    "description": "سواء كان لديك استفسار عن حملاتنا، أو ترغب في التطوع، أو فقط تريد إلقاء التحية — نحن هنا ونقرأ كل رسالة.",
+    "nameLabel": "الاسم",
+    "namePlaceholder": "أدخل اسمك",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "you@example.com",
+    "subjectLabel": "الموضوع",
+    "subjectPlaceholder": "عن ماذا تريد التحدث؟",
+    "messageLabel": "الرسالة",
+    "messagePlaceholder": "أخبرنا المزيد...",
+    "submit": "إرسال الرسالة",
+    "sending": "جارٍ الإرسال...",
+    "success": "تم إرسال الرسالة بنجاح! سنتواصل معك قريبًا.",
+    "error": "حدث خطأ ما. حاول مرة أخرى."
   }
 }

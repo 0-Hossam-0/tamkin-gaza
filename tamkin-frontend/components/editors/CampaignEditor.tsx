@@ -99,7 +99,7 @@ const CampaignEditor = ({ campaign, open, onClose }: CampaignEditorProps) => {
                   placeholder="Enter title"
                   value={title[key]}
                   onChange={(e) => setTitle({ ...title, [key]: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
                 />
               </div>
               <div>
@@ -111,7 +111,7 @@ const CampaignEditor = ({ campaign, open, onClose }: CampaignEditorProps) => {
                   placeholder="Enter description"
                   value={description[key]}
                   onChange={(e) => setDescription({ ...description, [key]: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white resize-none"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white resize-none"
                 />
               </div>
             </div>
@@ -127,7 +127,7 @@ const CampaignEditor = ({ campaign, open, onClose }: CampaignEditorProps) => {
                 placeholder="50000"
                 value={targetAmount}
                 onChange={(e) => setTargetAmount(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
               />
             </div>
             <div>
@@ -139,7 +139,7 @@ const CampaignEditor = ({ campaign, open, onClose }: CampaignEditorProps) => {
                 placeholder="0"
                 value={currentAmount}
                 onChange={(e) => setCurrentAmount(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-gray-900 dark:text-white"
               />
             </div>
           </div>
@@ -151,7 +151,7 @@ const CampaignEditor = ({ campaign, open, onClose }: CampaignEditorProps) => {
               <input type="file" multiple accept="image/*" onChange={(e) => setFiles(e.target.files)} className="hidden" id="edit-campaign-images" />
               <label htmlFor="edit-campaign-images" className="cursor-pointer">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <span className="text-indigo-600 dark:text-indigo-400 font-medium">Click to upload</span> or drag and drop
+                  <span className="text-primary-600 dark:text-primary-400 font-medium">Click to upload</span> or drag and drop
                 </p>
                 <p className="text-xs text-gray-500 mt-1">SVG, PNG, JPG or GIF</p>
               </label>
@@ -165,7 +165,7 @@ const CampaignEditor = ({ campaign, open, onClose }: CampaignEditorProps) => {
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={isPending}
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50">
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50">
             {isPending ? "Updating..." : "Update Campaign"}
           </button>
         </div>

@@ -35,23 +35,23 @@ export const LanguageSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors outline-none group">
-        <Languages className="w-5 h-5 text-gray-500 group-hover:text-indigo-600" />
+        <Languages className="w-5 h-5 text-gray-500 group-hover:text-primary-600" />
         <span className="text-sm font-medium uppercase">{currentLocale}</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
+      <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 z-[70]">
         {locales.map((locale) => (
           <DropdownMenuItem
             key={locale}
             onClick={() => handleLocaleChange(locale)}
             className={`cursor-pointer rounded-lg mb-1 last:mb-0 ${
               currentLocale === locale
-                ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400"
+                ? "bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400"
                 : ""
             }`}
           >
             <span className="w-full flex justify-between items-center">
               {languageNames[locale]}
-              {currentLocale === locale && <span className="w-2 h-2 rounded-full bg-indigo-600" />}
+              {currentLocale === locale && <span className="w-2 h-2 rounded-full bg-primary-600" />}
             </span>
           </DropdownMenuItem>
         ))}
@@ -81,8 +81,8 @@ export const LanguageButtons = () => {
           onClick={() => handleLocaleChange(locale)}
           className={`flex-1 min-w-[60px] px-3 py-2 rounded-lg text-xs font-bold transition-all border ${
             currentLocale === locale
-              ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200 dark:shadow-none"
-              : "bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-100 dark:border-gray-800 hover:border-indigo-300"
+              ? "bg-primary-600 text-white border-primary-600 shadow-md shadow-primary-200 dark:shadow-none"
+              : "bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-100 dark:border-gray-800 hover:border-primary-300"
           }`}
         >
           {languageNames[locale]}

@@ -1,6 +1,52 @@
 {
   "homePage": {
-    "title": "Merhaba"
+    "title": "Merhaba",
+    "activeCampaigns": "Aktif Kampanyalar",
+    "subtitle": "Gazze'deki insani yardım çabalarımızı destekleyin",
+    "searchPlaceholder": "Kampanya ara...",
+    "allStatuses": "Tüm Durumlar",
+    "noCampaigns": "Kampanya bulunamadı",
+    "pageOf": "Sayfa {page} / {total}",
+    "search": "Ara",
+    "active": "Aktif",
+    "completed": "Tamamlandı",
+    "draft": "Taslak",
+    "canceled": "İptal Edildi",
+    "clearFilters": "Filtreleri Temizle",
+    "viewAll": "Tümünü Gör"
+  },
+  "campaignCard": {
+    "active": "Aktif",
+    "paused": "Duraklatıldı",
+    "completed": "Tamamlandı",
+    "fundingProgress": "Fon İlerlemesi",
+    "left": "kaldı",
+    "raised": "toplandı",
+    "raisedLabel": "Toplanan",
+    "goalLabel": "Hedef"
+  },
+  "campaignDetail": {
+    "notFound": "Kampanya Bulunamadı",
+    "notFoundDesc": "Bu kampanya mevcut değil veya kaldırılmış.",
+    "backToCampaigns": "Kampanyalara Dön",
+    "home": "Ana Sayfa",
+    "campaigns": "Kampanyalar",
+    "donationAmount": "Bağış Miktarı (USD)",
+    "paymentProvider": "Ödeme Sağlayıcı",
+    "donate": "Bağış Yap",
+    "paymentInitiated": "Ödeme başlatıldı! Tamamlamak için yeni sekmeyi kontrol edin.",
+    "paymentFailed": "Ödeme başarısız. Tekrar deneyin.",
+    "secureTransaction": "Güvenli İşlem",
+    "of": "/"
+  },
+  "campaigns": {
+    "title": "Tüm Kampanyalar",
+    "subtitle": "Mevcut tüm kampanyalara göz atın",
+    "searchPlaceholder": "Kampanya ara...",
+    "allCategories": "Tümü",
+    "noCampaigns": "Filtrelerinizle eşleşen kampanya bulunamadı",
+    "clearFilters": "Tüm filtreleri temizle",
+    "search": "Ara"
   },
   "navbar": {
     "campaigns": "Kampanyalar",
@@ -12,7 +58,36 @@
     "terms": "Şartlar",
     "about": "Hakkımızda",
     "login": "Giriş Yap",
-    "register": "Kayıt Ol"
+    "register": "Kayıt Ol",
+    "dashboard": "Kontrol Paneli",
+    "profile": "Profil",
+    "signOut": "Çıkış Yap"
+  },
+  "auth": {
+    "welcomeBack": "Tekrar hoş geldiniz",
+    "signInToAccount": "Tamkin hesabınıza giriş yapın",
+    "email": "E-posta",
+    "emailPlaceholder": "test@gmail.com",
+    "password": "Şifre",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Giriş Yap",
+    "signingIn": "Giriş yapılıyor...",
+    "orContinueWith": "veya şununla devam et",
+    "noAccount": "Hesabınız yok mu?",
+    "signUp": "Kayıt Ol",
+    "createAccount": "Hesap Oluştur",
+    "joinTamkin": "Tamkin'e katılın ve fark yaratmaya başlayın",
+    "fullName": "Ad Soyad",
+    "fullNamePlaceholder": "John Doe",
+    "nationality": "Uyruk",
+    "confirm": "Onayla",
+    "creatingAccount": "Hesap oluşturuluyor...",
+    "alreadyHaveAccount": "Zaten hesabınız var mı?",
+    "loggedIn": "Başarıyla giriş yapıldı!",
+    "failedLogin": "Giriş yapılamadı",
+    "accountCreated": "Hesap başarıyla oluşturuldu!",
+    "failedRegister": "Kayıt başarısız",
+    "passwordsNoMatch": "Şifreler eşleşmiyor"
   },
   "errors": {
     "forbidden": {
@@ -49,14 +124,17 @@
     "changes": "Şartlar her zaman değiştirilebilir."
   },
   "footer": {
-    "description": "Next.js ile oluşturulmuş modern SaaS platformu",
-    "company": "Şirket",
+    "description": "Gazze'deki yardım çabaları, tıbbi yardım ve acil insani ihtiyaçlar için bağış toplamaya ve destek sağlamaya yardımcı olan bir insani yardım platformu.",
+    "company": "Kuruluş",
+    "campaigns": "Kampanyalar",
+    "stories": "Hikayeler",
+    "support": "Destek",
     "legal": "Yasal",
     "about": "Hakkımızda",
     "contact": "İletişim",
     "privacy": "Gizlilik",
     "terms": "Şartlar",
-    "rights": "Tüm hakları saklıdır"
+    "rights": "Tüm hakları saklıdır."
   },
   "dashboard": {
     "dashboard": "Kontrol Paneli",
@@ -71,5 +149,58 @@
     "logout": "Çıkış Yap",
     "search": "Ara...",
     "profile": "Profil"
+  },
+  "reels": {
+    "heading": "Reels",
+    "subtitle": "Kısa Hikayeler",
+    "seeAll": "Tümünü Gör"
+  },
+  "emailVerification": {
+    "title": "E-postanı doğrula",
+    "sendCode": "Doğrulama kodu gönder",
+    "enterCode": "6 haneli kodu girin",
+    "verify": "Doğrula",
+    "resend": "Yeniden gönder",
+    "codeSent": "Doğrulama kodu e-postanıza gönderildi",
+    "codeFailed": "Doğrulama kodu gönderilemedi",
+    "verifiedSuccess": "E-posta başarıyla doğrulandı!",
+    "invalidCode": "Geçersiz veya süresi dolmuş kod"
+  },
+  "profile": {
+    "title": "Profil",
+    "notSignedIn": "Giriş yapılmadı",
+    "signInToView": "Profilinizi görüntülemek için giriş yapın.",
+    "signIn": "Giriş Yap",
+    "back": "Geri",
+    "name": "Ad",
+    "email": "E-posta",
+    "role": "Rol",
+    "nationality": "Uyruk",
+    "memberSince": "Üyelik tarihi",
+    "notVerified": "E-posta doğrulanmadı"
+  },
+  "mediaSection": {
+    "heading": "Medya ve Güncellemeler",
+    "subtitle": "Sahadan Son Haberler",
+    "showMedia": "Medyayı Göster",
+    "scrollLeft": "Sola kaydır",
+    "scrollRight": "Sağa kaydır"
+  },
+  "contactSection": {
+    "heading": "İletişime Geçin",
+    "subtitle": "Sizden haber almak isteriz",
+    "description": "Kampanyalarımız hakkında bir sorunuz varsa, gönüllü olmak istiyorsanız veya sadece merhaba demek istiyorsanız — buradayız ve her mesajı okuyoruz.",
+    "nameLabel": "Adınız",
+    "namePlaceholder": "Adınızı girin",
+    "emailLabel": "E-posta Adresi",
+    "emailPlaceholder": "you@example.com",
+    "subjectLabel": "Konu",
+    "subjectPlaceholder": "Bu ne hakkında?",
+    "messageLabel": "Mesaj",
+    "messagePlaceholder": "Bize daha fazla bilgi verin...",
+    "submit": "Mesaj Gönder",
+    "sending": "Gönderiliyor...",
+    "success": "Mesaj başarıyla gönderildi! En kısa sürede size döneceğiz.",
+    "error": "Bir şey ters gitti. Lütfen tekrar deneyin."
   }
 }

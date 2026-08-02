@@ -2,14 +2,14 @@ import {
   Body,
   Controller,
   Get,
-  Param,
-  Post,
   Put,
   Query,
-  Req,
-  RawBodyRequest,
   HttpCode,
   HttpStatus,
+  Param,
+  Post,
+  RawBodyRequest,
+  Req,
   UseGuards,
   UseInterceptors,
   UploadedFile,
@@ -17,20 +17,21 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Throttle, ThrottlerGuard, SkipThrottle } from '@nestjs/throttler';
-import { PaymentService } from './payment.service';
 import { BankTransferService } from './bank-transfer.service';
-import { CreatePaymentDto } from './Dtos/create-payment.dto';
 import { AdminFilterPaymentsDto } from './Dtos/admin-filter-payments.dto';
 import { UpdateBankTransferDto } from './Dtos/update-bank-transfer.dto';
 import { CreateBankTransferReceiptDto } from './Dtos/create-bank-transfer-receipt.dto';
 import { PaginationDto } from 'src/Modules/User/Dtos/pagination.dto';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
-import type { IRequest } from 'src/Common/Types/request.types';
-import { AuthenticationGuard } from 'src/Common/Guards/Authentication/authentication.guard';
 import { UserRoleEnum } from 'src/Common/Enums/User/user.enum';
 import { Auth } from 'src/Common/Decorators/Auth/auth.decorator';
 import { PaymentTargetTypeEnum } from './Enums/payment-target-type.enum';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { ResponseService } from 'src/Common/Services/Response/response.service';
+import type { IRequest } from 'src/Common/Types/request.types';
+import { AuthenticationGuard } from '../../Common/Guards/Authentication/authentication.guard';
+import { CreatePaymentDto } from './Dtos/create-payment.dto';
+import { PaymentService } from './payment.service';
+import { Multer } from 'multer';
 
 @UseGuards(ThrottlerGuard)
 @Controller('payments')
@@ -189,7 +190,10 @@ export class PaymentController {
       limits: { fileSize: 10 * 1024 * 1024 },
     }),
   )
-  async updateBankTransfer(@Body() dto: UpdateBankTransferDto, @UploadedFile() image?: Express.Multer.File) {
+  async updateBankTransfer(
+    @Body() dto: UpdateBankTransferDto,
+    @UploadedFile() image?: Express.Multer.File,
+  ) {
     const data = await this.bankTransferService.upsertBankTransfer(dto, image);
     return this.responseService.success({ message: 'payment.success.bank_transfer_updated', data });
   }

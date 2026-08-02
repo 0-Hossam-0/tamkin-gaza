@@ -19,7 +19,10 @@ interface PaymentSession {
 
 export const paymentApi = {
   create: async (dto: CreatePaymentDto) => {
-    const res = await axiosInstance.post<IResponse<PaymentSession>>("/payments/create", dto);
+    const idempotencyKey = crypto.randomUUID();
+    const res = await axiosInstance.post<IResponse<PaymentSession>>("/payments/create", dto, {
+      headers: { "x-idempotency-key": idempotencyKey },
+    });
     return res.data.data!;
   },
 

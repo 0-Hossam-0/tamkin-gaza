@@ -26,7 +26,7 @@ const ReelShowPage = () => {
             <p className="text-sm text-gray-500">Reel Details</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-sm">
+        <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors shadow-sm">
           <Play className="w-4 h-4" /> <span>Watch Reel</span>
         </button>
       </div>
@@ -40,7 +40,7 @@ const ReelShowPage = () => {
               <div className="text-gray-500 text-sm">No video available</div>
             )}
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/80 to-transparent">
-              <span className="px-2 py-1 text-xs font-medium bg-indigo-600 text-white rounded">{reel.fileName}</span>
+              <span className="px-2 py-1 text-xs font-medium bg-primary-600 text-white rounded">{reel.fileName}</span>
             </div>
           </div>
         </div>

@@ -26,7 +26,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
 }) => {
   return (
     <Link href={`/blogs/${id}`} className="group block">
-      <article className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 transition-all hover:border-indigo-200">
+      <article className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 transition-all hover:border-primary-200">
         <div className="relative h-56 w-full overflow-hidden bg-gray-100">
           <Image
             src={image}
@@ -35,7 +35,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute top-4 left-4">
-            <span className="px-3 py-1 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-widest rounded shadow-sm">
+            <span className="px-3 py-1 bg-primary-600 text-white text-[9px] font-black uppercase tracking-widest rounded shadow-sm">
               {category}
             </span>
           </div>
@@ -53,7 +53,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
             </div>
           </div>
 
-          <h2 className="text-xl font-black text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+          <h2 className="text-xl font-black text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
             {title}
           </h2>
 
@@ -61,7 +61,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
             {excerpt}
           </p>
 
-          <div className="flex items-center gap-2 text-[10px] font-black text-indigo-600 uppercase tracking-widest group-hover:gap-3 transition-all">
+          <div className="flex items-center gap-2 text-[10px] font-black text-primary-600 uppercase tracking-widest group-hover:gap-3 transition-all">
             Read Story
             <ArrowRight className="w-3 h-3" />
           </div>

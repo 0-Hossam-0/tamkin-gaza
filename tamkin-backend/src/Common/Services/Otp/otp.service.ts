@@ -1,12 +1,12 @@
-import crypto from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import crypto from 'crypto';
+import { OTPStatusEnum, OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
 import { ResponseService } from 'src/Common/Services/Response/response.service';
 import { HashingService } from 'src/Common/Services/Security/Hash/hash.service';
-import { EmailService } from '../Email/email.service';
-import { OTPStatusEnum, OTPTypeEnum } from 'src/Common/Enums/Otp/otp.enum';
 import { OtpModel } from 'src/DataBase/Models/otp.model';
+import { Repository } from 'typeorm';
+import { EmailService } from '../Email/email.service';
 import { TranslationService } from '../Translation/translation.service';
 
 type TFunction = (key: string) => string;

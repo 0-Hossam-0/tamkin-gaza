@@ -1,74 +1,119 @@
 "use client";
 
-import React, { useRef } from "react";
-import { Eye } from "lucide-react";
-import { useReels } from "@/hooks/useReels";
+import { useState } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface Reel {
-  id: string;
-  thumbnail: string;
-  views: string;
+interface Slide {
+  image: string;
   title: string;
-  userName: string;
+  description: string;
 }
 
-const ReelCard = ({ reel }: { reel: Reel }) => {
+const slides: Slide[] = [
+  {
+    image:
+      "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop",
+    title: "Food Donation",
+    description: "Providing meals and essential supplies to families in need.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop",
+    title: "Helping Communities",
+    description:
+      "Volunteers working together to support underprivileged communities.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1469571486292-b53601020f1b?q=80&w=2070&auto=format&fit=crop",
+    title: "Support & Care",
+    description:
+      "Every contribution helps bring hope to those facing hardship.",
+  },
+];
+
+export default function ImageSlider() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
+
+  // Check direction for RTL support from document or html dir if possible
+  // A simple way is to use inline style for transform to move the exact percentage
+  const slideWidth = 100 / slides.length;
+  // in LTR: translate -currentIndex * slideWidth. In RTL: translate currentIndex * slideWidth.
+  // We'll use `dir="ltr"` on the slider container to ensure it behaves consistently and just flip the flex-direction if needed,
+  // or simply rely on standard CSS. If the page is RTL, flex lays out items right-to-left.
+  // So moving to index 1 (which is left of index 0) means translating right (positive %).
+  const isRTL =
+    typeof window !== "undefined"
+      ? document.documentElement.dir === "rtl"
+      : false;
+
   return (
-    <div className="relative min-w-[180px] sm:min-w-[220px] aspect-9/16 rounded-xl overflow-hidden group cursor-pointer border border-gray-100 dark:border-gray-800">
-      <img src={reel.thumbnail} alt={reel.title}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
-      <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-0.5 bg-black/50 backdrop-blur-sm rounded text-[9px] font-bold text-white uppercase tracking-wider border border-white/10">
-        <Eye className="w-3 h-3" /> {reel.views}
-      </div>
-      <div className="absolute bottom-3 left-3 right-3">
-        <div className="flex items-center gap-1.5 mb-1">
-          <div className="w-5 h-5 rounded-full border border-white/30 overflow-hidden shrink-0 bg-gray-600 flex items-center justify-center text-[8px] text-white">
-            {reel.userName.charAt(0)}
+    <div className="relative w-full overflow-hidden min-h-[50vh] rounded-xl bg-[#f7ecdd]">
+      <div
+        className="flex transition-transform duration-500 ease-out h-full"
+        style={{
+          width: `${slides.length * 100}%`,
+          transform: `translateX(${isRTL ? currentIndex * slideWidth : -currentIndex * slideWidth}%)`,
+        }}
+      >
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0"
+            style={{ width: `${slideWidth}%` }}
+          >
+            <div className="flex flex-col md:grid grid-cols-2 h-full">
+              {/* Left Side */}
+              <div className="flex items-center justify-center p-8 bg-muted/20">
+                <div className="relative h-[400px] w-full max-w-sm overflow-hidden rounded-xl shadow-lg">
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Right Side */}
+              <div className="flex flex-col justify-center gap-10 p-8">
+                <h2 className="my-8 text-6xl font-bold">{slide.title}</h2>
+
+                <p className="leading-7 text-muted-foreground text-3xl">
+                  {slide.description}
+                </p>
+              </div>
+            </div>
           </div>
-          <span className="text-[10px] font-bold text-white truncate uppercase tracking-wider">{reel.userName}</span>
-        </div>
-        <h3 className="text-[10px] text-gray-200 line-clamp-1 font-medium">{reel.title}</h3>
+        ))}
       </div>
+
+      {/* Left Button */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-0 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/90 hover:bg-white flex items-center justify-center shadow-md rounded-r-2xl transition-all z-10"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6 text-gray-800" />
+      </button>
+
+      {/* Right Button */}
+      <button
+        onClick={nextSlide}
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/90 hover:bg-white flex items-center justify-center shadow-md rounded-l-2xl transition-all z-10"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6 text-gray-800" />
+      </button>
     </div>
   );
-};
-
-const ReelsSection = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const { data: paginated } = useReels(1, 10);
-  const reels = paginated?.items || [];
-
-  const mappedReels: Reel[] = reels.map((r) => ({
-    id: r.uuid,
-    thumbnail: r.fileUrl,
-    views: "—",
-    title: r.title || "Untitled Reel",
-    userName: r.user?.fullName || "Unknown",
-  }));
-
-  return (
-    <section className="py-6">
-      <div className="flex items-center justify-between mb-4 px-4 sm:px-0">
-        <div>
-          <h2 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-wider">Reels</h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Short Stories</p>
-        </div>
-        <button className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest hover:underline">See All</button>
-      </div>
-      <div ref={scrollRef}
-        className="flex gap-3 overflow-x-auto pb-4 px-4 sm:px-0 no-scrollbar snap-x snap-mandatory scroll-smooth"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-        {mappedReels.length > 0
-          ? mappedReels.map((reel) => (
-              <div key={reel.id} className="snap-start"><ReelCard reel={reel} /></div>
-            ))
-          : Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="min-w-[180px] sm:min-w-[220px] aspect-9/16 rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
-            ))}
-      </div>
-    </section>
-  );
-};
-
-export default ReelsSection;
+}

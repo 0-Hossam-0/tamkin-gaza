@@ -1,10 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { TokenTypeEnum } from 'src/Common/Enums/token.enum';
-import { ResponseService } from 'src/Common/Services/Response/response.service';
-import { TranslationService } from 'src/Common/Services/Translation/translation.service';
-import { TokenService } from 'src/Common/Services/Security/token.service';
-import { IRequest } from 'src/Common/Types/request.types';
+import { TokenTypeEnum } from '../../Enums/token.enum';
+import { ResponseService } from '../../Services/Response/response.service';
+import { TokenService } from '../../Services/Security/token.service';
+import { TranslationService } from '../../Services/Translation/translation.service';
+import { IRequest } from '../../Types/request.types';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {

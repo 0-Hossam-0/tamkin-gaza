@@ -26,7 +26,7 @@ const CampaignsTable = () => {
     typeof v === "string" ? v : typeof v === "object" && v ? Object.values(v).join(" ") : "";
 
   const filteredData = (campaigns || []).filter(
-    (c: { title: unknown; description?: unknown }) =>
+    (c: { title: string; description?: string }) =>
       extractStr(c.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
       (c.description != null &&
         extractStr(c.description).toLowerCase().includes(searchTerm.toLowerCase())),
@@ -60,7 +60,7 @@ const CampaignsTable = () => {
   function handleDelete(id: string) {
     deleteCampaign(id, {
       onSuccess: () => { toast.success("Campaign deleted!"); setDeletingId(null); },
-      onError: (err) => toast.error(err.message),
+      onError: (err: any) => toast.error(err.message),
     });
   }
 
@@ -75,7 +75,7 @@ const CampaignsTable = () => {
               placeholder="Search campaigns..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all dark:text-gray-200"
+              className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none transition-all dark:text-gray-200"
             />
           </div>
           <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full sm:w-auto">
@@ -114,11 +114,11 @@ const CampaignsTable = () => {
                       <td className="px-6 py-4">
                         <div className="w-full max-w-[200px]">
                           <div className="flex justify-between text-xs mb-1.5">
-                            <span className="font-medium text-indigo-600 dark:text-indigo-400">${current.toLocaleString()}</span>
+                            <span className="font-medium text-primary-600 dark:text-primary-400">${current.toLocaleString()}</span>
                             <span className="text-gray-500 dark:text-gray-400">of ${target.toLocaleString()}</span>
                           </div>
                           <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                            <div className="bg-indigo-600 dark:bg-indigo-500 h-2 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                            <div className="bg-primary-600 dark:bg-primary-500 h-2 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
                           </div>
                         </div>
                       </td>
@@ -129,7 +129,7 @@ const CampaignsTable = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
                           <Link href={`/${locale}/admin/campaigns/${campaign.uuid}`}>
-                            <button className="p-1.5 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-500/10">
+                            <button className="p-1.5 text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-md hover:bg-primary-50 dark:hover:bg-primary-500/10">
                               <Eye className="w-4 h-4" />
                             </button>
                           </Link>
