@@ -26,9 +26,10 @@ const CampaignsTable = () => {
     typeof v === "string" ? v : typeof v === "object" && v ? Object.values(v).join(" ") : "";
 
   const filteredData = (campaigns || []).filter(
-    (c: TCampaign) =>
+    (c: { title: unknown; description?: unknown }) =>
       extractStr(c.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
-      extractStr(c.description).toLowerCase().includes(searchTerm.toLowerCase()),
+      (c.description != null &&
+        extractStr(c.description).toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   const paginatedData = filteredData.slice(
